@@ -25,7 +25,13 @@ public abstract class Settlement {
 	private String name;
 	private Location location;
 	private List<Person> people;
+	private List<Sick> sick;
+	private List<Healthy> healthy;
 	private RamzorColor ramzorColor;
+	private int totalPersons;
+	private int totalVaccines;
+	private Settlement[] linkTo;
+	
 
 	//Constructor 
 	/**
@@ -35,11 +41,24 @@ public abstract class Settlement {
 	 * @param List people.
 	 * @param RamzorColor ramzorColor.
 	 */
-	public Settlement(String name, Location location, List<Person> people, RamzorColor ramzorColor) {
+	public Settlement(String name, Location location, List<Person> people, List<Sick> sick,
+			List<Healthy> healthy,  RamzorColor ramzorColor, int totalVaccines, Settlement[] linkTo) {
 		this.name = name;
 		this.location = location;
-		this.people=people;//need to make sure of deep copy
+		this.people = people;
+		this.sick = sick;
+		this.healthy = healthy;
 		this.ramzorColor = ramzorColor;
+		
+		this.totalVaccines = totalVaccines;
+		this.linkTo = linkTo;
+		
+		if(people != null) {
+			this.totalPersons = (int)(people.size()*1.3);
+		}
+		else
+			this.totalPersons = 0;
+		
 	}
 
 	//ToString
@@ -124,6 +143,33 @@ public abstract class Settlement {
 		else
 			return (double) counter / people.size();
 	}
+	
+	
+
+	public List<Sick> getSick() {
+		return sick;
+	}
+
+
+	public List<Healthy> getHealthy() {
+		return healthy;
+	}
+
+
+	public int getTotalPersons() {
+		return totalPersons;
+	}
+
+	public int getTotalVaccines() {
+		return totalVaccines;
+	}
+
+
+	public Settlement[] getLinkTo() {
+		return linkTo;
+	}
+	
+
 
 	/**
 	 * Method that add Person into list of people 
@@ -161,14 +207,16 @@ public abstract class Settlement {
 	 */
 	public boolean transferPerson(Person p, Settlement s) {
 		if (!(this.equals(s))) {
-			p.setSettlement(s);
-			this.people.remove(p);
-			s.people.add(p);
-			return true;
-
+			if ((s.getTotalPersons() < s.getPeople().size())
+				|| (p.getSettlement().getRamzorColor().getProbability() * s.getRamzorColor().getProbability() <= Math.random())) {
+				p.setSettlement(s);
+				this.people.remove(p);
+				s.people.add(p);
+				return true;
+			}
 		} 
-		else
-			return false;
+		
+		return false;
 	}
 
 	/**

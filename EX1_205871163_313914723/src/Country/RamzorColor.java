@@ -1,5 +1,7 @@
 package Country;
 
+import java.awt.Color;
+
 /***
  * Representation of a RamzorColor enum 
  * 
@@ -9,20 +11,29 @@ package Country;
  */
 
 public enum RamzorColor {
-
-	Green(0.4), Yellow(0.6), Orange(0.8), Red(1.0);
+	
+	
+	Green(0.4, Color.green, 1), Yellow(0.6, Color.yellow, 0.8), Orange(0.8, Color.orange, 0.6), Red(1.0, Color.red, 0.4);
 
 	private final double coefficient;
-
+	private Color color;
+	private double probability;
+	
+	
 	//Constructor
 	/***
 	  * Constructor
 	  * @param coefficient: enum
+	  * @param color: Color
+	  * @param probability: double
 	  */
-	RamzorColor(double coefficient) {
+	RamzorColor(double coefficient, Color color, double probability) {
 		this.coefficient = coefficient;
+		this.color = color;
+		this.probability = probability;
 	}
 
+	
 	//ToString
 	/***
 	   * ToString method of the RamzorColor Enum
@@ -41,6 +52,7 @@ public enum RamzorColor {
 		return this.coefficient;
 	}
 
+	
 	//Method
 	/***
 	  * The method calculate the RamzorColor according to the double she got
@@ -53,6 +65,11 @@ public enum RamzorColor {
 		else if(c > 0.4 && c <= 0.6) return Yellow;
 		else if(c > 0.6 && c <= 0.8) return Orange;
 		else return Red;
+	}
+
+	
+	public double getProbability() {
+		return probability;
 	}
 
 

@@ -3,7 +3,9 @@ package Country;
 import java.util.List;
 
 import Location.Location;
+import Population.Healthy;
 import Population.Person;
+import Population.Sick;
 
 /***
  * Representation of a City class
@@ -24,8 +26,9 @@ public class City extends Settlement{
 	 * @param people, List of Person
 	 * @param ramzorColor, Enum
 	 */
-	public City(String name, Location location, List<Person> people, RamzorColor ramzorColor) {
-		super(name, location, people, ramzorColor);
+	public City(String name, Location location, List<Person> people, List<Sick> sick,
+			List<Healthy> healthy,  RamzorColor ramzorColor, int totalVaccines, Settlement[] linkTo) {
+		super(name, location, people, sick, healthy, ramzorColor, totalVaccines, linkTo);
 	}
 	//Copy constructor
 	/***
@@ -33,7 +36,7 @@ public class City extends Settlement{
 	  * @param c, Object
 	  */
 	public City(City c) {
-		super(c.getName(), c.getLocation(), c.getPeople(), c.getRamzorColor());
+		super(c.getName(), c.getLocation(), c.getPeople(), c.getSick(), c.getHealthy(), c.getRamzorColor(), c.getTotalPersons(), c.getLinkTo());
 	}
 
 

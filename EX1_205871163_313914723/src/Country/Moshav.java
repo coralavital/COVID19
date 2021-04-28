@@ -3,6 +3,7 @@ package Country;
 import java.util.List;
 import Location.Location;
 import Location.Point;
+import Population.Healthy;
 import Population.Person;
 import Population.Sick;
 
@@ -24,9 +25,9 @@ public class Moshav extends Settlement {
 	 * @param people, List of Person
 	 * @param ramzorColor, Enum
 	 */
-	public Moshav(String name, Location location, List<Person> people, RamzorColor ramzorColor) {
-		//For the 
-		super(name, location, people, ramzorColor);
+	public Moshav(String name, Location location, List<Person> people, List<Sick> sick,
+			List<Healthy> healthy,  RamzorColor ramzorColor, int totalVaccines, Settlement[] linkTo) {
+		super(name, location, people, sick, healthy, ramzorColor, totalVaccines, linkTo);
 	}
 	
 	//Copy constructor
@@ -35,7 +36,7 @@ public class Moshav extends Settlement {
 	  * @param m, Object
 	  */
 	public Moshav(Moshav m) {
-		super(m.getName(), m.getLocation(), m.getPeople(), m.getRamzorColor());
+		super(m.getName(), m.getLocation(), m.getPeople(), m.getSick(), m.getHealthy(), m.getRamzorColor(), m.getTotalPersons(), m.getLinkTo());
 	}
 
 	

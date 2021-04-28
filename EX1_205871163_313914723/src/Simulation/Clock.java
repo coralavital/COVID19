@@ -10,6 +10,7 @@ public class Clock {
 
 	//Data members
 	public static long now;
+	public static int ticks_per_day = 1;
 
 	//ToString
 	/**
@@ -42,8 +43,10 @@ public class Clock {
 	  * @return double
 	  */
 	public static double days(long t) {
-		final long tt = 1;
-		return (double)((now-t)/tt);
+		//long tt = 1;
+		return Math.ceil((double)((now-t)/ticks_per_day));
 	}
+	
+		
 
 }//Clock class

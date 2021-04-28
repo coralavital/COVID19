@@ -3,7 +3,9 @@ package Country;
 import java.util.List;
 
 import Location.Location;
+import Population.Healthy;
 import Population.Person;
+import Population.Sick;
 
 /***
  * Representation of a Kibbutz class
@@ -24,8 +26,9 @@ public class Kibbutz extends Settlement{
 	 * @param people, List of Person
 	 * @param ramzorColor, Enum
 	 */
-	public Kibbutz(String name, Location location, List<Person> people, RamzorColor ramzorColor) {
-		super(name, location, people, ramzorColor);
+	public Kibbutz(String name, Location location, List<Person> people, List<Sick> sick,
+			List<Healthy> healthy,  RamzorColor ramzorColor, int totalVaccines, Settlement[] linkTo) {
+		super(name, location, people, sick, healthy, ramzorColor, totalVaccines, linkTo);
 	}
 	
 	//Copy constructor
@@ -34,8 +37,9 @@ public class Kibbutz extends Settlement{
 	  * @param k, Object
 	  */
 	public Kibbutz(Kibbutz k) {
-		super(k.getName(), k.getLocation(), k.getPeople(), k.getRamzorColor());
+		super(k.getName(), k.getLocation(), k.getPeople(), k.getSick(), k.getHealthy(), k.getRamzorColor(), k.getTotalPersons(), k.getLinkTo());
 	}
+	
 	
 
 	//Equals
