@@ -27,7 +27,7 @@ public class City extends Settlement{
 	 * @param ramzorColor, Enum
 	 */
 	public City(String name, Location location, List<Person> people, List<Sick> sick,
-			List<Healthy> healthy,  RamzorColor ramzorColor, int totalVaccines, Settlement[] linkTo) {
+			List<Healthy> healthy,  RamzorColor ramzorColor, int totalVaccines, List<Settlement> linkTo) {
 		super(name, location, people, sick, healthy, ramzorColor, totalVaccines, linkTo);
 	}
 	//Copy constructor

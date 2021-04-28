@@ -30,7 +30,7 @@ public abstract class Settlement {
 	private RamzorColor ramzorColor;
 	private int totalPersons;
 	private int totalVaccines;
-	private Settlement[] linkTo;
+	private List<Settlement> linkTo;
 	
 
 	//Constructor 
@@ -42,7 +42,7 @@ public abstract class Settlement {
 	 * @param RamzorColor ramzorColor.
 	 */
 	public Settlement(String name, Location location, List<Person> people, List<Sick> sick,
-			List<Healthy> healthy,  RamzorColor ramzorColor, int totalVaccines, Settlement[] linkTo) {
+			List<Healthy> healthy,  RamzorColor ramzorColor, int totalVaccines, List<Settlement> linkTo) {
 		this.name = name;
 		this.location = location;
 		this.people = people;
@@ -60,6 +60,21 @@ public abstract class Settlement {
 			this.totalPersons = 0;
 		
 	}
+	
+	public Settlement(Settlement s) {
+		this.name = s.name;
+		this.location = s.location;
+		this.people = s.people;
+		this.sick = s.sick;
+		this.healthy = s.healthy;
+		this.ramzorColor = s.ramzorColor;
+		
+		this.totalVaccines = s.totalVaccines;
+		this.linkTo = s.linkTo;
+		this.totalPersons = s.totalPersons;
+
+		
+	}
 
 	//ToString
 	/**
@@ -70,7 +85,8 @@ public abstract class Settlement {
 		return "\n\t\tForm of locality --> " + this.getName() 
 		+ "\n\t\t" + this.getLocation().toString() 
 		+ "\n\t\tNumber of people --> " + this.getPeople().size()
-		+ "\n\t\tRamzorColor is -->  "+ this.getRamzorColor();
+		+ "\n\t\tRamzorColor is -->  "+ this.getRamzorColor()
+		+ "\n\t\tLinked settlement -->" + this.getLinkTo();
 	}
 
 	/**
@@ -165,8 +181,8 @@ public abstract class Settlement {
 	}
 
 
-	public Settlement[] getLinkTo() {
-		return linkTo;
+	public List<Settlement> getLinkTo() {
+		return this.linkTo;
 	}
 	
 

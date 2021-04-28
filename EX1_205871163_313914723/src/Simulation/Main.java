@@ -112,19 +112,25 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		Map map = null;
+		
 		try {
 			map = loading();
 		} 
+		
 		catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
+		
 		initialization(map);
+		
 		for(int n = 0; n < 5; n++) {
 			simulation(map);
 			Clock.nextTick();
 		}
+		
 		int count;
+		
 		for (int i = 0; i < map.getSettlements().length; i++) {
 			count = 0;
 			for (int j = 0; j < map.getSettlements()[i].getPeople().size(); j++) {
@@ -132,7 +138,9 @@ public class Main {
 					++count;
 				}
 			}
+			
 			System.out.println("\t\tThe settlement -->" + map.getSettlements()[i].getName() + "\n\t\tHas --> |"+ count +"| sick people");
+
 		}
 	}
 
