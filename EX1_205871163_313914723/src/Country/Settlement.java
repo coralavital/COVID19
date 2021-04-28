@@ -185,7 +185,13 @@ public abstract class Settlement {
 		return this.linkTo;
 	}
 	
-
+	public void printLinked() {
+		for(int i = 0; i < linkTo.size(); i++) {
+			int count = 1;
+			System.out.println("The " + count + " that linked to the city " + getName() + " is " + linkTo.get(i).name);
+			count++;
+		}
+	}
 
 	/**
 	 * Method that add Person into list of people 
