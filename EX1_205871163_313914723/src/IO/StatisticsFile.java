@@ -19,7 +19,7 @@ public class StatisticsFile {
         String str = null;
         
         int returnValue = jfc.showSaveDialog(null);
-        
+       
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             if (jfc.getSelectedFile().isDirectory()) {
                 str =  jfc.getSelectedFile().toString();

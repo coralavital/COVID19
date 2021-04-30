@@ -127,6 +127,7 @@ public class SimulationFile {
 		String s;
 		
 		BufferedReader br= new BufferedReader(new FileReader(path));
+		
 		while ((s = br.readLine())!= null) {
 
 			//The output of the text file
@@ -136,16 +137,20 @@ public class SimulationFile {
 			if(buffer[0].equals("#")) {
 				String s1 = buffer[1];
 				String s2 = buffer[2];
+				
 				for(int i = 0; i < settlement.size(); i++) {
 					if(settlement.get(i).getName().equals(s1)) {
 						for(int j = 0; j < settlement.size(); j++)
 							if(settlement.get(j).getName().equals(s2)) {
-								settlement.get(i).getLinkTo().add(settlement.get(j));//getLinkTo is null -bug
+								
+								settlement.get(i).getLinkTo().add(settlement.get(j));
+								settlement.get(j).getLinkTo().add(settlement.get(i));
 							}
 					}
 				}
 			}
 		}
+		
 		br.close();
 	}
 	//Read from file
