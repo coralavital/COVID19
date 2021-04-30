@@ -31,6 +31,7 @@ public class UserMenu extends JMenuBar {
 	JMenuItem f1, f2, f3, f4;
 	JMenuItem l1, l2, l3, l4;
 	JMenuItem h1, h2;
+	
 
 	public UserMenu(JFrame frame) {
 
