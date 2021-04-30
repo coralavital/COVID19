@@ -79,19 +79,18 @@ public class UserMenu extends JMenuBar {
 
 			public void actionPerformed(ActionEvent e) {
 
-				String current = "The current virus";
-				String infect = "Can be infected from";
+
 				String colum[]={ "British virus","Chinese virus","SouthAfrica virus"};	
-				
+
 				JPanel panel= new JPanel();
-				
+
 				Object[][] data = {{false,false,false}, {false,false,false}, {false,false,false}};
 				MutationsTable model = new MutationsTable(data, colum);
 				JTable table = new JTable(model);
 				table.setFillsViewportHeight(true);
 				panel.add(new RowedTableScroll(table, colum));	
 				JDialog d= new JDialog(frame,"Mutations Window",true);
-				
+
 				model.addTableModelListener(new TableModelListener() {
 
 					public void tableChanged(TableModelEvent e) {

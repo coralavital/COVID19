@@ -38,9 +38,9 @@ public abstract class Person{
 
 	//Copy constructor
 	/**
-	  * copy constructor
-	  * @param p, object
-	  */
+	 * copy constructor
+	 * @param p, object
+	 */
 	public Person(Person p) {
 		this.age = p.getAge();
 		this.location = new Point(p.getLocation());
@@ -62,9 +62,9 @@ public abstract class Person{
 
 	//Equals
 	/**
-	  * Equals method 
-	  * @return: boolean true if it is the same object with the same values, else false 
-	  */
+	 * Equals method 
+	 * @return: boolean true if it is the same object with the same values, else false 
+	 */
 	public boolean equals(Object other) {
 		boolean ans = false;
 		//true if other is instance of person
@@ -93,21 +93,21 @@ public abstract class Person{
 	}
 
 	/**
-	  * Getter function
-	  * @return: settlement, Settlement
-	  */
+	 * Getter function
+	 * @return: settlement, Settlement
+	 */
 	public Settlement getSettlement() {
 		return settlement;
 	}
 
 	/**
-	  * Setter function
-	  * @param: settlement, Settlement
-	  */
+	 * Setter function
+	 * @param: settlement, Settlement
+	 */
 	public void setSettlement(Settlement settlement) {
 		this.settlement = settlement;
 	}
-	
+
 	//Method's
 	/**
 	 * This method abstract functions.

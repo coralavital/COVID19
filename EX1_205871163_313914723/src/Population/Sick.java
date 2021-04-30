@@ -37,9 +37,9 @@ public class Sick extends Person{
 
 	//Copy constructor
 	/**
-	  * copy constructor
-	  * @param s, object
-	  */
+	 * copy constructor
+	 * @param s, object
+	 */
 	public Sick(Sick s) {
 		super(s.getAge(), s.getLocation(), s.getSettlement());
 		this.contagiousTime = s.getContagiousTime();
@@ -76,9 +76,9 @@ public class Sick extends Person{
 
 	//Getters
 	/**
-	  * Getter method
-	  * @return: contagiousTime, Long
-	  */
+	 * Getter method
+	 * @return: contagiousTime, Long	
+	 */
 	public long getContagiousTime() {
 		return contagiousTime;
 	}

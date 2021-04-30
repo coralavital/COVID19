@@ -43,7 +43,6 @@ public class Clock {
 	  * @return double
 	  */
 	public static double days(long t) {
-		//long tt = 1;
 		return Math.ceil((double)((now-t)/ticks_per_day));
 	}
 	
