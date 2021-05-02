@@ -32,8 +32,7 @@ public class StatisticsFile {
         File fos = new File(str);
 		PrintWriter pw = new PrintWriter(fos);
 
-		pw.println("Name, Location, people");
-		pw.println("Bob, 24, 200");
+		
 		
 		
 		

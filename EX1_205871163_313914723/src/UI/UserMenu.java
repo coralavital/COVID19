@@ -1,6 +1,7 @@
 package UI;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -20,10 +21,12 @@ import javax.swing.SwingConstants;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+import Country.Map;
 import IO.SimulationFile;
 
 public class UserMenu extends JMenuBar {
 
+	Map map;
 	JMenu op1;
 	JMenu op2;
 	JMenu op3;
@@ -31,10 +34,10 @@ public class UserMenu extends JMenuBar {
 	JMenuItem f1, f2, f3, f4;
 	JMenuItem l1, l2, l3, l4;
 	JMenuItem h1, h2;
-	
+
 
 	public UserMenu(JFrame frame) {
-
+		
 		// create a menu
 		op1 = new JMenu("File");
 		op2 = new JMenu("Simulation");
@@ -59,10 +62,11 @@ public class UserMenu extends JMenuBar {
 				if (fd.getFile() == null)
 					return;
 				File f = new File(fd.getDirectory(), fd.getFile());
-				System.out.println(f.getPath());
 				SimulationFile simolation = new SimulationFile(f.getPath());
+				System.out.println(f.getPath());
+				
 				try {
-					simolation.readFromFile();
+					map = new Map(simolation.readFromFile());
 					f4.setEnabled(true);
 				} catch (Exception e1) {
 
@@ -75,6 +79,15 @@ public class UserMenu extends JMenuBar {
 
 		f2 = new JMenuItem("Statistics");
 		f2.setEnabled(false);
+
+		f2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				StatisticsWindow s = new StatisticsWindow(map);
+			}
+		});
+
+
 		f3 = new JMenuItem("Edit Mutations");
 		f3.addActionListener(new ActionListener() {
 

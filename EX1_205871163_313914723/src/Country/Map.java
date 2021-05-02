@@ -19,9 +19,9 @@ public class Map {
 
 	//Constructor
 	/***
-	  * Constructor, copy the settlement list param into settlement array
-	  * @param settlements, Settlement list
-	  */
+	 * Constructor, copy the settlement list param into settlement array
+	 * @param settlements, Settlement list
+	 */
 	public Map(List<Settlement> settlements) {
 		this.settlements = new Settlement[settlements.size()]; //Allocation of a new locality
 		//Deep copying
@@ -46,9 +46,9 @@ public class Map {
 
 	//ToString
 	/***
-	  * ToString method of the Map object
-	  * @return: String
-	  */
+	 * ToString method of the Map object
+	 * @return: String
+	 */
 	public String toString() {
 		StringBuilder finalString= new StringBuilder();	
 		for (int i = 0; i < settlements.length; i++) {
@@ -67,8 +67,16 @@ public class Map {
 		return settlements;
 	}
 
-
-
+	public Settlement at(int index) {
+		return settlements[index];
+	}
+	public int getSize() {
+		int counter = 0;
+		for(int i = 0; i < settlements.length; i++) {
+			counter++;
+		}
+		return counter;
+	}
 
 }//Map class
 

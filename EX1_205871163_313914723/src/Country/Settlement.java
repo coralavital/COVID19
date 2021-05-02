@@ -185,12 +185,24 @@ public abstract class Settlement {
 		return this.linkTo;
 	}
 	
-	public void printLinked() {
+	
+	
+	public String printLinked() {
+		StringBuilder finalString = new StringBuilder();
 		for(int i = 0; i < linkTo.size(); i++) {
-			int count = 1;
-			System.out.println("The " + count + " that linked to the city " + getName() + " is " + linkTo.get(i).name);
-			count++;
+			finalString.append(linkTo.get(i).name + ", ");
 		}
+		return "" + finalString;
+
+	}
+	
+	public String getType() {
+		if(this instanceof City)
+			return "City";
+		else if(this instanceof Moshav)
+			return "Moshav";
+		else
+			return "Kibbutz";
 	}
 
 	/**

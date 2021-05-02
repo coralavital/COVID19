@@ -67,7 +67,9 @@ public enum RamzorColor {
 		else return Red;
 	}
 
-	
+	public RamzorColor getColor() {
+		return this.choice(coefficient);
+	}
 	public double getProbability() {
 		return probability;
 	}

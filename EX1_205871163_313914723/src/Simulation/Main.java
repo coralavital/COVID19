@@ -140,7 +140,7 @@ public class Main {
 			}
 			
 			System.out.println("\t\tThe settlement -->" + map.getSettlements()[i].getName() + "\n\t\tHas --> |"+ count +"| sick people|\n");
-			map.getSettlements()[i].printLinked();
+				map.getSettlements()[i].printLinked();
 		}
 	}
 
