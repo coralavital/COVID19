@@ -25,8 +25,7 @@ public class Moshav extends Settlement {
 	 * @param people, List of Person
 	 * @param ramzorColor, Enum
 	 */
-	public Moshav(String name, Location location, List<Person> people, List<Sick> sick,
-			List<Healthy> healthy,  RamzorColor ramzorColor, int totalVaccines, List<Settlement> linkTo) {
+	public Moshav(String name, Location location, List<Person> people, List<Sick> sick, List<Person> healthy,  RamzorColor ramzorColor, int totalVaccines, List<Settlement> linkTo) {
 		super(name, location, people, sick, healthy, ramzorColor, totalVaccines, linkTo);
 	}
 	

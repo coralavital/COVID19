@@ -9,7 +9,7 @@ public class MutationsTable extends AbstractTableModel {
 	public MutationsTable(Object[][] data, String[] col_names) { 
 
 		this.data = data; 
-		this.col_names=col_names;
+		this.col_names = col_names;
 	}
 
 

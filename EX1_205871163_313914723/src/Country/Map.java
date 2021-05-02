@@ -70,6 +70,7 @@ public class Map {
 	public Settlement at(int index) {
 		return settlements[index];
 	}
+	
 	public int getSize() {
 		int counter = 0;
 		for(int i = 0; i < settlements.length; i++) {

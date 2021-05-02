@@ -42,8 +42,8 @@ public class SimulationFile {
 	private Location location;
 	private int age;
 	private Point point;
-	private List<Sick> sick = null;
-	private List<Healthy> healthy = null;
+	private List<Sick> sick;
+	private List<Person> healthy;
 	private int totalPersons;
 	private int totalVaccines;
 	private List<Settlement> linkTo;
@@ -125,9 +125,9 @@ public class SimulationFile {
 	public void setLinkTo(List<Settlement> settlement) throws IOException {
 		String[] buffer;
 		String s;
-		
+
 		BufferedReader br= new BufferedReader(new FileReader(path));
-		
+
 		while ((s = br.readLine())!= null) {
 
 			//The output of the text file
@@ -137,12 +137,12 @@ public class SimulationFile {
 			if(buffer[0].equals("#")) {
 				String s1 = buffer[1];
 				String s2 = buffer[2];
-				
+
 				for(int i = 0; i < settlement.size(); i++) {
 					if(settlement.get(i).getName().equals(s1)) {
 						for(int j = 0; j < settlement.size(); j++)
 							if(settlement.get(j).getName().equals(s2)) {
-								
+
 								settlement.get(i).getLinkTo().add(settlement.get(j));
 								settlement.get(j).getLinkTo().add(settlement.get(i));
 							}
@@ -150,9 +150,12 @@ public class SimulationFile {
 				}
 			}
 		}
-		
+
 		br.close();
 	}
+
+
+
 	//Read from file
 	/**
 	 * read the text from file, put them into the correct values and put them in to our objects variable, 
@@ -185,15 +188,17 @@ public class SimulationFile {
 					Integer.parseInt(buffer[3]),
 					Integer.parseInt(buffer[4]),
 					Integer.parseInt(buffer[5]));
-			List<Person> listPerson = new ArrayList<>();
+
+			List<Person> people = new ArrayList<>();
+			List<Sick> sick = new ArrayList<>();
+			List<Person> healthy = new ArrayList<>();
 			List<Settlement> linkTo = new ArrayList<>();
 			RamzorColor ramzorColor = RamzorColor.Green;
 
 
 
-
 			if(buffer[0].equals("City")) {
-				City newCity = new City(name, location, listPerson, sick, healthy, ramzorColor, totalVaccines, linkTo);
+				City newCity = new City(name, location, people, sick, healthy, ramzorColor, totalVaccines, linkTo);
 				for(int j = 0; j < Integer.parseInt(buffer[6]); j++) {
 					int age = getAge();
 					Healthy h = new Healthy(age, newCity.randomLocation(), newCity);
@@ -203,7 +208,7 @@ public class SimulationFile {
 			}
 
 			else if(buffer[0].equals("Moshav")) {
-				Moshav newMoshav = new Moshav(name, location, listPerson, sick, healthy, ramzorColor, totalVaccines, linkTo);
+				Moshav newMoshav = new Moshav(name, location, people, sick, healthy, ramzorColor, totalVaccines, linkTo);
 				for(int j = 0; j < Integer.parseInt(buffer[6]); j++) {
 					int age = getAge();
 					Healthy h = new Healthy(age, newMoshav.randomLocation(), newMoshav);
@@ -214,11 +219,12 @@ public class SimulationFile {
 			}
 
 			else if(buffer[0].equals("Kibbutz")) {
-				Kibbutz newKibbutz = new Kibbutz(name, location, listPerson, sick, healthy, ramzorColor, totalVaccines, linkTo);
+				Kibbutz newKibbutz = new Kibbutz(name, location, people, sick, healthy, ramzorColor, totalVaccines, linkTo);
 				for(int j = 0; j < Integer.parseInt(buffer[6]); j++) {
 					int age = getAge();
 					Healthy h = new Healthy(age, newKibbutz.randomLocation(), newKibbutz);
 					newKibbutz.addPerson(h);
+
 				}
 
 				settlement.add(newKibbutz);
@@ -232,12 +238,12 @@ public class SimulationFile {
 
 			i = i + 1;
 		}
-		
+
 		br.close();
-		
+
 		setLinkTo(settlement);
-		
-		
+
+
 		return settlement;
 	}
 

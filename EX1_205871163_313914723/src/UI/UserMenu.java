@@ -35,6 +35,7 @@ public class UserMenu extends JMenuBar {
 	JMenuItem l1, l2, l3, l4;
 	JMenuItem h1, h2;
 
+	Object[][] data = null;
 
 	public UserMenu(JFrame frame) {
 		
@@ -64,11 +65,12 @@ public class UserMenu extends JMenuBar {
 				File f = new File(fd.getDirectory(), fd.getFile());
 				SimulationFile simolation = new SimulationFile(f.getPath());
 				System.out.println(f.getPath());
-				
+				simolation = new SimulationFile(f.getPath());
 				try {
 					map = new Map(simolation.readFromFile());
 					f4.setEnabled(true);
-				} catch (Exception e1) {
+				} 
+				catch (Exception e1) {
 
 					JOptionPane.showConfirmDialog(frame, "Invalid File", "Error", JOptionPane.DEFAULT_OPTION);
 				}
@@ -83,7 +85,7 @@ public class UserMenu extends JMenuBar {
 		f2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				StatisticsWindow s = new StatisticsWindow(map);
+				StatisticsWindow s = new StatisticsWindow(map, data);
 			}
 		});
 
@@ -98,7 +100,11 @@ public class UserMenu extends JMenuBar {
 
 				JPanel panel= new JPanel();
 
-				Object[][] data = {{false,false,false}, {false,false,false}, {false,false,false}};
+				for(int i = 0; i < 10; i++) {
+					for(int j = 0; j < 10; j++)
+						data[i][j] = false;
+				}
+				
 				MutationsTable model = new MutationsTable(data, colum);
 				JTable table = new JTable(model);
 				table.setFillsViewportHeight(true);
@@ -109,9 +115,10 @@ public class UserMenu extends JMenuBar {
 
 					public void tableChanged(TableModelEvent e) {
 						//-----------------------
-						System.out.println("click");
+						System.out.println("Click");
 						// your code goes here, whatever you want to do when something changes in the table
 					}
+					
 				});
 				d.add(panel);
 				d.pack();

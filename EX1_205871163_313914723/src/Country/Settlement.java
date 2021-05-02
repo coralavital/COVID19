@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.List;
 import java.util.Random;
 
-/***
+/*
  * Representation of a Settlement class 
  * 
  * @author Yoni Ifrah 313914723, Coral Avital 205871163
@@ -26,12 +26,12 @@ public abstract class Settlement {
 	private Location location;
 	private List<Person> people;
 	private List<Sick> sick;
-	private List<Healthy> healthy;
+	private List<Person> healthy;
 	private RamzorColor ramzorColor;
 	private int totalPersons;
 	private int totalVaccines;
 	private List<Settlement> linkTo;
-	
+
 
 	//Constructor 
 	/**
@@ -41,26 +41,24 @@ public abstract class Settlement {
 	 * @param List people.
 	 * @param RamzorColor ramzorColor.
 	 */
-	public Settlement(String name, Location location, List<Person> people, List<Sick> sick,
-			List<Healthy> healthy,  RamzorColor ramzorColor, int totalVaccines, List<Settlement> linkTo) {
+	public Settlement(String name, Location location, List<Person> people, List<Sick> sick, List<Person> healthy,  RamzorColor ramzorColor, int totalVaccines, List<Settlement> linkTo) {
 		this.name = name;
 		this.location = location;
 		this.people = people;
 		this.sick = sick;
 		this.healthy = healthy;
 		this.ramzorColor = ramzorColor;
-		
 		this.totalVaccines = totalVaccines;
 		this.linkTo = linkTo;
-		
+
 		if(people != null) {
 			this.totalPersons = (int)(people.size()*1.3);
 		}
 		else
 			this.totalPersons = 0;
-		
+
 	}
-	
+
 	public Settlement(Settlement s) {
 		this.name = s.name;
 		this.location = s.location;
@@ -68,12 +66,11 @@ public abstract class Settlement {
 		this.sick = s.sick;
 		this.healthy = s.healthy;
 		this.ramzorColor = s.ramzorColor;
-		
 		this.totalVaccines = s.totalVaccines;
 		this.linkTo = s.linkTo;
 		this.totalPersons = s.totalPersons;
 
-		
+
 	}
 
 	//ToString
@@ -96,26 +93,26 @@ public abstract class Settlement {
 	public abstract boolean equals(Object obj);
 
 	//Getters
-	/***
-	  * Getter function to name
-	  * @return String
-	  */
+	/*
+	 * Getter function to name
+	 * @return String
+	 */
 	public String getName() {
 		return name;
 	}
 
-	/***
-	  * Getter function to location
-	  * @return Object location
-	  */
+	/*
+	 * Getter function to location
+	 * @return Object location
+	 */
 	public Location getLocation() {
 		return location;
 	}
 
-	/***
-	  * Getter function to List of people
-	  * @return List
-	  */
+	/*
+	 * Getter function to List of people
+	 * @return List
+	 */
 	public List<Person> getPeople() {
 		return people;
 	}
@@ -130,17 +127,17 @@ public abstract class Settlement {
 	}
 
 	/**
-	  * Setter function for ramzorColor
-	  * @param ramzorColor
-	  */
+	 * Setter function for ramzorColor
+	 * @param ramzorColor
+	 */
 	public void setRamzorColor(RamzorColor ramzorColor) {
 		this.ramzorColor = ramzorColor;
 	}
 
 	/**
-	  * Setter function for ramzorColor
-	  * @param ramzorColor
-	  */
+	 * Setter function for ramzorColor
+	 * @param ramzorColor
+	 */
 	public abstract RamzorColor calcuateRamzorGrade();
 
 	/**
@@ -159,15 +156,14 @@ public abstract class Settlement {
 		else
 			return (double) counter / people.size();
 	}
-	
-	
+
+
 
 	public List<Sick> getSick() {
 		return sick;
 	}
 
-
-	public List<Healthy> getHealthy() {
+	public List<Person> getHealthy() {
 		return healthy;
 	}
 
@@ -176,6 +172,10 @@ public abstract class Settlement {
 		return totalPersons;
 	}
 
+	public void setTotalVaccines(int number) {
+		this.totalVaccines += number;
+	}
+	
 	public int getTotalVaccines() {
 		return totalVaccines;
 	}
@@ -184,18 +184,18 @@ public abstract class Settlement {
 	public List<Settlement> getLinkTo() {
 		return this.linkTo;
 	}
-	
-	
-	
+
+
+
 	public String printLinked() {
 		StringBuilder finalString = new StringBuilder();
 		for(int i = 0; i < linkTo.size(); i++) {
-			finalString.append(linkTo.get(i).name + ", ");
+			finalString.append(linkTo.get(i).name + "\n");
 		}
 		return "" + finalString;
 
 	}
-	
+
 	public String getType() {
 		if(this instanceof City)
 			return "City";
@@ -211,24 +211,35 @@ public abstract class Settlement {
 	 * @return boolean, true if the Person object was from the object that are mention above, else false
 	 */
 	public boolean addPerson(Person p) {
-		if (p instanceof Sick) {
+		if(p instanceof Sick) {
 			Sick s = (Sick) p;
 			this.people.add(new Sick(s));
+			this.sick.add(s);
 			return true;
-		} else if (p instanceof Healthy) {
+			
+		} 
+		else if (p instanceof Healthy) {
 			Healthy h = (Healthy) (p);
 			this.people.add(new Healthy(h));
+			this.healthy.add(new Healthy(h));
 			return true;
-		} else if (p instanceof Convalescent) {
-			Convalescent c = (Convalescent)(p);
-			this.people.add(new Convalescent(c));
+			
+		} 
+		else if (p instanceof Convalescent) {
+			Convalescent c = (Convalescent) (p);
+			this.healthy.add(new Convalescent(c));
 			return true;
-		} else if (p instanceof Vaccinated) {
+			
+		} 
+		else if (p instanceof Vaccinated) {
 			Vaccinated v = (Vaccinated) (p);
-			this.people.add(new Vaccinated(v));
+			this.healthy.add(new Vaccinated(v));
 			return true;
-		} else
+		} 
+		
+		else
 			return false;
+
 	}
 
 
@@ -242,14 +253,14 @@ public abstract class Settlement {
 	public boolean transferPerson(Person p, Settlement s) {
 		if (!(this.equals(s))) {
 			if ((s.getTotalPersons() < s.getPeople().size())
-				|| (p.getSettlement().getRamzorColor().getProbability() * s.getRamzorColor().getProbability() <= Math.random())) {
+					|| (p.getSettlement().getRamzorColor().getProbability() * s.getRamzorColor().getProbability() <= Math.random())) {
 				p.setSettlement(s);
 				this.people.remove(p);
 				s.people.add(p);
 				return true;
 			}
 		} 
-		
+
 		return false;
 	}
 
