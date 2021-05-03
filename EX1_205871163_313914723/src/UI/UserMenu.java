@@ -32,7 +32,7 @@ public class UserMenu extends JMenuBar {
 	
 	
 	Object[][] data = {{false,false,false}, {false,false,false}, {false,false,false}};
-	
+	StatisticsWindow statistics;
 	private boolean flag;
 	
 	Map map;
@@ -98,7 +98,7 @@ public class UserMenu extends JMenuBar {
 		f2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				StatisticsWindow s = new StatisticsWindow(map);
+				statistics = new StatisticsWindow(map);
 			}
 		});
 

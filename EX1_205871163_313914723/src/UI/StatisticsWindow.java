@@ -53,7 +53,11 @@ public class StatisticsWindow extends JFrame {
 
 
 	private void newFilter() {
-
+		try {
+			sorter.setRowFilter(RowFilter.regexFilter(textFilter.getText()));
+		} catch (java.util.regex.PatternSyntaxException e) {
+			// If current expression doesn't parse, don't update.
+		}
 
 	}
 	//static class like in the powerpoint
@@ -100,7 +104,7 @@ public class StatisticsWindow extends JFrame {
 	public StatisticsWindow(Map map) {
 		super("StatisticsWindow");
 		statisticFrame.setLayout(new BorderLayout());
-
+		
 		JPanel statisticsPanel = new JPanel();
 
 		statisticsPanel.setLayout(new BoxLayout(statisticsPanel, BoxLayout.LINE_AXIS));

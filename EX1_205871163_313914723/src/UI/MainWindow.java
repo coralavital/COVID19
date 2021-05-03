@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.net.MulticastSocket;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -13,7 +14,7 @@ import javax.swing.event.ChangeListener;
 public class MainWindow extends JFrame {
 	protected  MapPanel mapPanel;
 	private UserMenu userMenu;
-	private StatisticsWindow statistics;
+	public StatisticsWindow statistics;
 
 	// inner class if Map panel
 	protected  class MapPanel extends JPanel {
@@ -27,19 +28,27 @@ public class MainWindow extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
-					for(Shape rect:rectangles){
+					for(Shape rect:rectangles) {
 						Point p = e.getPoint();
-						if(rect.contains(p)){
-							//System.out.println("Clicked");
-
-								int row = e.getButton();
-								System.out.println(row);
-								StatisticsWindow s = new StatisticsWindow(userMenu.getMap());
+						if(rect.contains(p)) {
+							String sPoint= rect.toString();
+							int k=-1;
+							for(int i =0; i< userMenu.getMap().getSettlements().length; i++) {
+								if(	userMenu.getMap().getSettlements()[i].getLocation().checkRect().equals(sPoint))
+									k=i;
+								System.out.println(k);
+							}
+							if (k>=0) {
+								statistics = new StatisticsWindow(userMenu.getMap());
+								statistics.getTable().getSelectionModel().setSelectionInterval(0, k);
+								//s.getTable().clearSelection();
 							}
 
 						}
+
 					}
-				
+				}
+
 			});
 		}
 
@@ -58,7 +67,7 @@ public class MainWindow extends JFrame {
 				super.paintComponent(g); // clears the last paint
 
 				//draw the connection lines
-				for(int l = 0;l<userMenu.getMap().getSettlements().length;++l){
+				for(int l = 0;l < userMenu.getMap().getSettlements().length;++l){
 					for(int j = 0; j < userMenu.getMap().getSettlements()[l].getLinkTo().size(); j++) {
 						x1 = userMenu.getMap().getSettlements()[l].getLocation().getPosition().getX();
 						y1 = userMenu.getMap().getSettlements()[l].getLocation().getPosition().getY();
