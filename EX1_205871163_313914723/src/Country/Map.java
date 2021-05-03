@@ -78,6 +78,15 @@ public class Map {
 		}
 		return counter;
 	}
+	
+	public int indexByStr(String name) {
+		for (int i = 0; i < settlements.length; i++) {
+			if(settlements[i].getName().equals(name))
+				return i;		
+		}
+		System.out.println("cannot find settlement in indexByStr");
+		return -1;
+	}
 
 }//Map class
 

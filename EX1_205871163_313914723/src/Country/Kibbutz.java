@@ -36,7 +36,7 @@ public class Kibbutz extends Settlement{
 	  * @param k, Object
 	  */
 	public Kibbutz(Kibbutz k) {
-		super(k.getName(), k.getLocation(), k.getPeople(), k.getSick(), k.getHealthy(), k.getRamzorColor(), k.getTotalPersons(), k.getLinkTo());
+		super(k.getName(), k.getLocation(), k.getPeople(), k.getSick(), k.getNonSick(), k.getRamzorColor(), k.getTotalPersons(), k.getLinkTo());
 	}
 	
 	

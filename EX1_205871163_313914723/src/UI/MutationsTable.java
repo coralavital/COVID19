@@ -6,10 +6,10 @@ public class MutationsTable extends AbstractTableModel {
 
 	private String[] col_names ;
 	private Object[][] data;
-	public MutationsTable(Object[][] data, String[] col_names) { 
+	public MutationsTable(Object[][] data, String[] colum) { 
 
 		this.data = data; 
-		this.col_names = col_names;
+		this.col_names = colum;
 	}
 
 

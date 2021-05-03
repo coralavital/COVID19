@@ -35,7 +35,7 @@ public class Moshav extends Settlement {
 	  * @param m, Object
 	  */
 	public Moshav(Moshav m) {
-		super(m.getName(), m.getLocation(), m.getPeople(), m.getSick(), m.getHealthy(), m.getRamzorColor(), m.getTotalPersons(), m.getLinkTo());
+		super(m.getName(), m.getLocation(), m.getPeople(), m.getSick(), m.getNonSick(), m.getRamzorColor(), m.getTotalPersons(), m.getLinkTo());
 	}
 
 	

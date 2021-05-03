@@ -26,7 +26,7 @@ public abstract class Settlement {
 	private Location location;
 	private List<Person> people;
 	private List<Sick> sick;
-	private List<Person> healthy;
+	private List<Person> NonSick;
 	private RamzorColor ramzorColor;
 	private int totalPersons;
 	private int totalVaccines;
@@ -46,7 +46,7 @@ public abstract class Settlement {
 		this.location = location;
 		this.people = people;
 		this.sick = sick;
-		this.healthy = healthy;
+		this.NonSick = healthy;
 		this.ramzorColor = ramzorColor;
 		this.totalVaccines = totalVaccines;
 		this.linkTo = linkTo;
@@ -64,7 +64,7 @@ public abstract class Settlement {
 		this.location = s.location;
 		this.people = s.people;
 		this.sick = s.sick;
-		this.healthy = s.healthy;
+		this.NonSick = s.NonSick;
 		this.ramzorColor = s.ramzorColor;
 		this.totalVaccines = s.totalVaccines;
 		this.linkTo = s.linkTo;
@@ -163,8 +163,8 @@ public abstract class Settlement {
 		return sick;
 	}
 
-	public List<Person> getHealthy() {
-		return healthy;
+	public List<Person> getNonSick() {
+		return NonSick;
 	}
 
 
@@ -221,19 +221,19 @@ public abstract class Settlement {
 		else if (p instanceof Healthy) {
 			Healthy h = (Healthy) (p);
 			this.people.add(new Healthy(h));
-			this.healthy.add(new Healthy(h));
+			this.NonSick.add(new Healthy(h));
 			return true;
 			
 		} 
 		else if (p instanceof Convalescent) {
 			Convalescent c = (Convalescent) (p);
-			this.healthy.add(new Convalescent(c));
+			this.NonSick.add(new Convalescent(c));
 			return true;
 			
 		} 
 		else if (p instanceof Vaccinated) {
 			Vaccinated v = (Vaccinated) (p);
-			this.healthy.add(new Vaccinated(v));
+			this.NonSick.add(new Vaccinated(v));
 			return true;
 		} 
 		

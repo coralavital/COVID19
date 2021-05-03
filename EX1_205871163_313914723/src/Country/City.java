@@ -35,7 +35,7 @@ public class City extends Settlement{
 	  * @param c, Object
 	  */
 	public City(City c) {
-		super(c.getName(), c.getLocation(), c.getPeople(), c.getSick(), c.getHealthy(), c.getRamzorColor(), c.getTotalPersons(), c.getLinkTo());
+		super(c.getName(), c.getLocation(), c.getPeople(), c.getSick(), c.getNonSick(), c.getRamzorColor(), c.getTotalPersons(), c.getLinkTo());
 	}
 
 

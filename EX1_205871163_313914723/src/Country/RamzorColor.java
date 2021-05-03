@@ -1,6 +1,7 @@
 package Country;
 
 import java.awt.Color;
+import java.awt.color.ColorSpace;
 
 /***
  * Representation of a RamzorColor enum 
@@ -70,9 +71,32 @@ public enum RamzorColor {
 	public RamzorColor getColor() {
 		return this.choice(coefficient);
 	}
+	
 	public double getProbability() {
 		return probability;
 	}
 
 
+	public String getColorOfGuitar() {
+
+	    if(color.equals(Color.GREEN))
+	        return "GREEN";
+	    else if(color.equals(Color.YELLOW))
+	        return "YELLOW";
+	    else if(color.equals(Color.ORANGE))
+	        return "ORANGE";
+	    else if(color.equals(Color.RED))
+	        return "RED";
+	    else
+	        return "Unknown Color";
+	}
+	
+	public Color getColorEnum() {
+		double c = this.coefficient;
+		if(c <= 0.4) return color.green;
+		else if(c > 0.4 && c <= 0.6) return color.yellow;
+		else if(c > 0.6 && c <= 0.8) return color.orange;
+		else return color.red; 
+	}
+	
 }//RamzorColor class
