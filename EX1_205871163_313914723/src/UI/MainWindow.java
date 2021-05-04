@@ -14,7 +14,7 @@ import javax.swing.event.ChangeListener;
 public class MainWindow extends JFrame {
 	protected  MapPanel mapPanel;
 	private UserMenu userMenu;
-	public StatisticsWindow statistics;
+
 
 	// inner class if Map panel
 	protected  class MapPanel extends JPanel {
@@ -29,18 +29,23 @@ public class MainWindow extends JFrame {
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
 					for(Shape rect:rectangles) {
+						
 						Point p = e.getPoint();
+						
 						if(rect.contains(p)) {
-							String sPoint= rect.toString();
-							int k=-1;
-							for(int i =0; i< userMenu.getMap().getSettlements().length; i++) {
-								if(	userMenu.getMap().getSettlements()[i].getLocation().checkRect().equals(sPoint))
-									k=i;
-								System.out.println(k);
+							
+							String sPoint = rect.toString();
+							int k =- 1;
+							int i;
+							for(i =0; i< userMenu.getMap().getSettlements().length; i++) {
+								if(userMenu.getMap().getSettlements()[i].getLocation().checkRect().equals(sPoint))
+									k = i;
 							}
-							if (k>=0) {
-								statistics = new StatisticsWindow(userMenu.getMap());
-								statistics.getTable().getSelectionModel().setSelectionInterval(0, k);
+							if (k >= 0) {
+								StatisticsWindow statistics = new StatisticsWindow(userMenu.getMap());
+
+								statistics.getTable().getSelectionModel().setSelectionInterval(0,k);
+								statistics.getLocationOnScreen();
 								//s.getTable().clearSelection();
 							}
 
