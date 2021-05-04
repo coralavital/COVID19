@@ -26,6 +26,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import Country.Map;
 import IO.SimulationFile;
+import Simulation.Clock;
 import UI.MainWindow.MapPanel;
 
 public class UserMenu extends JMenuBar {
@@ -186,45 +187,39 @@ public class UserMenu extends JMenuBar {
 
 			public void actionPerformed(ActionEvent e) {
 
-				JDialog dialog = new JDialog(frame,"HELP WINDOW" ,true);
-				JLabel redMessage = new JLabel("AUXILIARY INFORMATION", SwingConstants.CENTER);
-				redMessage.setForeground(Color.BLUE);
-				dialog.setLayout(new GridLayout(5, 5));
-				dialog.add(redMessage);
-				dialog.add(new JLabel(""));
+				
+				JDialog dialog;
 
+				String multiMessage = "\r\n\n As part of a study project in an advanced object-oriented programming course,\r\n"
+						+ "we were asked to prepare a system for the State of Israel that experienced a health-economic crisis \r\nfollowing an outbreak of a virus that carries with it three different strains"
+						+ "that spread rapidly in it.\r\n"
+						+ "Unfortunately, the virus requires us to properly manage resources and information, \r\n"
+						+ "with every form of settlement in Israel having a different probability of contracting the virus, \r\n"
+						+ "which is so important in order to allow residents to continue moving around the country.\r\n"
+						+ "The system makes it possible to select for each virus the mutations to which it can develop. \r\n"
+						+ "To start the simulation, the user must upload a file from a folder of his choice, when he must make sure that the desired amount of tics is initialized in the spider \r\n"
+						+ "(the amount received will eventually determine the number of simulations in one day.) \r\n"
+						+ "The user has to click play to start the simulation, when after clicking this action it cannot be repeated, \r\n"
+						+ "but the user will have two new options - stop and pause when if he wants to stop the current simulation he will use pause and if he wants to\r\n"
+						+ "load a new simulation he will use stop. \r\n"
+						+ "The purpose of the simulation is to describe a hypothetical situation of using a demo in the system and check its correctness.\r\n"
+						+ "The simulation process will include the following steps:\r\n"
+						+ "1. The system will sample 20 randomized patients and for each of them will try to infect with three non-sick people.\r\n"
+						+ "2. In each locality, each patient who has passed 25 days from the date of his infection, the system will make him recover.\r\n"
+						+ "3. In each locality, the system will sample 3% of all people (sick and not sick) \r\n"
+						+ "and for each of them the system will try to make a move to a random locality.\r\n"
+						+ "4. In each locality, if there are vaccine doses waiting and there are healthy people waiting, the system will vaccinate them,\r\n"
+						+ "with each healthy person vaccinated with one vaccine. \r\n"
+						+ "We hope that the simulation met your expectations and requirements and that the use came was understandable and simple. \r\n"
+						+ "We are happy to be at your disposal for any future task required\r\n"
+						+ "Editors:\r\n"
+						+ "Coral Avital and Yoni Yifrach.";
+				JOptionPane pane = new JOptionPane();
 				
+				pane.setMessage(multiMessage);
 				
-				dialog.add(new JLabel("<html><font color='blue'>As part of a study project in an advanced object-oriented programming course, we were"
-						+ "asked to prepare a system for the State of Israel that experienced a health-economic crisis following an outbreak of a virus"
-						+ "<br>that carries with it three different strains that spread rapidly in it."
-						+ "<br>Unfortunately, the virus requires us to properly manage resources and information, with every form of settlement in Israel"
-						+ "<br>having a different probability of contracting the virus, which is so important in order to allow residents to continue moving"
-						+ "<br>around the country."
-						+ "<br>The system makes it possible to select for each virus the mutations to which it can develop."
-						+ "<br>To start the simulation, the user must upload a file from a folder of his choice, when he must make sure that the desired"
-						+ "<br>amount of tics is initialized in the spider (the amount received will eventually determine the number of simulations in one"
-						+ " day."
-						+ "<br>The user has to click play to start the simulation, when after clicking this action it cannot be repeated, but the user will"
-						+ "<br>have two new options - stop and pause when if he wants to stop the current simulation he will use pause and if he wants to"
-						+ "<br>load a new simulation he will use stop."
-						+ "<br>The purpose of the simulation is to describe a hypothetical situation of using a demo in the system and check its "
-						+ "correctness."
-						+ "<br>The simulation process will include the following steps:"
-						+ "<br>1. The system will sample 20 randomized patients and for each of them will try to infect with three non-sick people."
-						+ "<br>2. In each locality, each patient who has passed 25 days from the date of his infection, the system will make him recover."
-						+ "<br>3. In each locality, the system will sample 3% of all people (sick and not sick) and for each of them the system will try to make"
-						+ "<br>a move to a random locality."
-						+ "<br>4. In each locality, if there are vaccine doses waiting and there are healthy people waiting, the system will vaccinate them,"
-						+ "<br>with each healthy person vaccinated with one vaccine."
-						+ "<br>We hope that the simulation met your expectations and requirements and that the use came was understandable and simple."
-						+ "<br>We are happy to be at your disposal for any future task required"
-						+ "<br>Editors:"
-						+ "<br>Coral Avital and Yoni Yifrach.</font><html>"));
-				dialog.add(new JLabel(""));
-				dialog.pack();
+				dialog = pane.createDialog(null, "HELP WINDOW");
 				dialog.setVisible(true);
-
 			}
 		});
 

@@ -40,7 +40,7 @@ public class Point {
 	 * @return String.
 	 */
 	public String toString() {
-		return "[x=" + x + "], [y=" + y + "]";
+		return "[x=" + x + "] [y=" + y + "]";
 	}
 
 	//Equals
@@ -71,4 +71,5 @@ public class Point {
 		return this.y;
 	}
 
+	
 }//Point class

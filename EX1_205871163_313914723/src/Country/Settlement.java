@@ -190,7 +190,7 @@ public abstract class Settlement {
 	public String printLinked() {
 		StringBuilder finalString = new StringBuilder();
 		for(int i = 0; i < linkTo.size(); i++) {
-			finalString.append(linkTo.get(i).name + "\n");
+			finalString.append(linkTo.get(i).name + " ");
 		}
 		return "" + finalString;
 
@@ -198,11 +198,11 @@ public abstract class Settlement {
 
 	public String getType() {
 		if(this instanceof City)
-			return "City";
+			return "CITY";
 		else if(this instanceof Moshav)
-			return "Moshav";
+			return "MOSHAV";
 		else
-			return "Kibbutz";
+			return "KIBBUTZ";
 	}
 
 	/**

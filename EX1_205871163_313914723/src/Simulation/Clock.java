@@ -46,6 +46,8 @@ public class Clock {
 		return Math.ceil((double)((now-t)/ticks_per_day));
 	}
 	
-		
+	public static int getTicksPerDay() {
+		return ticks_per_day;
+	}
 
 }//Clock class

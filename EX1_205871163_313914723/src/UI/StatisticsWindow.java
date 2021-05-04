@@ -100,8 +100,10 @@ public class StatisticsWindow extends JFrame {
 
 	}
 
+
 	//---------------constructor--------------------------------------
 	public StatisticsWindow(Map map) {
+		
 		super("StatisticsWindow");
 		statisticFrame.setLayout(new BorderLayout());
 		
@@ -124,9 +126,7 @@ public class StatisticsWindow extends JFrame {
 				if (e.getSource() == combo) {
 
 					switch(combo.getItemAt(combo.getSelectedIndex()).toString()) {
-					case "Col  Select: NONE" : {
-						sorter.setRowFilter(RowFilter.regexFilter(""));
-						break; }
+	                case "Col Select: NONE":sorter.setRowFilter(RowFilter.regexFilter("")); break;
 					case "Col Select: CITY": {
 						sorter.setRowFilter(RowFilter.regexFilter("CITY"));
 						break; }
@@ -172,7 +172,7 @@ public class StatisticsWindow extends JFrame {
 
 			public void actionPerformed(ActionEvent e) {
 				try {
-					new StatisticsFile();
+					new StatisticsFile(map);
 				} 
 				catch (FileNotFoundException e1) {
 					e1.printStackTrace();

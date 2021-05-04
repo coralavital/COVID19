@@ -37,7 +37,7 @@ public class MainWindow extends JFrame {
 							String sPoint = rect.toString();
 							int k =- 1;
 							int i;
-							for(i =0; i< userMenu.getMap().getSettlements().length; i++) {
+							for(i =0; i < userMenu.getMap().getSettlements().length; i++) {
 								if(userMenu.getMap().getSettlements()[i].getLocation().checkRect().equals(sPoint))
 									k = i;
 							}
@@ -45,8 +45,7 @@ public class MainWindow extends JFrame {
 								StatisticsWindow statistics = new StatisticsWindow(userMenu.getMap());
 
 								statistics.getTable().getSelectionModel().setSelectionInterval(0,k);
-								statistics.getLocationOnScreen();
-								//s.getTable().clearSelection();
+
 							}
 
 						}
