@@ -88,11 +88,11 @@ public class ChineseVariant implements IVirus {
 	 * @return: boolean , true if the chance of getting contagion is higher that the random number from 0 to 1 that we got from Math.random())
 	 * else false
 	 */
-	public boolean tryToContagion(Person p1, Person p2) {
+	public boolean tryToContagion(Sick p1, Person p2) {
 		if ((p2 instanceof Sick))
 			return false;
 		else {
-			double t = Clock.days(((Sick)p1).getContagiousTime());
+			double t = Clock.days((p1).getContagiousTime());
 			if((contagionProbability(p2) * Math.min(1, (0.14) * Math.pow(Math.E, (2 - 0.25 * distance(p1, p2)))) <= Math.random()) && t < 5) 
 				return true;
 			

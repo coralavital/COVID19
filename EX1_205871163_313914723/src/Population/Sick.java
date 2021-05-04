@@ -106,7 +106,7 @@ public class Sick extends Person{
 	 * @param virus
 	 * @return Object, Vaccinated person
 	 */
-	public Person recover(IVirus virus) {
+	public Person recover() {
 		int age = this.getAge();
 		Point point = this.getLocation();
 		Settlement settlement = this.getSettlement();

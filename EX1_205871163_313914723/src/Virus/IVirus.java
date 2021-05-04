@@ -23,6 +23,6 @@ public interface IVirus {
 	*/
 
 	public double contagionProbability(Person p);
-	public boolean tryToContagion(Person p1, Person p2);//the first person is sick for sure and the method try to infect the second person
+	public boolean tryToContagion(Sick p1, Person p2);//the first person is sick for sure and the method try to infect the second person
 	public boolean tryToKill(Sick s);
 }//IVirus interface

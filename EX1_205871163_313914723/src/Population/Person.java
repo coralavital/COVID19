@@ -131,9 +131,9 @@ public abstract class Person{
 
 		else {
 			System.out.println("Error, the person is already sick");
-		}
+		
 		return this;
-
+		}
 
 	}
 

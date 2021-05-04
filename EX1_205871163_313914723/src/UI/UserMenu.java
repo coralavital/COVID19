@@ -1,6 +1,7 @@
 package UI;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Graphics;
@@ -24,25 +25,35 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
 import Country.Map;
+import Country.Settlement;
 import IO.SimulationFile;
 import Simulation.Clock;
+import Simulation.Main;
+import Simulation.Simulation;
 import UI.MainWindow.MapPanel;
+/**
+ * UserMenu class which contain all the options and thier click event
+ * in each evenet we added setVisible according to the assigment and thier task
+ * @author coral
+ *
+ */
+public class UserMenu extends JMenuBar {	
 
-public class UserMenu extends JMenuBar {
-	
-	
-	Object[][] data = {{false,false,false}, {false,false,false}, {false,false,false}};
+	boolean data[][] = {{false,false,false}, {false,false,false}, {false,false,false}};
 	StatisticsWindow statistics;
 	private boolean flag;
-	
-	Map map;
 
-	
+	private boolean isON;
+	SimulationFile simolation;
+
+
+
 	JMenu op1;
 	JMenu op2;
 	JMenu op3;
-	
+
 	// Menu items
 	JMenuItem f1, f2, f3, f4;
 	JMenuItem l1, l2, l3, l4;
@@ -61,7 +72,7 @@ public class UserMenu extends JMenuBar {
 
 			public void actionPerformed(ActionEvent e) {
 
-				
+
 				f1.setEnabled(false);
 				f2.setEnabled(true);
 				l3.setEnabled(true);
@@ -74,12 +85,13 @@ public class UserMenu extends JMenuBar {
 				if (fd.getFile() == null)
 					return;
 				File f = new File(fd.getDirectory(), fd.getFile());
-				SimulationFile simolation = new SimulationFile(f.getPath());
+				simolation = new SimulationFile(f.getPath());
 				System.out.println(f.getPath());
 				simolation = new SimulationFile(f.getPath());
 				try {
-					map = new Map(simolation.readFromFile());
+					Main.setMap(new Map(simolation.readFromFile()));
 					flag = true;
+
 					mapPanel.repaint();
 					f4.setEnabled(true);
 				} 
@@ -99,7 +111,7 @@ public class UserMenu extends JMenuBar {
 		f2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				statistics = new StatisticsWindow(map);
+				statistics = new StatisticsWindow();
 			}
 		});
 
@@ -113,7 +125,7 @@ public class UserMenu extends JMenuBar {
 				String colum[]={ "BRITISH VIRUS","CHINESE VIRUS","SOUTHAFRICA VIRUS"};
 				String row[]={ "BRITISH","CHINESE","SOUTHAFRICA"};
 				JPanel panel= new JPanel();
-				
+
 
 				MutationsTable model = new MutationsTable(data, colum);
 				JTable table = new JTable(model);
@@ -122,8 +134,8 @@ public class UserMenu extends JMenuBar {
 				JDialog d= new JDialog(frame,"MUTATIONS WINDOW",true);
 
 
-					
-			
+
+
 				d.add(panel);
 				d.pack();
 				d.setVisible(true);
@@ -145,8 +157,17 @@ public class UserMenu extends JMenuBar {
 
 
 			public void actionPerformed(ActionEvent e) {
+				isON = true;
+				Simulation s = new Simulation();
+				s.initialization();
+				s.simulation();
+				s.transferSick();
+				s.moveSettlement();
+				s.vaccinateHealthy();
 				l1.setEnabled(false);
 				l2.setEnabled(true);
+
+				Clock.nextTick();
 			}
 		});
 
@@ -156,8 +177,11 @@ public class UserMenu extends JMenuBar {
 
 
 			public void actionPerformed(ActionEvent e) {
+				isON = false;
 				l2.setEnabled(false);
 				l1.setEnabled(true);
+
+
 			}
 		});
 
@@ -165,17 +189,19 @@ public class UserMenu extends JMenuBar {
 		l3.setEnabled(false);
 		l3.addActionListener(new ActionListener() {
 
-
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				f1.setEnabled(true);
-				f2.setEnabled(false);
+
 				l1.setEnabled(false);
 				l2.setEnabled(false);
 				l3.setEnabled(false);
+				f1.setEnabled(true);
+				f2.setEnabled(false);
+
 				flag = false;
+
 				mapPanel.repaint();
-				//need to complete stop
+				Main.setMap(null);
+
 			}
 		});
 
@@ -187,7 +213,7 @@ public class UserMenu extends JMenuBar {
 
 			public void actionPerformed(ActionEvent e) {
 
-				
+
 				JDialog dialog;
 
 				String multiMessage = "\r\n\n As part of a study project in an advanced object-oriented programming course,\r\n"
@@ -215,9 +241,9 @@ public class UserMenu extends JMenuBar {
 						+ "Editors:\r\n"
 						+ "Coral Avital and Yoni Yifrach.";
 				JOptionPane pane = new JOptionPane();
-				
+
 				pane.setMessage(multiMessage);
-				
+
 				dialog = pane.createDialog(null, "HELP WINDOW");
 				dialog.setVisible(true);
 			}
@@ -272,12 +298,18 @@ public class UserMenu extends JMenuBar {
 		this.add(op3);
 
 	}
-	
+	//Getters
 	public boolean getFlag() {
 		return flag;
 	}
-	public Map getMap() {
-		return map;
+
+	public boolean getIsON() {
+		return isON;
 	}
+
+	public boolean[][] getData() {
+		return data;
+	}
+
 
 }

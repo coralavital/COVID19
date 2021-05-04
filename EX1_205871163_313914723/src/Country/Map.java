@@ -15,7 +15,7 @@ import java.util.List;
 public class Map {
 
 	private Settlement[] settlements;
-
+	List<Settlement> setAllSettlement;
 
 	//Constructor
 	/***
@@ -66,10 +66,19 @@ public class Map {
 	public Settlement[] getSettlements() {
 		return settlements;
 	}
+	
+	public List<Settlement> getAllSerttlement() {
+		for(int i = 0; i < this.settlements.length; i++) {
+			setAllSettlement.add(settlements[i]);
+		}
+		
+		return setAllSettlement;
+	}
 
 	public Settlement at(int index) {
 		return settlements[index];
 	}
+	
 	
 	public int getSize() {
 		int counter = 0;
@@ -87,6 +96,7 @@ public class Map {
 		System.out.println("cannot find settlement in indexByStr");
 		return -1;
 	}
+
 
 }//Map class
 

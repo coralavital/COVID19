@@ -35,6 +35,7 @@ import IO.StatisticsFile;
 import Population.Person;
 import Population.Sick;
 import Simulation.Clock;
+import Simulation.Main;
 import Virus.BritishVariant;
 import Virus.ChineseVariant;
 import Virus.IVirus;
@@ -46,8 +47,10 @@ public class StatisticsWindow extends JFrame {
 	static JFrame statisticFrame = new JFrame("Statistics Window");
 	private JTextField textFilter;
 	private TableRowSorter<Model> sorter;
-	private Model model;
+	Model model;
 	private JTable table;
+
+
 	private final String [] columnNames = { "NAME", "TYPE", "LOCATION", "RAMZOR COLOR", "NUMBER OF PEOPLE", "NUMBER OF VACCINATE",
 			"LINKED SETTLEMENT","NUMBER OF SICK","NUMBER OF NON-SICK"};
 
@@ -60,53 +63,13 @@ public class StatisticsWindow extends JFrame {
 		}
 
 	}
-	//static class like in the powerpoint
-	private  class Model extends AbstractTableModel{
-
-		private Map mapData;
-
-		public Model(Map mapData) {
-			this.mapData = mapData;
-		}
-
-		public int getRowCount() { 
-			return mapData.getSize();
-		}
-
-		public int getColumnCount () {
-			return 9; 
-		}
-
-		public String getColumnName(int column) { 
-			return columnNames[column];
-		}
-
-		public Object getValueAt(int rowIndex, int columnIndex) {
-			Settlement settlement = mapData.at(rowIndex);
-			switch(columnIndex) {
-			case 0 : return settlement.getName();
-			case 1 : return settlement.getType();
-			case 2 : return settlement.getLocation().getPosition().toString();
-			case 3 : return settlement.getRamzorColor().getColorOfGuitar();
-			case 4 : return settlement.getPeople().size();
-			case 5 : return settlement.getTotalVaccines();
-			case 6 : return settlement.printLinked();
-			case 7:return settlement.getSick().size();
-			case 8:return settlement.getNonSick().size();
-
-			}
-			return null;
-		}
-
-	}
-
 
 	//---------------constructor--------------------------------------
-	public StatisticsWindow(Map map) {
-		
+	public StatisticsWindow() {
+
 		super("StatisticsWindow");
 		statisticFrame.setLayout(new BorderLayout());
-		
+
 		JPanel statisticsPanel = new JPanel();
 
 		statisticsPanel.setLayout(new BoxLayout(statisticsPanel, BoxLayout.LINE_AXIS));
@@ -126,7 +89,7 @@ public class StatisticsWindow extends JFrame {
 				if (e.getSource() == combo) {
 
 					switch(combo.getItemAt(combo.getSelectedIndex()).toString()) {
-	                case "Col Select: NONE":sorter.setRowFilter(RowFilter.regexFilter("")); break;
+					case "Col Select: NONE":sorter.setRowFilter(RowFilter.regexFilter("")); break;
 					case "Col Select: CITY": {
 						sorter.setRowFilter(RowFilter.regexFilter("CITY"));
 						break; }
@@ -172,7 +135,7 @@ public class StatisticsWindow extends JFrame {
 
 			public void actionPerformed(ActionEvent e) {
 				try {
-					new StatisticsFile(map);
+					new StatisticsFile(Main.getMap());
 				} 
 				catch (FileNotFoundException e1) {
 					e1.printStackTrace();
@@ -191,11 +154,11 @@ public class StatisticsWindow extends JFrame {
 				String selectedName = (String) table.getValueAt(table.getSelectedRow(), 0);
 				IVirus virus;
 
-				for(int i = 0; i < map.getSettlements().length; i++) {
-					if(map.getSettlements()[i].getName() == selectedName) {
-						for(int j = 0; j < map.getSettlements()[i].getNonSick().size()*0.01; j++) {
-							int index = rand.nextInt(map.getSettlements()[i].getNonSick().size());
-							Person person = map.getSettlements()[i].getNonSick().get(index);
+				for(int i = 0; i < Main.getMap().getSettlements().length; i++) {
+					if(Main.getMap().getSettlements()[i].getName() == selectedName) {
+						for(int j = 0; j < Main.getMap().getSettlements()[i].getNonSick().size()*0.01; j++) {
+							int index = rand.nextInt(Main.getMap().getSettlements()[i].getNonSick().size());
+							Person person = Main.getMap().getSettlements()[i].getNonSick().get(index);
 							int value = rand.nextInt(3);
 							if(value == 1)
 								virus = new BritishVariant();
@@ -205,8 +168,8 @@ public class StatisticsWindow extends JFrame {
 								virus = new SouthAfricanVariant();
 
 							Sick sick = new Sick(person.getAge(), person.getLocation(), person.getSettlement(), Clock.now(), virus);
-							map.getSettlements()[i].getSick().add(sick);
-							map.getSettlements()[i].getNonSick().remove(j);
+							Main.getMap().getSettlements()[i].getSick().add(sick);
+							Main.getMap().getSettlements()[i].getNonSick().remove(j);
 
 						}
 						model.fireTableDataChanged();
@@ -217,7 +180,7 @@ public class StatisticsWindow extends JFrame {
 		});
 
 
-		this.model = new Model(map);
+		this.model = new Model();
 		table = new JTable (model);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); 
 		table.setPreferredScrollableViewportSize(new Dimension(500 , 100));
@@ -235,7 +198,7 @@ public class StatisticsWindow extends JFrame {
 					int i = Integer.parseInt(s);
 					System.out.println(i);
 					int row = table.getSelectedRow();
-					map.getSettlements()[row].setTotalVaccines(i);
+					Main.getMap().getSettlements()[row].setTotalVaccines(i);
 					model.fireTableDataChanged();					
 
 				} catch (Exception e2) {
@@ -256,8 +219,47 @@ public class StatisticsWindow extends JFrame {
 		statisticFrame.setVisible(true);
 
 	}
-	
+
 	public JTable getTable() {
 		return table;
+	}
+
+	public Model getModel() {
+		return model;
+	}
+
+	public class Model extends AbstractTableModel {
+
+
+		public int getRowCount() { 
+			return Main.getMap().getSize();
+		}
+
+		public int getColumnCount () {
+			return 9; 
+		}
+
+		public String getColumnName(int column) { 
+			return columnNames[column];
+		}
+
+		public Object getValueAt(int rowIndex, int columnIndex) {
+			Settlement settlement = Main.getMap().at(rowIndex);
+			switch(columnIndex) {
+			case 0 : return settlement.getName();
+			case 1 : return settlement.getType();
+			case 2 : return settlement.getLocation().getPosition().toString();
+			case 3 : return settlement.getRamzorColor().getColorOfGuitar();
+			case 4 : return settlement.getPeople().size();
+			case 5 : return settlement.getTotalVaccines();
+			case 6 : return settlement.printLinked();
+			case 7:return settlement.getSick().size();
+			case 8:return settlement.getNonSick().size();
+
+			}
+			return null;
+		}
+
+
 	}
 }

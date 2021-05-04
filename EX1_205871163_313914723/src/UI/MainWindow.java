@@ -10,12 +10,19 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import Country.Map;
+import Simulation.Main;
 
+/*
+ * Representation of a Main class
+ * @author Yoni Ifrah 313914723, Coral Avital 205871163
+ *
+ */
 public class MainWindow extends JFrame {
 	protected  MapPanel mapPanel;
-	private UserMenu userMenu;
-
-
+	protected UserMenu userMenu;
+	
+	
 	// inner class if Map panel
 	protected  class MapPanel extends JPanel {
 		private Shape rect;
@@ -29,20 +36,20 @@ public class MainWindow extends JFrame {
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
 					for(Shape rect:rectangles) {
-						
+
 						Point p = e.getPoint();
-						
+
 						if(rect.contains(p)) {
-							
+
 							String sPoint = rect.toString();
 							int k =- 1;
 							int i;
-							for(i =0; i < userMenu.getMap().getSettlements().length; i++) {
-								if(userMenu.getMap().getSettlements()[i].getLocation().checkRect().equals(sPoint))
+							for(i =0; i < Main.getMap().getSettlements().length; i++) {
+								if(Main.getMap().getSettlements()[i].getLocation().checkRect().equals(sPoint))
 									k = i;
 							}
 							if (k >= 0) {
-								StatisticsWindow statistics = new StatisticsWindow(userMenu.getMap());
+								StatisticsWindow statistics = new StatisticsWindow();
 
 								statistics.getTable().getSelectionModel().setSelectionInterval(0,k);
 
@@ -71,26 +78,26 @@ public class MainWindow extends JFrame {
 				super.paintComponent(g); // clears the last paint
 
 				//draw the connection lines
-				for(int l = 0;l < userMenu.getMap().getSettlements().length;++l){
-					for(int j = 0; j < userMenu.getMap().getSettlements()[l].getLinkTo().size(); j++) {
-						x1 = userMenu.getMap().getSettlements()[l].getLocation().getPosition().getX();
-						y1 = userMenu.getMap().getSettlements()[l].getLocation().getPosition().getY();
-						x2 = userMenu.getMap().getSettlements()[j].getLocation().getPosition().getX();
-						y2 = userMenu.getMap().getSettlements()[j].getLocation().getPosition().getX();
+				for(int l = 0;l < Main.getMap().getSettlements().length;++l){
+					for(int j = 0; j < Main.getMap().getSettlements()[l].getLinkTo().size(); j++) {
+						x1 = Main.getMap().getSettlements()[l].getLocation().getPosition().getX();
+						y1 = Main.getMap().getSettlements()[l].getLocation().getPosition().getY();
+						x2 = Main.getMap().getSettlements()[j].getLocation().getPosition().getX();
+						y2 = Main.getMap().getSettlements()[j].getLocation().getPosition().getX();
 						g.drawLine(x1,y1,x2,y2);
 					}
 				}
 
 				// go on all settlements and paint them with its color and name -> settlements list
 				// for each settlement we will create a rectangle, lets assume there are 10 settlements
-				while (i < userMenu.getMap().getSettlements().length) {
+				while (i < Main.getMap().getSettlements().length) {
 
-					sName = userMenu.getMap().getSettlements()[i].getName();
-					x = userMenu.getMap().getSettlements()[i].getLocation().getPosition().getX();
-					y = userMenu.getMap().getSettlements()[i].getLocation().getPosition().getY();
-					width = userMenu.getMap().getSettlements()[i].getLocation().getSize().getWidth();
-					height = userMenu.getMap().getSettlements()[i].getLocation().getSize().getHeight();
-					g.setColor(userMenu.getMap().getSettlements()[i].getRamzorColor().getColorEnum());
+					sName = Main.getMap().getSettlements()[i].getName();
+					x = Main.getMap().getSettlements()[i].getLocation().getPosition().getX();
+					y = Main.getMap().getSettlements()[i].getLocation().getPosition().getY();
+					width = Main.getMap().getSettlements()[i].getLocation().getSize().getWidth();
+					height = Main.getMap().getSettlements()[i].getLocation().getSize().getHeight();
+					g.setColor(Main.getMap().getSettlements()[i].getRamzorColor().getColorEnum());
 
 					rect = new Rectangle(x,y,width,height);
 					g.draw(rect); // draw the settlement rectangle
@@ -146,9 +153,8 @@ public class MainWindow extends JFrame {
 
 	}
 
-	public static void main(String args[]) {
-
-		MainWindow main = new MainWindow();
+	public UserMenu getUserMenu() {
+		return userMenu;
 	}
-
+	
 }

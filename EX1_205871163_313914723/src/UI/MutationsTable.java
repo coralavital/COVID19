@@ -5,10 +5,10 @@ import javax.swing.table.AbstractTableModel;
 public class MutationsTable extends AbstractTableModel {
 
 	private String[] col_names ;
-	private Object[][] data;
-	public MutationsTable(Object[][] data, String[] colum) { 
+	private boolean[][] data;
+	public MutationsTable(boolean[][] data2, String[] colum) { 
 
-		this.data = data; 
+		this.data = data2; 
 		this.col_names = colum;
 	}
 
