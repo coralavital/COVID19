@@ -53,20 +53,22 @@ public class Simulation{
 					Main.getMap().getSettlements()[i].getNonSick().remove(j);
 					Main.getMap().getSettlements()[i].getPeople().remove(j);
 
-					if(Main.getMap().getSettlements()[j].getNonSick().size() > 3 )
-						simulation(sick, person, i, j);
+					if(Main.getMap().getSettlements()[j].getNonSick().size() > 3 ) {
+						//simulation(sick, person, i, j);
+					}
 				}
 			}
 		}
+
 		//Main.getStatistics().getModel().fireTableDataChanged();
-		Main.getMain().getMapPanel().repaint();
+		//Main.getMain().getMapPanel().repaint();
 	}
 
 
 	public void simulation(Sick sick, Person person, int i, int j) {
 
 		Random rand = new Random();
-				IVirus virus = sick.getVirus();
+		IVirus virus = sick.getVirus();
 		IVirus v = null;
 		Sick s;
 		int index = 0;
@@ -87,7 +89,7 @@ public class Simulation{
 							v = new BritishVariant();
 						if(index == 2)
 							v = new ChineseVariant();
-						if(index == 3)
+						else
 							v = new SouthAfricanVariant();
 
 
