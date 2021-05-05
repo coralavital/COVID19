@@ -41,7 +41,11 @@ import Virus.ChineseVariant;
 import Virus.IVirus;
 import Virus.SouthAfricanVariant;
 
-
+/**
+ * Here we get the statistic stats values and show them in out GUI
+ * @author coral
+ *
+ */
 public class StatisticsWindow extends JFrame {
 
 	static JFrame statisticFrame = new JFrame("Statistics Window");
@@ -194,17 +198,20 @@ public class StatisticsWindow extends JFrame {
 
 			public void actionPerformed(ActionEvent e) {
 				try {
-					String s = JOptionPane.showInputDialog("Enter A NUMBER: ");
+					String s = JOptionPane.showInputDialog("ENTER A NUMBER: ");
 					int i = Integer.parseInt(s);
-					System.out.println(i);
+					//System.out.println(i);
 					int row = table.getSelectedRow();
+					
 					Main.getMap().getSettlements()[row].setTotalVaccines(i);
+					
 					model.fireTableDataChanged();					
 
 				} catch (Exception e2) {
 					JOptionPane.showConfirmDialog(statisticFrame, "Invalid input", "Error", JOptionPane.DEFAULT_OPTION);
 				}
 			}
+			
 		});
 
 
@@ -225,11 +232,10 @@ public class StatisticsWindow extends JFrame {
 	}
 
 	public Model getModel() {
-		return model;
+		return this.model;
 	}
 
 	public class Model extends AbstractTableModel {
-
 
 		public int getRowCount() { 
 			return Main.getMap().getSize();
@@ -242,6 +248,8 @@ public class StatisticsWindow extends JFrame {
 		public String getColumnName(int column) { 
 			return columnNames[column];
 		}
+		
+		
 
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			Settlement settlement = Main.getMap().at(rowIndex);
@@ -260,6 +268,6 @@ public class StatisticsWindow extends JFrame {
 			return null;
 		}
 
-
 	}
+
 }

@@ -198,7 +198,7 @@ public class SimulationFile {
 
 
 			if(buffer[0].equals("City")) {
-				City newCity = new City(name, location, people, sick, healthy, ramzorColor, totalVaccines, linkTo);
+				City newCity = new City(name, location, people, sick, healthy, ramzorColor, 0, linkTo);
 				for(int j = 0; j < Integer.parseInt(buffer[6]); j++) {
 					int age = getAge();
 					Healthy h = new Healthy(age, newCity.randomLocation(), newCity);
@@ -208,7 +208,7 @@ public class SimulationFile {
 			}
 
 			else if(buffer[0].equals("Moshav")) {
-				Moshav newMoshav = new Moshav(name, location, people, sick, healthy, ramzorColor, totalVaccines, linkTo);
+				Moshav newMoshav = new Moshav(name, location, people, sick, healthy, ramzorColor, 0, linkTo);
 				for(int j = 0; j < Integer.parseInt(buffer[6]); j++) {
 					int age = getAge();
 					Healthy h = new Healthy(age, newMoshav.randomLocation(), newMoshav);
@@ -219,7 +219,7 @@ public class SimulationFile {
 			}
 
 			else if(buffer[0].equals("Kibbutz")) {
-				Kibbutz newKibbutz = new Kibbutz(name, location, people, sick, healthy, ramzorColor, totalVaccines, linkTo);
+				Kibbutz newKibbutz = new Kibbutz(name, location, people, sick, healthy, ramzorColor, 0, linkTo);
 				for(int j = 0; j < Integer.parseInt(buffer[6]); j++) {
 					int age = getAge();
 					Healthy h = new Healthy(age, newKibbutz.randomLocation(), newKibbutz);

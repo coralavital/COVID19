@@ -19,12 +19,14 @@ import Simulation.Main;
  *
  */
 public class MainWindow extends JFrame {
-	protected  MapPanel mapPanel;
-	protected UserMenu userMenu;
 	
+	public  MapPanel mapPanel;
+	public UserMenu userMenu;
+	
+	JSlider slider = new JSlider();
 	
 	// inner class if Map panel
-	protected  class MapPanel extends JPanel {
+	public  class MapPanel extends JPanel {
 		private Shape rect;
 		private ArrayList<Shape> rectangles;
 
@@ -49,9 +51,9 @@ public class MainWindow extends JFrame {
 									k = i;
 							}
 							if (k >= 0) {
-								StatisticsWindow statistics = new StatisticsWindow();
-
-								statistics.getTable().getSelectionModel().setSelectionInterval(0,k);
+								
+								Main.setStatistics(new StatisticsWindow());
+								Main.getStatistics().getTable().getSelectionModel().setSelectionInterval(0,k);
 
 							}
 
@@ -131,7 +133,6 @@ public class MainWindow extends JFrame {
 		mapPanel.setBackground(Color.WHITE);
 		this.add(mapPanel); // map panel}
 		// creating JSlider
-		JSlider slider = new JSlider();
 		JLabel label = new JLabel("Current value: " + slider.getValue());
 
 		// set
@@ -155,6 +156,14 @@ public class MainWindow extends JFrame {
 
 	public UserMenu getUserMenu() {
 		return userMenu;
+	}
+	
+	public MapPanel getMapPanel() {
+		return mapPanel;
+	}
+	
+	public JSlider getJSlider() {
+		return slider;
 	}
 	
 }

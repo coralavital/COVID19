@@ -37,17 +37,23 @@ public class Clock {
 		now += 1;
 	}
 	
+	
 	/**
 	  * calculate the days with the time we got as parament
 	  * @param t, long 
 	  * @return double
 	  */
 	public static double days(long t) {
+		//calculate the time in the simulation
 		return Math.ceil((double)((now-t)/ticks_per_day));
 	}
-	
+	//getter
 	public static int getTicksPerDay() {
 		return ticks_per_day;
+	}
+	//setter
+	public static void setTicksPerDay(int num) {
+		ticks_per_day = num;
 	}
 
 }//Clock class

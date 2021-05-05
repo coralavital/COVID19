@@ -41,12 +41,12 @@ public abstract class Settlement {
 	 * @param List people.
 	 * @param RamzorColor ramzorColor.
 	 */
-	public Settlement(String name, Location location, List<Person> people, List<Sick> sick, List<Person> healthy,  RamzorColor ramzorColor, int totalVaccines, List<Settlement> linkTo) {
+	public Settlement(String name, Location location, List<Person> people, List<Sick> sick, List<Person> NonSick, RamzorColor ramzorColor, int totalVaccines, List<Settlement> linkTo) {
 		this.name = name;
 		this.location = location;
 		this.people = people;
 		this.sick = sick;
-		this.NonSick = healthy;
+		this.NonSick = NonSick;
 		this.ramzorColor = ramzorColor;
 		this.totalVaccines = totalVaccines;
 		this.linkTo = linkTo;
@@ -175,7 +175,11 @@ public abstract class Settlement {
 	public void setTotalVaccines(int number) {
 		this.totalVaccines += number;
 	}
-	
+
+	public void decONE() {
+		this.totalVaccines -= 1;
+	}
+
 	public int getTotalVaccines() {
 		return totalVaccines;
 	}
@@ -213,30 +217,18 @@ public abstract class Settlement {
 	public boolean addPerson(Person p) {
 		if(p instanceof Sick) {
 			Sick s = (Sick) p;
-			this.people.add(new Sick(s));
+			this.people.add(s);
 			this.sick.add(s);
 			return true;
-			
+
 		} 
-		else if (p instanceof Healthy) {
-			Healthy h = (Healthy) (p);
-			this.people.add(new Healthy(h));
-			this.NonSick.add(new Healthy(h));
+		else if(!(p instanceof Sick)) {
+			Healthy h = (Healthy) p;
+			this.people.add(h);
+			this.NonSick.add(h);
 			return true;
-			
-		} 
-		else if (p instanceof Convalescent) {
-			Convalescent c = (Convalescent) (p);
-			this.NonSick.add(new Convalescent(c));
-			return true;
-			
-		} 
-		else if (p instanceof Vaccinated) {
-			Vaccinated v = (Vaccinated) (p);
-			this.NonSick.add(new Vaccinated(v));
-			return true;
-		} 
-		
+		}
+
 		else
 			return false;
 
@@ -277,5 +269,7 @@ public abstract class Settlement {
 		Point p = new Point(rand.nextInt(w) + x, rand.nextInt(h) + y);
 		return p;
 	}
+
+
 
 }//Settlement class

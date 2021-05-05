@@ -41,14 +41,13 @@ import UI.MainWindow.MapPanel;
  */
 public class UserMenu extends JMenuBar {	
 
-	boolean data[][] = {{false,false,false}, {false,false,false}, {false,false,false}};
-	StatisticsWindow statistics;
+	boolean data[][] = {{true,false,false}, {false,true,false}, {false, false, true}};
+
 	private boolean flag;
-
 	private boolean isON;
+	private boolean isPLAY;
+
 	SimulationFile simolation;
-
-
 
 	JMenu op1;
 	JMenu op2;
@@ -110,8 +109,8 @@ public class UserMenu extends JMenuBar {
 
 		f2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				statistics = new StatisticsWindow();
+
+				Main.setStatistics(new StatisticsWindow());
 			}
 		});
 
@@ -121,9 +120,9 @@ public class UserMenu extends JMenuBar {
 
 			public void actionPerformed(ActionEvent e) {
 
-				
+
 				String colum[]={ "BRITISH VIRUS","CHINESE VIRUS","SOUTHAFRICA VIRUS"};
-				String row[]={ "BRITISH","CHINESE","SOUTHAFRICA"};
+				String row[]={ "B-virus","C-virus","S-Avirus"};
 				JPanel panel= new JPanel();
 
 
@@ -131,11 +130,10 @@ public class UserMenu extends JMenuBar {
 				JTable table = new JTable(model);
 				table.setFillsViewportHeight(true);
 				panel.add(new RowedTableScroll(table, row));
-				JDialog d= new JDialog(frame,"MUTATIONS WINDOW",true);
-
-
-
-
+				
+				
+				JDialog d = new JDialog(frame,"MUTATIONS WINDOW",true);
+				
 				d.add(panel);
 				d.pack();
 				d.setVisible(true);
@@ -157,17 +155,21 @@ public class UserMenu extends JMenuBar {
 
 
 			public void actionPerformed(ActionEvent e) {
+
 				isON = true;
+				isPLAY = true;
 				Simulation s = new Simulation();
-				s.initialization();
-				s.simulation();
-				s.transferSick();
-				s.moveSettlement();
-				s.vaccinateHealthy();
+				while(isPLAY) {
+					s.initialization();
+					//s.transferSick();
+					//s.moveSettlement();
+					//s.vaccinateHealthy();
+				}
 				l1.setEnabled(false);
 				l2.setEnabled(true);
 
-				Clock.nextTick();
+				mapPanel.repaint();
+
 			}
 		});
 
@@ -177,7 +179,9 @@ public class UserMenu extends JMenuBar {
 
 
 			public void actionPerformed(ActionEvent e) {
-				isON = false;
+				
+				isPLAY = false;
+
 				l2.setEnabled(false);
 				l1.setEnabled(true);
 
@@ -191,22 +195,45 @@ public class UserMenu extends JMenuBar {
 
 			public void actionPerformed(ActionEvent e) {
 
+				isON = false;
+				flag = false;
+
 				l1.setEnabled(false);
 				l2.setEnabled(false);
 				l3.setEnabled(false);
 				f1.setEnabled(true);
 				f2.setEnabled(false);
 
-				flag = false;
 
 				mapPanel.repaint();
+				Main.getStatistics().statisticFrame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
 				Main.setMap(null);
 
 			}
 		});
 
+		
 		l4 = new JMenuItem("SET TICKS PER DAY");
 
+		l4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				try {
+					String s = JOptionPane.showInputDialog("ENTER A NUMBER: ");
+					
+					int i = Integer.parseInt(s);
+					
+					Clock.setTicksPerDay(i);
+
+				} 
+				catch (Exception e2) {
+					
+					JOptionPane.showConfirmDialog(frame, "Invalid input", "Error", JOptionPane.DEFAULT_OPTION);
+				}
+				
+			}
+		});
+		
 		h1 = new JMenuItem("HELP");
 		h1.addActionListener(new ActionListener() {
 
