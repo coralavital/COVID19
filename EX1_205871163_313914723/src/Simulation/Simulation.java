@@ -21,7 +21,6 @@ import Virus.SouthAfricanVariant;
 
 public class Simulation{
 
-
 	// Initialization
 	/**
 	 * Running on all the settlements and the 10% of people in it and make them sick
@@ -29,14 +28,23 @@ public class Simulation{
 	 */
 	public void initialization() {
 		Random rand = new Random();
-		IVirus virus;
+		IVirus virus = null;
 
 		for(int i = 0; i < Main.getMap().getSettlements().length; i++) {
 			for(int j = 0; j < (Main.getMap().getSettlements()[i].getPeople().size()*0.2); j++) {
 				if(!(Main.getMap().getSettlements()[i].getPeople().get(i) instanceof Sick)) {
+
 					int index = rand.nextInt(Main.getMap().getSettlements()[i].getNonSick().size());
-					Person person = Main.getMap().getSettlements()[i].getNonSick().get(index);
+
+					if(index < 0)
+						index = Math.abs(index);
+
+					Person person = Main.getMap().getSettlements()[i].getNonSick().get(1);
+
 					int value = rand.nextInt(3);
+
+					if(value < 0)
+						value = Math.abs(value);
 
 					if(value == 1)
 						virus = new BritishVariant();
@@ -44,7 +52,7 @@ public class Simulation{
 					else if(value == 2)
 						virus = new ChineseVariant();
 
-					else
+					else if(value == 3)
 						virus = new SouthAfricanVariant();
 
 					Sick sick = new Sick(person.getAge(), person.getLocation(), person.getSettlement(), Clock.now(), virus);
@@ -53,8 +61,8 @@ public class Simulation{
 					Main.getMap().getSettlements()[i].getNonSick().remove(j);
 					Main.getMap().getSettlements()[i].getPeople().remove(j);
 
-					if(Main.getMap().getSettlements()[j].getNonSick().size() > 3 ) {
-						//simulation(sick, person, i, j);
+					if(Main.getMap().getSettlements()[j].getNonSick().size() >= 3 ) {
+						simulation(sick, person, i, j);
 					}
 				}
 			}
@@ -62,6 +70,7 @@ public class Simulation{
 
 		//Main.getStatistics().getModel().fireTableDataChanged();
 		//Main.getMain().getMapPanel().repaint();
+
 	}
 
 
@@ -71,6 +80,7 @@ public class Simulation{
 		IVirus virus = sick.getVirus();
 		IVirus v = null;
 		Sick s;
+		int value = 0;
 		int index = 0;
 		//to try 
 		for (int h = 0; h < 3; h++) {
@@ -81,15 +91,21 @@ public class Simulation{
 				for(int k = 0; k < 3; k++) {
 					if(virus instanceof BritishVariant) {
 						if(Main.getMain().getUserMenu().getData()[0][k]) {
-							index++;
+							value++;
 						}
 
-						rand.nextInt(index);
+						index = rand.nextInt(value);
+
+						if(index < 0)
+							index = Math.abs(index);
+
 						if(index == 1) 
 							v = new BritishVariant();
+
 						if(index == 2)
 							v = new ChineseVariant();
-						else
+
+						if(index == 3)
 							v = new SouthAfricanVariant();
 
 
@@ -102,14 +118,20 @@ public class Simulation{
 					}
 					if(virus instanceof ChineseVariant) {
 						if(Main.getMain().getUserMenu().getData()[1][k]) {
-							index++;
+							value++;
 						}
 
-						rand.nextInt(index);
+						index = rand.nextInt(value);
+						
+						if(index < index)
+							index = Math.abs(value);
+						
 						if(index == 1) 
 							v = new BritishVariant();
+						
 						if(index == 2)
 							v = new ChineseVariant();
+						
 						if(index == 3)
 							v = new SouthAfricanVariant();
 
@@ -120,35 +142,41 @@ public class Simulation{
 							Main.getMap().getSettlements()[i].getPeople().remove(j);
 							Main.getMap().getSettlements()[i].addPerson(person.contagion(v));
 						}
-					}
-					if(virus instanceof SouthAfricanVariant) {
-						if(Main.getMain().getUserMenu().getData()[2][k]) {
-							index++;
+						if(virus instanceof SouthAfricanVariant) {
+							if(Main.getMain().getUserMenu().getData()[2][k]) {
+								value++;
+							}
+
+							index = rand.nextInt(value);
+							
+							if(index < 0)
+								index = Math.abs(index);
+							
+							if(index == 1) 
+								v = new BritishVariant();
+							
+							if(index == 2)
+								v = new ChineseVariant();
+							
+							if(index == 3)
+								v = new SouthAfricanVariant();
+
+
+							s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), v);
+							if(v.tryToContagion(s, person)) {
+								Main.getMap().getSettlements()[i].getNonSick().remove(j);
+								Main.getMap().getSettlements()[i].getPeople().remove(j);
+								Main.getMap().getSettlements()[i].addPerson(person.contagion(v));
+							}
 						}
-
-						rand.nextInt(index);
-						if(index == 1) 
-							v = new BritishVariant();
-						if(index == 2)
-							v = new ChineseVariant();
-						if(index == 3)
-							v = new SouthAfricanVariant();
-
-
-						s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), v);
-						if(v.tryToContagion(s, person)) {
-							Main.getMap().getSettlements()[i].getNonSick().remove(j);
-							Main.getMap().getSettlements()[i].getPeople().remove(j);
-							Main.getMap().getSettlements()[i].addPerson(person.contagion(v));
-						}
 					}
+
 				}
-
 			}
 		}
 
 		//Main.getStatistics().getModel().fireTableDataChanged();
-		Main.getMain().getMapPanel().repaint();
+		//Main.getMain().getMapPanel().repaint();
 	}
 
 

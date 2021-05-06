@@ -21,7 +21,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -44,8 +46,8 @@ public class UserMenu extends JMenuBar {
 	boolean data[][] = {{true,false,false}, {false,true,false}, {false, false, true}};
 
 	private boolean flag;
-	private boolean isON;
-	private boolean isPLAY;
+	private boolean isON;//for the main function
+	private boolean isPLAY;//for the pause select
 
 	SimulationFile simolation;
 
@@ -164,10 +166,14 @@ public class UserMenu extends JMenuBar {
 					//s.transferSick();
 					//s.moveSettlement();
 					//s.vaccinateHealthy();
+					//System.out.println("true");
+					
+					
 				}
+				isPLAY = false;
 				l1.setEnabled(false);
 				l2.setEnabled(true);
-
+				
 				mapPanel.repaint();
 
 			}
@@ -196,13 +202,15 @@ public class UserMenu extends JMenuBar {
 			public void actionPerformed(ActionEvent e) {
 
 				isON = false;
+				isPLAY = false;
 				flag = false;
+
+				f1.setEnabled(true);
+				f2.setEnabled(false);
 
 				l1.setEnabled(false);
 				l2.setEnabled(false);
 				l3.setEnabled(false);
-				f1.setEnabled(true);
-				f2.setEnabled(false);
 
 
 				mapPanel.repaint();
@@ -216,23 +224,22 @@ public class UserMenu extends JMenuBar {
 		l4 = new JMenuItem("SET TICKS PER DAY");
 
 		l4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				try {
-					String s = JOptionPane.showInputDialog("ENTER A NUMBER: ");
-					
-					int i = Integer.parseInt(s);
-					
-					Clock.setTicksPerDay(i);
 
-				} 
-				catch (Exception e2) {
-					
-					JOptionPane.showConfirmDialog(frame, "Invalid input", "Error", JOptionPane.DEFAULT_OPTION);
-				}
-				
-			}
+			
+			public void actionPerformed(ActionEvent e) {
+				double tmp = 0;
+				SpinnerNumberModel Model = new SpinnerNumberModel(0.0, 0.00, 100.00, 1.00);// start with 0, the minimum  is 0, the maximum is 0 and increase steps is 1;
+				JSpinner spinner1 = new JSpinner(Model);
+				int clickOK = JOptionPane.showOptionDialog(null, spinner1, "SET TICKS PER DAY WINDOW",
+						JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+				if (clickOK == JOptionPane.OK_OPTION)
+					tmp = (Double) spinner1.getValue();
+				int ticks = (int) tmp;
+				System.out.println(ticks);
+				Clock.setTicksPerDay(ticks);
+	}
 		});
+	
 		
 		h1 = new JMenuItem("HELP");
 		h1.addActionListener(new ActionListener() {
@@ -330,6 +337,11 @@ public class UserMenu extends JMenuBar {
 		return flag;
 	}
 
+	public boolean getIsPLAY() {
+		return isPLAY;
+	}
+	
+	
 	public boolean getIsON() {
 		return isON;
 	}

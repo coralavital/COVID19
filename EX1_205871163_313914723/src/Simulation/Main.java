@@ -33,14 +33,14 @@ public class Main {
 
 				public void run() {
 					//update all
-					Main.updateAll();
+					//Main.updateAll();
 					
 				}
 				
 			});
 			//inc by ont the clock
-			Clock.nextTick();
-			Thread.sleep(Main.getMain().getJSlider().getValue());
+			//Clock.nextTick();
+			//Thread.sleep(Main.getMain().getJSlider().getValue());
 		}
 
 	}
