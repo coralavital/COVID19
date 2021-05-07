@@ -99,7 +99,7 @@ public class MainWindow extends JFrame {
 					y = Main.getMap().getSettlements()[i].getLocation().getPosition().getY();
 					width = Main.getMap().getSettlements()[i].getLocation().getSize().getWidth();
 					height = Main.getMap().getSettlements()[i].getLocation().getSize().getHeight();
-					g.setColor(Main.getMap().getSettlements()[i].getRamzorColor().getColorEnum());
+					g.setColor(Main.getMap().getSettlements()[i].calcuateRamzorGrade().getColorEnum());
 
 					rect = new Rectangle(x,y,width,height);
 					g.draw(rect); // draw the settlement rectangle

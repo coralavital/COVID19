@@ -7,6 +7,8 @@ import Population.Healthy;
 import Population.Person;
 import Population.Sick;
 import Population.Vaccinated;
+import Simulation.Main;
+
 import java.util.*;
 import java.util.List;
 import java.util.Random;
@@ -116,6 +118,7 @@ public abstract class Settlement {
 	public List<Person> getPeople() {
 		return people;
 	}
+	
 
 	/**
 	 * get functions that give ramzorColor object.
@@ -216,6 +219,7 @@ public abstract class Settlement {
 	 */
 	public boolean addPerson(Person p) {
 		if(p instanceof Sick) {
+			//thie person is sick so we add him to the sick people
 			Sick s = (Sick) p;
 			this.people.add(s);
 			this.sick.add(s);
@@ -223,9 +227,22 @@ public abstract class Settlement {
 
 		} 
 		else if(!(p instanceof Sick)) {
-			Healthy h = (Healthy) p;
-			this.people.add(h);
-			this.NonSick.add(h);
+			
+			if(p instanceof Healthy) {
+				Healthy h = (Healthy) p;
+				this.people.add(h);
+				this.NonSick.add(h);
+			}
+			else if(p instanceof Convalescent) {
+				Convalescent c = (Convalescent) p;
+				this.people.add(c);
+				this.NonSick.add(c);
+			}
+			else {
+				Vaccinated v = (Vaccinated) p; 
+				this.people.add(v);
+				this.NonSick.add(v);
+			}
 			return true;
 		}
 
@@ -233,7 +250,6 @@ public abstract class Settlement {
 			return false;
 
 	}
-
 
 
 	/**

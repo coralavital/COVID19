@@ -46,8 +46,7 @@ public class UserMenu extends JMenuBar {
 	boolean data[][] = {{true,false,false}, {false,true,false}, {false, false, true}};
 
 	private boolean flag;
-	private boolean isON;//for the main function
-	private boolean isPLAY;//for the pause select
+
 
 	SimulationFile simolation;
 
@@ -157,22 +156,32 @@ public class UserMenu extends JMenuBar {
 
 
 			public void actionPerformed(ActionEvent e) {
-
-				isON = true;
-				isPLAY = true;
+				//update the relevant flags
+				Main.setPLAY(true);
+				Main.setON(true);
+				
+				//creat an object of the simulation
 				Simulation s = new Simulation();
-				while(isPLAY) {
+				
+				//to sure the statistics frame is update
+
+				l1.setEnabled(false);
+				l2.setEnabled(true);
+				Main.getStatistics().statisticFrame.setDefaultCloseOperation(frame.getDefaultCloseOperation());
+				while(Main.isPLAY()) {
+					//The role of the method is to sample 20% of patients out of all the people in localities that have already been initialized 
+					//on the map and for each person who has become ill an attempt will be made to infect three different people
+					//And for this purpose uses another method whose function is to try to infect a random person who is not ill
 					s.initialization();
-					//s.transferSick();
+					
+					//s.recoverToHealthy();
 					//s.moveSettlement();
-					//s.vaccinateHealthy();
-					//System.out.println("true");
+					s.vaccinateHealthy();
+					System.out.println("true");
 					
 					
 				}
-				isPLAY = false;
-				l1.setEnabled(false);
-				l2.setEnabled(true);
+				
 				
 				mapPanel.repaint();
 
@@ -186,8 +195,8 @@ public class UserMenu extends JMenuBar {
 
 			public void actionPerformed(ActionEvent e) {
 				
-				isPLAY = false;
-
+				
+				Main.setPLAY(false);
 				l2.setEnabled(false);
 				l1.setEnabled(true);
 
@@ -201,8 +210,9 @@ public class UserMenu extends JMenuBar {
 
 			public void actionPerformed(ActionEvent e) {
 
-				isON = false;
-				isPLAY = false;
+				Main.setON(false);
+				Main.setPLAY(false);
+				
 				flag = false;
 
 				f1.setEnabled(true);
@@ -337,14 +347,6 @@ public class UserMenu extends JMenuBar {
 		return flag;
 	}
 
-	public boolean getIsPLAY() {
-		return isPLAY;
-	}
-	
-	
-	public boolean getIsON() {
-		return isON;
-	}
 
 	public boolean[][] getData() {
 		return data;

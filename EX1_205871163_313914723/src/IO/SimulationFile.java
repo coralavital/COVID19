@@ -242,7 +242,7 @@ public class SimulationFile {
 		br.close();
 
 		setLinkTo(settlement);
-
+		
 
 		return settlement;
 	}

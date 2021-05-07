@@ -64,8 +64,8 @@ public class City extends Settlement{
 	  */
 	public RamzorColor calcuateRamzorGrade() {
 		double p = contaiousPercent();
-		double c = this.getRamzorColor().getCoefficient();// TODO problem
-		c = 0.2 * Math.pow(4, 1.25 * p);
+		double c = this.getRamzorColor().getCoefficient();
+		c = 0.2 * Math.pow(4, (1.25 * p));
 		this.setRamzorColor(RamzorColor.choice(c));
 		return RamzorColor.choice(c);
 
