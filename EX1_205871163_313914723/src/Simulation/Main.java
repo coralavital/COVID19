@@ -44,7 +44,6 @@ public class Main {
 			//inc by ont the clock
 			Clock.nextTick();
 			Thread.sleep(Main.getMain().getJSlider().getValue());
-			//setON(false);
 		}
 
 	}

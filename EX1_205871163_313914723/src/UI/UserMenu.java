@@ -167,22 +167,22 @@ public class UserMenu extends JMenuBar {
 
 				l1.setEnabled(false);
 				l2.setEnabled(true);
+				
 				Main.getStatistics().statisticFrame.setDefaultCloseOperation(frame.getDefaultCloseOperation());
 				while(Main.isPLAY()) {
 					//The role of the method is to sample 20% of patients out of all the people in localities that have already been initialized 
 					//on the map and for each person who has become ill an attempt will be made to infect three different people
 					//And for this purpose uses another method whose function is to try to infect a random person who is not ill
 					s.initialization();
-					
-					//s.recoverToHealthy();
-					//s.moveSettlement();
+					s.recoverToHealthy();
+					s.moveSettlement();
 					s.vaccinateHealthy();
-					System.out.println("true");
 					
 					
 				}
 				
-				
+				l1.setEnabled(true);
+				l2.setEnabled(false);
 				mapPanel.repaint();
 
 			}
