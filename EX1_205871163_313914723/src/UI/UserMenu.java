@@ -49,18 +49,24 @@ public class UserMenu extends JMenuBar {
 
 
 	SimulationFile simolation;
-
+	
+	/**
+	 * op1: file menu, op2: simulation menu, op3: help menu
+	 */
 	JMenu op1;
 	JMenu op2;
 	JMenu op3;
 
-	// Menu items
+	 /**
+	  * f1: load, f2: statistic window, f3: edit mutation window, f4: exit
+	  * l1:play, l2: pause, l3: stop, l4: set ticks per day
+	  * h1:help, h2:about
+	  */
 	JMenuItem f1, f2, f3, f4;
 	JMenuItem l1, l2, l3, l4;
 	JMenuItem h1, h2;
 
 	public UserMenu(JFrame frame, MapPanel mapPanel) {
-
 		// create a menu
 		op1 = new JMenu("FILE");
 		op2 = new JMenu("SIMULATION");
@@ -93,13 +99,13 @@ public class UserMenu extends JMenuBar {
 
 					mapPanel.repaint();
 					f4.setEnabled(true);
+					Main.setON(true);
 				} 
 				catch (Exception e1) {
 
 					JOptionPane.showConfirmDialog(frame, "INVALID FILE", "ERROR", JOptionPane.DEFAULT_OPTION);
 				}
 
-				Main.setON(true);
 			}
 
 		});
@@ -157,19 +163,13 @@ public class UserMenu extends JMenuBar {
 
 			public void actionPerformed(ActionEvent e) {
 				//update the relevant flags
+
 				Main.setPLAY(true);
-				
-				//to sure the statistics frame is update
-				
-				l1.setEnabled(false);
 				l2.setEnabled(true);
-				//creat an object of the simulation
-				
-				//mapPanel.repaint();
+				l1.setEnabled(false);
 
 			}
 		});
-		
 		
 		
 
@@ -179,7 +179,6 @@ public class UserMenu extends JMenuBar {
 
 
 			public void actionPerformed(ActionEvent e) {
-				
 				Main.setPLAY(false);
 				
 				l2.setEnabled(false);
@@ -191,13 +190,12 @@ public class UserMenu extends JMenuBar {
 
 
 		l3 = new JMenuItem("STOP");
-		l3.setEnabled(false);
+		
 		l3.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 
 				Main.setON(false);
-				Main.setPLAY(false);
 				
 				flag = false;
 
@@ -328,12 +326,19 @@ public class UserMenu extends JMenuBar {
 		this.add(op3);
 
 	}
-	//Getters
+	
+	/**
+	  * getter function for flag
+	  * @return: boolean, flag
+	  */
 	public boolean getFlag() {
 		return flag;
 	}
 
-
+	/**
+	 * getter for data which is the mutation table
+	 * @return: boolean, data
+	 */
 	public boolean[][] getData() {
 		return data;
 	}

@@ -48,12 +48,18 @@ public class Clock {
 		return Math.ceil((double)((now-t)/ticks_per_day));
 	}
 	
-	//getter
+	/**
+	  * Get ticks_per_day value
+	  * @return ticks_per_day, int
+	  */
 	public static int getTicksPerDay() {
 		return ticks_per_day;
 	}
 	
-	//setter
+	/**
+	  * Set ticks_per_day value
+	  * @param ticks_per_day, int
+	  */
 	public static void setTicksPerDay(int num) {
 		ticks_per_day = num;
 	}

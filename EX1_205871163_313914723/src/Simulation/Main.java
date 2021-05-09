@@ -22,30 +22,16 @@ public class Main {
 	static StatisticsWindow statistics;
 	static Simulation s;
 	static boolean isON, isPLAY;
+	
 	//load function
 	public static void load() throws InterruptedException {
 
-		map = null;
-		main = new MainWindow();
-		setON(false);
-		setPLAY(false);
-
-
-		while(isON == true) {
+		while(isON() == true) {
 			// when getIsON true the user press play and the simulation start 
-
-			do {
-				Thread.sleep(Main.getMain().getJSlider().getValue()*1000);
-			}while(!isPLAY);
-
-
-			//update all
 			s = new Simulation();
 
-
-			//Main.getStatistics().statisticFrame.setDefaultCloseOperation(main.getDefaultCloseOperation());
-			while(!isPLAY) {
-			//while(isPLAY()) {
+			while(isPLAY() == true) {
+				
 				//The role of the method is to sample 20% of patients out of all the people in localities that have already been initialized 
 				//on the map and for each person who has become ill an attempt will be made to infect three different people
 				//And for this purpose uses another method whose function is to try to infect a random person who is not ill
@@ -54,72 +40,110 @@ public class Main {
 				s.moveSettlement();
 				s.vaccinateHealthy();
 
-				Main.updateAll();
+				//Update the map panel according to recalculations of the data needed for drawing
+				Main.getMain().getMapPanel().repaint();
+
 				//inc by one the time in the simulation
 				Clock.nextTick();
-				setPLAY(false);
+				//The thread goes to sleep between iterations and iterations according to the value entered by the user in JSlider 
+				Thread.sleep(Main.getMain().getJSlider().getValue()*1000);
 			}
+
 		}
+
 
 	}
 
-	//Get map
+	/**
+	 * Get map object
+	 * @return map, Map Object
+	 */
 	public static Map getMap() {
 		return map;
 	}
 
-	//Set map
+	/**
+	 * Set map object
+	 * @param map, Map Object
+	 */
 	public static void setMap(Map map) {
 		Main.map = map;
 	}
 
-	//get the main main
+	/**
+	 * Get main object
+	 * @return map, MainWindow Object
+	 */
 	public static MainWindow getMain() {
 		return main;
 	}
 
-	//set statistiics window
+	/**
+	 * Set statistics object
+	 * @param map, StatisticsWindow Object
+	 */
 	public static void setStatistics(StatisticsWindow statistics) {
 		Main.statistics = statistics;
 	}
 
-	//get statistics window
+	/**
+	 * Get statistics object
+	 * @return map, StatisticsWindow Object
+	 */
 	public static StatisticsWindow getStatistics() {
 		return statistics;
 	}
 
-
+	/**
+	 * Get for the flag that indicates if the file is play
+	 * @return isPLAY, boolean
+	 */
 	public static boolean isPLAY() {
 		return isPLAY;
 	}
-
+	
+	/**
+	 * Set for the flag that indicates if the file is play
+	 * @param isPLAY, boolean
+	 */
 	public static void setPLAY(boolean isPLAY) {
 		Main.isPLAY = isPLAY;
 	}
 
+	/**
+	 * Get for the flag that indicates if the file is loaded
+	 * @return isON, boolean
+	 */
 	public static boolean isON() {
 		return isON;
 	}
-
+	/**
+	 * Set for the flag that indicates if the file is loaded
+	 * @param isON, boolean
+	 */
 	public static void setON(boolean isON) {
 		Main.isON = isON;
 	}
 
-	//update all
-	public static void updateAll() {
-
-		Main.getStatistics().getModel().fireTableDataChanged();
-		Main.getMain().getMapPanel().repaint();
-
-	}
 
 
 
-	//main function for all the system
+	/**
+	 * The main function of this project
+	 * @param args, String[]
+	 */
 	public static void main(String[] args) throws InterruptedException {
-
-		load();
-
+		map = null;
+		main = new MainWindow();
+		
+		setON(false);
+		setPLAY(false);
+		//A while loop that makes sure that between each charge there is a second sleep
+		while(true) {
+			load();
+			Thread.sleep(1000);
+		}
+		
 	}
 
 }

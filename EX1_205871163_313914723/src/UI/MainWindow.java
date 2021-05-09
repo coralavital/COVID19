@@ -24,14 +24,17 @@ public class MainWindow extends JFrame {
 	
 	JSlider slider = new JSlider();
 	
-	// inner class if Map panel
+	// Inner class if Map panel
 	public  class MapPanel extends JPanel {
 		private Shape rect;
 		private ArrayList<Shape> rectangles;
 
-
+		/**
+	     * Each rectangles is a settlement and if we clicked on settlement k will be the index of the settlement inside the 
+	     * Stats Table, then we will open the statistics window with mentioning the k settlement clicked
+	     */
 		MapPanel(){
-			repaint();
+			repaint();//In order to update the GUI drawing
 			addMouseListener((MouseListener) new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -64,7 +67,7 @@ public class MainWindow extends JFrame {
 			});
 		}
 
-		@Override
+		//The method that actually draws the map in our main frame
 		protected void paintComponent(Graphics gr) {
 			if(userMenu.getFlag()) {
 				Graphics2D g = (Graphics2D)gr;
@@ -76,9 +79,9 @@ public class MainWindow extends JFrame {
 				String sName = "";
 
 
-				super.paintComponent(g); // clears the last paint
+				super.paintComponent(g); //Clears the last paint
 
-				//draw the connection lines
+				//Draw the connection lines
 				for(int l = 0;l < Main.getMap().getSettlements().length;++l){
 					for(int j = 0; j < Main.getMap().getSettlements()[l].getLinkTo().size(); j++) {
 						x1 = Main.getMap().getSettlements()[l].getLocation().getPosition().getX();
@@ -89,8 +92,8 @@ public class MainWindow extends JFrame {
 					}
 				}
 
-				// go on all settlements and paint them with its color and name -> settlements list
-				// for each settlement we will create a rectangle, lets assume there are 10 settlements
+				//Go on all settlements and paint them with its color and name -> settlements list
+				//For each settlement we will create a rectangle, lets assume there are 10 settlements
 				while (i < Main.getMap().getSettlements().length) {
 
 					sName = Main.getMap().getSettlements()[i].getName();
@@ -101,17 +104,17 @@ public class MainWindow extends JFrame {
 					g.setColor(Main.getMap().getSettlements()[i].calcuateRamzorGrade().getColorEnum());
 
 					rect = new Rectangle(x,y,width,height);
-					g.draw(rect); // draw the settlement rectangle
-					g.fill(rect); // paint the rectangle with the settlement color
+					g.draw(rect); //Draw the settlement rectangle
+					g.fill(rect); //Paint the rectangle with the settlement color
 					FontMetrics fm = g.getFontMetrics();
-					int stringx = x + (width - fm.stringWidth(sName)) / 2;; // Determine the X coordinate for the text
-					int stringy = y + ((height - fm.getHeight()) / 2) + fm.getAscent(); // Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
+					int stringx = x + (width - fm.stringWidth(sName)) / 2;; //Determine the X coordinate for the text
+					int stringy = y + ((height - fm.getHeight()) / 2) + fm.getAscent(); //Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
 					g.setColor(Color.BLACK);
-					g.drawString(sName,stringx,stringy); // draw the settlement name
-					rectangles.add(rect); // adds to the rectangles list
+					g.drawString(sName,stringx,stringy); //Draw the settlement name
+					rectangles.add(rect); //Adds to the rectangles list
 					++i;
 
-					// initialize x, y, width,height, color, name of the settlement
+					//Initialize x, y, width,height, color, name of the settlement
 
 				}
 
@@ -122,25 +125,28 @@ public class MainWindow extends JFrame {
 				return;
 		}
 	}
+	
+	/**
+     * The constructor that initializes the entire main window and creates from it an object in front of which our main function will work
+     */
 	public MainWindow() {
 		super("Main");
 		this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
 		mapPanel=  new MapPanel();
-		setJMenuBar(userMenu = new UserMenu(this,mapPanel));// User menu
+		setJMenuBar(userMenu = new UserMenu(this,mapPanel));//User menu
 		// create mapPanel
 		mapPanel.setPreferredSize(new Dimension(600, 600));
 		mapPanel.setBackground(Color.WHITE);
-		this.add(mapPanel); // map panel}
-		// creating JSlider
+		this.add(mapPanel); //Map panel}
+		//Creating JSlider
 		JLabel label = new JLabel("Current value: " + slider.getValue());
 
-		// set
+		//Set
 		slider.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				int value = slider.getValue();
 				label.setText("current value: " + value);
-				// we will need to add sleep between the ticks
 			}
 
 		});
@@ -152,15 +158,27 @@ public class MainWindow extends JFrame {
 		this.setVisible(true);
 
 	}
-
+	
+	/**
+	 * getter function for userMenu
+	 * @return: object, usermenu
+	 */
 	public UserMenu getUserMenu() {
 		return userMenu;
 	}
 	
+	/**
+	  * getter function for mapPanel
+	  * @return: object, mapPanel
+	  */
 	public MapPanel getMapPanel() {
 		return mapPanel;
 	}
 	
+	 /**
+	  * getter function for slider
+	  * @return: object, slider
+	  */
 	public JSlider getJSlider() {
 		return slider;
 	}

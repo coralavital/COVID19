@@ -161,39 +161,69 @@ public abstract class Settlement {
 	}
 
 
-
+	/**
+	 *  getter function for sick
+	 * @return: list , sick
+	 */
 	public List<Sick> getSick() {
 		return sick;
 	}
 
+	 /**
+	  * getter function for non sick 
+	  * @return: list , NonSick
+	  */
 	public List<Person> getNonSick() {
 		return NonSick;
 	}
 
-
+	 /**
+	  * getter function for total persons
+	  * @return: list , sick
+	  */
 	public int getTotalPersons() {
 		return totalPersons;
 	}
 
+	/**
+	 * setter function for the number of vaccines
+	 * @param: int, number
+	 */
 	public void setTotalVaccines(int number) {
 		this.totalVaccines += number;
 	}
 
+	/**
+	 * decreasing the number of vaccines if there is more than zero else it will stay zero 
+	 */
 	public void decVaccineByOne() {
-		this.totalVaccines -= 1;
+		if(this.totalVaccines > 0)
+			this.totalVaccines -= 1;
+		else
+			this.totalVaccines = 0;
 	}
 
+	/**
+	 * getter function for number of vaccines
+	 * @return: int, totalVaccines
+	 */
 	public int getTotalVaccines() {
 		return totalVaccines;
 	}
 
-
+	 /**
+	  * getter function for linked settlements to the current settlement
+	  * @return: list, linkTo
+	  */
 	public List<Settlement> getLinkTo() {
 		return this.linkTo;
 	}
 
 
-
+	/**
+	 * returning a string that match inside to the cell of the Excel file
+	 * @return: String, finalString
+	 */
 	public String printLinked() {
 		StringBuilder finalString = new StringBuilder();
 		for(int i = 0; i < linkTo.size(); i++) {
@@ -203,6 +233,10 @@ public abstract class Settlement {
 
 	}
 
+	/**
+	 * return the name of the type of the settlement 
+	 * @return:String, CITY/MOSHAV/KIBBUTZ
+	 */
 	public String getType() {
 		if(this instanceof City)
 			return "CITY";
@@ -282,7 +316,7 @@ public abstract class Settlement {
 			}
 			else 
 				System.out.println("this person is allready in the settlement");
-				return false;
+			return false;
 		}
 		return false;
 	}

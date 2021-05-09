@@ -54,11 +54,13 @@ public class StatisticsWindow extends JFrame {
 	Model model;
 	private JTable table;
 
-
+	//the categories inside the chart
 	private final String [] columnNames = { "NAME", "TYPE", "LOCATION", "RAMZOR COLOR", "NUMBER OF PEOPLE", "NUMBER OF VACCINATE",
 			"LINKED SETTLEMENT","NUMBER OF SICK","NUMBER OF NON-SICK"};
 
-
+	/**
+	 * used for filtering the stasts table by text
+	 */
 	private void newFilter() {
 		try {
 			sorter.setRowFilter(RowFilter.regexFilter(textFilter.getText()));
@@ -68,7 +70,9 @@ public class StatisticsWindow extends JFrame {
 
 	}
 
-	//---------------constructor--------------------------------------
+	/**
+	 * A builder that initializes the entire statistics window
+	 */
 	public StatisticsWindow() {
 
 		super("StatisticsWindow");
@@ -81,6 +85,7 @@ public class StatisticsWindow extends JFrame {
 
 		southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.LINE_AXIS));
 
+		  //categories inside the comboBox
 		final String [] names = {"Col Select: NONE", "Col Select: CITY", "Col Select: MOSHAV", "Col Select: KIBBUTZ", "Col Select: GREEN",
 				"Col Select: YELLOW", "Col Select: ORANGE", "Col Select: RED"};
 		JComboBox combo = new JComboBox<String>(names);
@@ -133,7 +138,7 @@ public class StatisticsWindow extends JFrame {
 
 		JButton save = new JButton("Save");
 		southPanel.add(save);
-		//save to csv file
+		 //save into csv file the currect stats table
 		save.addActionListener(new ActionListener() {
 
 
@@ -151,13 +156,17 @@ public class StatisticsWindow extends JFrame {
 
 		JButton add = new JButton("Add Sick");
 		southPanel.add(add);
-		//add another 10% of sicks people
+		  //infect 10% non-sicks people to the selected settlement
 		add.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Random rand = new Random();
 				String selectedName = (String) table.getValueAt(table.getSelectedRow(), 0);
 				IVirus virus;
 
+				 /**
+			     * running on all the settlements if we found what the user selected then add a random virus into their people
+			     * if he didnt selected then we wont be able to add sick people
+			     */
 				for(int i = 0; i < Main.getMap().getSettlements().length; i++) {
 					if(Main.getMap().getSettlements()[i].getName() == selectedName) {
 						for(int j = 0; j < Main.getMap().getSettlements()[i].getNonSick().size()*0.01; j++) {
@@ -194,6 +203,9 @@ public class StatisticsWindow extends JFrame {
 
 
 		JButton vaccinate = new JButton("Vaccinate");
+		 /**
+		   *  adding the number we got from the user as a vaccines to the settlement 
+		   */
 		vaccinate.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -227,20 +239,34 @@ public class StatisticsWindow extends JFrame {
 
 	}
 
+	/**
+	 * getter function for table 
+	 * @return:Object, JTable
+	 */
 	public JTable getTable() {
 		return table;
 	}
 
+	 /**
+	  * getter function for model 
+	  * @return:Object, model
+	  */
 	public Model getModel() {
 		return this.model;
 	}
 
+	/**
+	 * inner class which provides what we will have inside the stats table
+	 * @author yonif
+	 *
+	 */
 	public class Model extends AbstractTableModel {
 
 		public int getRowCount() { 
 			return Main.getMap().getSize();
 		}
-
+		
+		//giving the size of ampunt of column to the stats table
 		public int getColumnCount () {
 			return 9; 
 		}
@@ -250,7 +276,11 @@ public class StatisticsWindow extends JFrame {
 		}
 		
 		
-
+		/**
+		 * @param: int, rowIndex and columnIndex
+		 * @return:Object, case 0: settlement name, case 1 settlement type by String, case 2  settlement position, case 3 settlement ramzor color, case 4 the amount of people inside the settlement,
+		 * case 5 the amount of vaccines inside that settlement, case 6 the linked settlements to the current settlement, case 7 the amount of the sick people in that settlement, case 8 the mount of non sick 
+		 */
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			Settlement settlement = Main.getMap().at(rowIndex);
 			switch(columnIndex) {

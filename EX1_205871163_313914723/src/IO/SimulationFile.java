@@ -122,6 +122,10 @@ public class SimulationFile {
 		}
 	}
 
+	/**
+	 * A method that reads from the file to initialize the cities to which each settlement is linked
+	 * @return int, the number of lines in the file
+	 */
 	public void setLinkTo(List<Settlement> settlement) throws IOException {
 		String[] buffer;
 		String s;

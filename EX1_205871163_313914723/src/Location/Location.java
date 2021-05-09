@@ -58,6 +58,10 @@ public class Location {
 		return size;
 	}
 
+	/**
+	 * used onced in order to find the settlement we clicked on GUI
+	 * @return: String
+	 */
 	public String checkRect() {
 		return "java.awt.Rectangle[x="+this.position.getX()+",y="+this.getPosition().getY()+",width="+this.size.getWidth()+",height="+this.size.getHeight()+"]";
 	}

@@ -29,7 +29,6 @@ public class Simulation{
 	 * Running on all the settlements and the 20% of people in it and make them sick
 	 * @param map
 	 */
-
 	public void initialization() {
 		Random rand = new Random();
 		IVirus virus = null;
@@ -38,7 +37,7 @@ public class Simulation{
 			for(int j = 0; j < (Main.getMap().getSettlements()[i].getNonSick().size()*0.2); j++) {
 
 				int index = rand.nextInt(Main.getMap().getSettlements()[i].getNonSick().size());
-				
+
 				Person person = Main.getMap().getSettlements()[i].getNonSick().get(index);
 
 				int value = rand.nextInt(3);
@@ -84,7 +83,10 @@ public class Simulation{
 
 	}
 
-
+	/**
+	 * Method that try to infect 3 non-sick people by one sick person
+	 * @param sick, Sick object
+	 */
 	public void tryToInfect(Sick sick, int i) {
 
 		Random rand = new Random();
@@ -199,7 +201,9 @@ public class Simulation{
 		}
 	}
 
-	//Try to transfer sick from one settlement to another.
+	/**
+	 * Method that try to recover sick people to be convalescent people if they getContagiousTime > 25 days.
+	 */
 	public void recoverToHealthy() {
 		//A loop that goes through all forms of settlement
 		for(int j = 0; j < Main.getMap().getSettlements().length; j++) {
@@ -211,7 +215,7 @@ public class Simulation{
 					System.out.println("try to recover the person in the index " + k + " in the settlement " + j);
 
 					Sick s = Main.getMap().getSettlements()[j].getSick().get(k);
-					
+
 					Main.getMap().getSettlements()[j].getSick().remove(s);
 					Main.getMap().getSettlements()[j].getPeople().remove(s);
 					s.recover();
@@ -226,20 +230,24 @@ public class Simulation{
 		}	
 	}
 
-
+	/**
+	 * Method that try to transfer sick from one settlement to another
+	 */
 	public void moveSettlement() {
 		for(int i = 0; i < Main.getMap().getSettlements().length; i++) {
 			for(int j = 0; j < Main.getMap().getSettlements()[i].getPeople().size()*0.03; j++) {
 				
 				Random rand = new Random();
-				int index = rand.nextInt(Main.getMap().getSettlements().length);
-				
-				Main.getMap().getSettlements()[i].transferPerson(Main.getMap().getSettlements()[i].getPeople().get(j),Main.getMap().getSettlements()[index]);
+				int index = rand.nextInt(Main.getMap().getSettlements()[i].getLinkTo().size());
+				int value = rand.nextInt(Main.getMap().getSettlements()[i].getPeople().size());
+				Main.getMap().getSettlements()[i].transferPerson(Main.getMap().getSettlements()[i].getPeople().get(value),Main.getMap().getSettlements()[index]);
 			}
 		}
 	}
 
-
+	/**
+	 * A method that tries to vaccinate healthy people if there are vaccine doses waiting.
+	 */
 	public void vaccinateHealthy() {
 
 		for(int j = 0; j < Main.getMap().getSettlements().length; j++) {

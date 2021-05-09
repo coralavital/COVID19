@@ -46,7 +46,7 @@ public enum RamzorColor {
 
 	//Getter
 	/***
-	    * Getter method
+	    * Getter method that return the coefficient
 	    * @return:  double
 	    */
 	public double getCoefficient() {
@@ -68,15 +68,26 @@ public enum RamzorColor {
 		else return Red;
 	}
 
+	/**
+	 * getter function for choice after getting coefficient
+	 * @return: Object, RamzorColor
+	 */
 	public RamzorColor getColor() {
 		return this.choice(coefficient);
 	}
 	
+	 /**
+	  * getter function for probability
+	  * @return: double, probability
+	  */
 	public double getProbability() {
 		return probability;
 	}
 
-
+	/**
+	 * reading the enum number and converting it into String in order to show it in the stats table
+	 * @return:String, GREEN/YELLOW/ORANGE/RED/Unknow Color
+	 */
 	public String getColorOfGuitar() {
 
 	    if(color.equals(Color.GREEN))
@@ -91,6 +102,10 @@ public enum RamzorColor {
 	        return "Unknown Color";
 	}
 	
+	/**
+	  * returning the enum color
+	  * @return: Color, color.green/color.yellow/color.orange/color.red
+	  */
 	public Color getColorEnum() {
 		double c = this.coefficient;
 		if(c <= 0.4) return color.green;

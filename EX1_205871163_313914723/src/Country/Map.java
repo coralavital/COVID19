@@ -67,6 +67,10 @@ public class Map {
 		return settlements;
 	}
 	
+	/**
+	  * converting array to list and returning it as a list
+	  * @return: list, Settlement
+	  */
 	public List<Settlement> getAllSerttlement() {
 		for(int i = 0; i < this.settlements.length; i++) {
 			setAllSettlement.add(settlements[i]);
@@ -75,6 +79,7 @@ public class Map {
 		return setAllSettlement;
 	}
 
+	
 	public Settlement at(int index) {
 		return settlements[index];
 	}
@@ -88,6 +93,11 @@ public class Map {
 		return counter;
 	}
 	
+	/**
+	  * finding the settlement by his name
+	  * @param String, name
+	  * @return: int, the index of the settlement by his name
+	  */
 	public int indexByStr(String name) {
 		for (int i = 0; i < settlements.length; i++) {
 			if(settlements[i].getName().equals(name))
