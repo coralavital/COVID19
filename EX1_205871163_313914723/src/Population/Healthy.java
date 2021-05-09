@@ -53,12 +53,12 @@ public class Healthy extends Person{
 	  * @return: boolean true if it is the same object with the same values, else false 
 	  */
 	public boolean equals(Object o) {
-		if(!(o instanceof Sick))
+		if(!(o instanceof Healthy))
 			return false;
 		Healthy other = (Healthy)o;
 		if(this.getAge() == other.getAge()
-				&& this.getLocation() == other.getLocation()
-				&& this.getSettlement() == other.getSettlement())
+				&& this.getLocation().equals(other.getLocation())
+				&& this.getSettlement().equals(other.getSettlement()))
 			return true;
 		else
 			return false;

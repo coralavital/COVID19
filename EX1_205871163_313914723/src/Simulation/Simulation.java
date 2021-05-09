@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.Random;
 import Country.Map;
 import IO.SimulationFile;
+import Population.Convalescent;
 import Population.Healthy;
 import Population.Person;
 import Population.Sick;
@@ -22,12 +23,13 @@ import Virus.SouthAfricanVariant;
 
 public class Simulation{
 
-	
+
 	// Initialization
 	/**
 	 * Running on all the settlements and the 20% of people in it and make them sick
 	 * @param map
 	 */
+
 	public void initialization() {
 		Random rand = new Random();
 		IVirus virus = null;
@@ -35,53 +37,54 @@ public class Simulation{
 		for(int i = 0; i < Main.getMap().getSettlements().length; i++) {
 			for(int j = 0; j < (Main.getMap().getSettlements()[i].getNonSick().size()*0.2); j++) {
 
-					Person person = Main.getMap().getSettlements()[i].getNonSick().get(j);
-
-					int value = rand.nextInt(3);
-
-					if(value < 0)
-						value = Math.abs(value);
-
-					if(value == 0)
-						virus = new BritishVariant();
-
-					else if(value == 1)
-						virus = new ChineseVariant();
-
-					else if(value == 2)
-						virus = new SouthAfricanVariant();
-
-
-					Sick sick = new Sick(person.getAge(), person.getLocation(), person.getSettlement(),
-							Clock.now(), virus);
-
-					Main.getMap().getSettlements()[i].getNonSick().remove(j);
-					Main.getMap().getSettlements()[i].getPeople().remove(j);
-					Main.getMap().getSettlements()[i].addPerson(sick);
-
-					for(int k = 0; k < 3; k++) {
-						
-						System.out.println("The person in the index " + j + " from the settlement in the index: " + i 
-								+ " became ill");
-						System.out.println("Now the system will try to infect 3 non-sick people for this sick person.");
-						System.out.println("The non sick person number "+ k + ", index of virus = " + value + ","
-								+ " the settlement index is " + i);
-						
-						if(Main.getMap().getSettlements()[i].getNonSick().size() > 3 ) {//changed from [j] to [i]
-							//Here is called a method whose function is to infect a random person with the help of 
-							//the created sick person.
-							tryToInfect(sick, i);
-						}
-					}
+				int index = rand.nextInt(Main.getMap().getSettlements()[i].getNonSick().size());
 				
+				Person person = Main.getMap().getSettlements()[i].getNonSick().get(index);
+
+				int value = rand.nextInt(3);
+
+				if(value < 0)
+					value = Math.abs(value);
+
+				if(value == 0)
+					virus = new BritishVariant();
+
+				else if(value == 1)
+					virus = new ChineseVariant();
+
+				else if(value == 2)
+					virus = new SouthAfricanVariant();
+
+
+				Sick sick = new Sick(person.getAge(), person.getLocation(), person.getSettlement(),
+						Clock.now(), virus);
+
+				Main.getMap().getSettlements()[i].getNonSick().remove(j);
+				Main.getMap().getSettlements()[i].getPeople().remove(j);
+				Main.getMap().getSettlements()[i].addPerson(sick);
+
+				for(int k = 0; k < 3; k++) {
+
+					System.out.println("The person in the index " + j + " from the settlement in the index: " + i 
+							+ " became ill");
+					System.out.println("Now the system will try to infect 3 non-sick people for this sick person.");
+					System.out.println("The non sick person number "+ k + ", index of virus = " + value + ","
+							+ " the settlement index is " + i);
+
+					if(Main.getMap().getSettlements()[i].getNonSick().size() > 3 ) {//changed from [j] to [i]
+						//Here is called a method whose function is to infect a random person with the help of 
+						//the created sick person.
+						tryToInfect(sick, i);
+					}
+				}
+
 			}
 		}
 
-		//Main.setPLAY(false);
-		//Main.setON(false);
+
 	}
 
-	
+
 	public void tryToInfect(Sick sick, int i) {
 
 		Random rand = new Random();
@@ -97,7 +100,7 @@ public class Simulation{
 		newP = rand.nextInt(Main.getMap().getSettlements()[i].getNonSick().size());
 		if(newP < 0)
 			newP = Math.abs(newP);
-		
+
 		Person p = Main.getMap().getSettlements()[i].getNonSick().get(newP);
 
 
@@ -108,7 +111,7 @@ public class Simulation{
 			}
 
 			index = rand.nextInt(value);
-			
+
 			if(index == 0) 
 				v = new BritishVariant();
 
@@ -139,7 +142,7 @@ public class Simulation{
 			}
 
 			index = rand.nextInt(value);
-			
+
 			if(index == 0) 
 				v = new BritishVariant();
 
@@ -204,62 +207,61 @@ public class Simulation{
 			for (int k = 0; k < Main.getMap().getSettlements()[j].getSick().size(); k++) {
 				//A loop that passes over the number of people who have passed 25 days from the moment they were infected with the virus 
 				if(Clock.days(Main.getMap().getSettlements()[j].getSick().get(k).getContagiousTime()) > 25) {
-					
+
 					System.out.println("try to recover the person in the index " + k + " in the settlement " + j);
-					Person p = Main.getMap().getSettlements()[j].getSick().get(k).recover();
-					Main.getMap().getSettlements()[j].addPerson(p);
-					Main.getMap().getSettlements()[j].getSick().remove(k);
-					System.out.println("this person wad a sick and now he healthy");
+
+					Sick s = Main.getMap().getSettlements()[j].getSick().get(k);
+					
+					Main.getMap().getSettlements()[j].getSick().remove(s);
+					Main.getMap().getSettlements()[j].getPeople().remove(s);
+					s.recover();
+					Main.getMap().getSettlements()[j].addPerson(s);
+					System.out.println("this person was a sick and now he healthy");
 				}
 				else
 					System.out.println("No people were found to be ill for more than 25 days");
 
 			}
 
-		}
-		//Main.setPLAY(false);
-		//Main.setON(false);
+		}	
 	}
 
-	
+
 	public void moveSettlement() {
 		for(int i = 0; i < Main.getMap().getSettlements().length; i++) {
 			for(int j = 0; j < Main.getMap().getSettlements()[i].getPeople().size()*0.03; j++) {
-
+				
 				Random rand = new Random();
 				int index = rand.nextInt(Main.getMap().getSettlements().length);
-				Main.getMap().getSettlements()[i].transferPerson(Main.getMap().getSettlements()[i].getPeople().get(j),
-						Main.getMap().getSettlements()[index]);
+				
+				Main.getMap().getSettlements()[i].transferPerson(Main.getMap().getSettlements()[i].getPeople().get(j),Main.getMap().getSettlements()[index]);
 			}
 		}
 	}
 
-	
+
 	public void vaccinateHealthy() {
-		
+
 		for(int j = 0; j < Main.getMap().getSettlements().length; j++) {
-			for (int k = 0; k < Main.getMap().getSettlements()[j].getNonSick().size(); k++) {
-				if(Main.getMap().getSettlements()[j].getTotalVaccines() > 0) {
-					
+			if(Main.getMap().getSettlements()[j].getTotalVaccines() > 0) {
+				for (int k = 0; k < Main.getMap().getSettlements()[j].getNonSick().size(); k++) {
+
 					Vaccinated v = new Vaccinated(Main.getMap().getSettlements()[j].getNonSick().get(k).getAge(),
 							Main.getMap().getSettlements()[j].getNonSick().get(k).getLocation(),
 							Main.getMap().getSettlements()[j].getNonSick().get(k).getSettlement(), Clock.now());
 					Main.getMap().getSettlements()[j].getNonSick().remove(k);
 					Main.getMap().getSettlements()[j].getPeople().remove(k);
 					Main.getMap().getSettlements()[j].addPerson(v);
-					
-					Main.getMap().getSettlements()[j].decONE();
-					
+
+					Main.getMap().getSettlements()[j].decVaccineByOne();
+
 					System.out.println("The person in index " + k + "resilient and now he is a resilient person");
 				}
-				else
-					System.out.println("There were no vaccines left in the pool");
 			}
+			else
+				System.out.println("There were no vaccines left in the pool");
 		}
-		Main.setPLAY(false);
-		Main.setON(false);
-	}
 
-	
+	}
 
 }//Main class

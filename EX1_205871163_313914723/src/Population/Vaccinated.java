@@ -61,9 +61,9 @@ public class Vaccinated extends Person{
 			return false;
 		Vaccinated other = (Vaccinated)o;
 		if(this.getAge() == other.getAge()
-				&& this.getLocation() == other.getLocation()
-				&& this.getSettlement() == other.getSettlement()
-				&& this.getVaccinationTime() == other.getVaccinationTime())
+				&& this.getLocation().equals(other.getLocation())
+				&& this.getSettlement().equals(other.getSettlement())
+				&& this.vaccinationTime == other.getVaccinationTime())
 			return true;
 		else
 			return false;

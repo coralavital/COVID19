@@ -48,7 +48,7 @@ import Virus.SouthAfricanVariant;
  */
 public class StatisticsWindow extends JFrame {
 
-	static JFrame statisticFrame = new JFrame("Statistics Window");
+	public static JFrame statisticFrame = new JFrame("Statistics Window");
 	private JTextField textFilter;
 	private TableRowSorter<Model> sorter;
 	Model model;

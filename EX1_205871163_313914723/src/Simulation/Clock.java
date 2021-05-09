@@ -47,10 +47,12 @@ public class Clock {
 		//calculate the time in the simulation
 		return Math.ceil((double)((now-t)/ticks_per_day));
 	}
+	
 	//getter
 	public static int getTicksPerDay() {
 		return ticks_per_day;
 	}
+	
 	//setter
 	public static void setTicksPerDay(int num) {
 		ticks_per_day = num;

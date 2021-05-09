@@ -118,7 +118,7 @@ public abstract class Settlement {
 	public List<Person> getPeople() {
 		return people;
 	}
-	
+
 
 	/**
 	 * get functions that give ramzorColor object.
@@ -179,7 +179,7 @@ public abstract class Settlement {
 		this.totalVaccines += number;
 	}
 
-	public void decONE() {
+	public void decVaccineByOne() {
 		this.totalVaccines -= 1;
 	}
 
@@ -227,7 +227,7 @@ public abstract class Settlement {
 
 		} 
 		else if(!(p instanceof Sick)) {
-			
+
 			if(p instanceof Healthy) {
 				Healthy h = (Healthy) p;
 				this.people.add(h);
@@ -260,15 +260,30 @@ public abstract class Settlement {
 	 */
 	public boolean transferPerson(Person p, Settlement s) {
 		if (!(this.equals(s))) {
-			if ((s.getTotalPersons() < s.getPeople().size())
-					|| (p.getSettlement().getRamzorColor().getProbability() * s.getRamzorColor().getProbability() <= Math.random())) {
-				p.setSettlement(s);
-				this.people.remove(p);
-				s.people.add(p);
-				return true;
-			}
-		} 
+			if ((s.getTotalPersons() > s.getPeople().size()) || 
+					(this.getRamzorColor().getProbability() * s.getRamzorColor().getProbability() <= Math.random())) {
+				if(p instanceof Sick) {
+					this.getPeople().remove(p);
+					this.getSick().remove(p);
+					s.addPerson(p);
+					return true;
 
+
+				}
+				else if(!(p instanceof Sick)) {
+					this.getPeople().remove(p);
+					this.getNonSick().remove(p);
+					s.addPerson(p);
+					return true;
+				}
+
+				else 
+					return false;
+			}
+			else 
+				System.out.println("this person is allready in the settlement");
+				return false;
+		}
 		return false;
 	}
 

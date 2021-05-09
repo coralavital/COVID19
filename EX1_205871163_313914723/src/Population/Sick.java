@@ -17,8 +17,8 @@ import Virus.IVirus;
 public class Sick extends Person{
 
 	//Data members
-	private long contagiousTime;
-	private IVirus virus;
+	private long contagiousTime = 0;
+	private IVirus virus = null;
 
 
 	//Constructor
@@ -67,8 +67,10 @@ public class Sick extends Person{
 			return false;
 		Sick other = (Sick)o;
 		if(this.getAge() == other.getAge()
-				&& this.getLocation() == other.getLocation()
-				&& this.getSettlement() == other.getSettlement())
+				&& this.getLocation().equals(other.getLocation())
+				&& this.getSettlement().equals(other.getSettlement())
+				&& this.contagiousTime == other.getContagiousTime()
+				&& this.virus.equals(other.getVirus()))
 			return true;
 		else
 			return false;
@@ -80,7 +82,7 @@ public class Sick extends Person{
 	 * @return: contagiousTime, Long	
 	 */
 	public long getContagiousTime() {
-		return contagiousTime;
+		return this.contagiousTime;
 	}
 
 	/**
@@ -88,7 +90,7 @@ public class Sick extends Person{
 	 * @return: virus, IVirus
 	 */
 	public IVirus getVirus() {
-		return virus;
+		return this.virus;
 	}
 
 
@@ -107,10 +109,7 @@ public class Sick extends Person{
 	 * @return Object, Vaccinated person
 	 */
 	public Person recover() {
-		int age = this.getAge();
-		Point point = this.getLocation();
-		Settlement settlement = this.getSettlement();
-		return new Vaccinated(age, point, settlement, Clock.now());
+		return new Convalescent(this.getAge(), this.getLocation(), this.getSettlement(), this.getVirus());
 	}
 
 	/**

@@ -62,9 +62,9 @@ public class Convalescent extends Person{
 			return false;
 		Convalescent other = (Convalescent)o;
 		if(this.getAge() == other.getAge()
-				&& this.getLocation() == other.getLocation()
-				&& this.getSettlement() == other.getSettlement()
-				&& this.getVirus() == other.getVirus())
+				&& this.getLocation().equals(other.getLocation())
+				&& this.getSettlement().equals(other.getSettlement())
+				&& this.virus.equals(other.getVirus()))
 			return true;
 		else
 			return false;

@@ -72,7 +72,6 @@ public class UserMenu extends JMenuBar {
 
 			public void actionPerformed(ActionEvent e) {
 
-
 				f1.setEnabled(false);
 				f2.setEnabled(true);
 				l3.setEnabled(true);
@@ -100,6 +99,7 @@ public class UserMenu extends JMenuBar {
 					JOptionPane.showConfirmDialog(frame, "INVALID FILE", "ERROR", JOptionPane.DEFAULT_OPTION);
 				}
 
+				Main.setON(true);
 			}
 
 		});
@@ -158,35 +158,20 @@ public class UserMenu extends JMenuBar {
 			public void actionPerformed(ActionEvent e) {
 				//update the relevant flags
 				Main.setPLAY(true);
-				Main.setON(true);
-				
-				//creat an object of the simulation
-				Simulation s = new Simulation();
 				
 				//to sure the statistics frame is update
-
+				
 				l1.setEnabled(false);
 				l2.setEnabled(true);
+				//creat an object of the simulation
 				
-				Main.getStatistics().statisticFrame.setDefaultCloseOperation(frame.getDefaultCloseOperation());
-				while(Main.isPLAY()) {
-					//The role of the method is to sample 20% of patients out of all the people in localities that have already been initialized 
-					//on the map and for each person who has become ill an attempt will be made to infect three different people
-					//And for this purpose uses another method whose function is to try to infect a random person who is not ill
-					s.initialization();
-					s.recoverToHealthy();
-					s.moveSettlement();
-					s.vaccinateHealthy();
-					
-					
-				}
-				
-				l1.setEnabled(true);
-				l2.setEnabled(false);
-				mapPanel.repaint();
+				//mapPanel.repaint();
 
 			}
 		});
+		
+		
+		
 
 		l2 = new JMenuItem("PAUSE");
 		l2.setEnabled(false);
@@ -195,14 +180,15 @@ public class UserMenu extends JMenuBar {
 
 			public void actionPerformed(ActionEvent e) {
 				
-				
 				Main.setPLAY(false);
+				
 				l2.setEnabled(false);
 				l1.setEnabled(true);
 
 
 			}
 		});
+
 
 		l3 = new JMenuItem("STOP");
 		l3.setEnabled(false);
@@ -238,7 +224,7 @@ public class UserMenu extends JMenuBar {
 			
 			public void actionPerformed(ActionEvent e) {
 				double tmp = 0;
-				SpinnerNumberModel Model = new SpinnerNumberModel(0.0, 0.00, 100.00, 1.00);// start with 0, the minimum  is 0, the maximum is 0 and increase steps is 1;
+				SpinnerNumberModel Model = new SpinnerNumberModel(1.0, 1.00, 100.00, 1.00);// start with 0, the minimum  is 0, the maximum is 0 and increase steps is 1;
 				JSpinner spinner1 = new JSpinner(Model);
 				int clickOK = JOptionPane.showOptionDialog(null, spinner1, "SET TICKS PER DAY WINDOW",
 						JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
