@@ -6,6 +6,7 @@ import java.awt.Frame;
 import java.io.*;
 import java.util.Random;
 import Country.Map;
+import Country.Settlement;
 import IO.SimulationFile;
 import Population.Convalescent;
 import Population.Healthy;
@@ -235,13 +236,19 @@ public class Simulation{
 	 */
 	public void moveSettlement() {
 		for(int i = 0; i < Main.getMap().getSettlements().length; i++) {
-			for(int j = 0; j < Main.getMap().getSettlements()[i].getPeople().size()*0.03; j++) {
-				
-				Random rand = new Random();
-				int index = rand.nextInt(Main.getMap().getSettlements()[i].getLinkTo().size());
-				int value = rand.nextInt(Main.getMap().getSettlements()[i].getPeople().size());
-				Main.getMap().getSettlements()[i].transferPerson(Main.getMap().getSettlements()[i].getPeople().get(value),Main.getMap().getSettlements()[index]);
+			if(Main.getMap().getSettlements()[i].getLinkTo().size() > 0) {
+				for(int j = 0; j < Main.getMap().getSettlements()[i].getPeople().size()*0.03; j++) {
+
+					Random rand = new Random();
+					int index = rand.nextInt(Main.getMap().getSettlements()[i].getLinkTo().size());
+					Settlement s = Main.getMap().getSettlements()[i].getLinkTo().get(index);
+
+					int value = rand.nextInt(Main.getMap().getSettlements()[i].getPeople().size());
+					Main.getMap().getSettlements()[i].transferPerson(Main.getMap().getSettlements()[i].getPeople().get(value), s);
+				}
 			}
+			else
+				System.out.println("There are not link settlement for this settlement");
 		}
 	}
 

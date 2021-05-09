@@ -16,18 +16,18 @@ import UI.StatisticsWindow;
  */
 public class Main {
 
-	//static data members
+	//Static data members
 	static Map map;
 	static MainWindow main;
 	static StatisticsWindow statistics;
 	static Simulation s;
 	static boolean isON, isPLAY;
 	
-	//load function
+	//Load function
 	public static void load() throws InterruptedException {
 
 		while(isON() == true) {
-			// when getIsON true the user press play and the simulation start 
+			//When getIsON true the user press play and the simulation start 
 			s = new Simulation();
 
 			while(isPLAY() == true) {
