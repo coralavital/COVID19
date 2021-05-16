@@ -12,8 +12,14 @@ import java.awt.Scrollbar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -27,6 +33,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.AbstractTableModel;
 import Country.Map;
 import Country.Settlement;
@@ -62,7 +69,7 @@ public class UserMenu extends JMenuBar {
 	  * l1:play, l2: pause, l3: stop, l4: set ticks per day
 	  * h1:help, h2:about
 	  */
-	JMenuItem f1, f2, f3, f4;
+	JMenuItem f1, f2, f3, f4, f5;
 	JMenuItem l1, l2, l3, l4;
 	JMenuItem h1, h2;
 
@@ -72,6 +79,7 @@ public class UserMenu extends JMenuBar {
 		op2 = new JMenu("SIMULATION");
 		op3 = new JMenu("HELP");
 
+		
 		// create menuitems
 		f1 = new JMenuItem("LOAD");
 		f1.addActionListener(new ActionListener() {
@@ -80,6 +88,7 @@ public class UserMenu extends JMenuBar {
 
 				f1.setEnabled(false);
 				f2.setEnabled(true);
+				f4.setEnabled(true);
 				l3.setEnabled(true);
 				l1.setEnabled(true);
 				l2.setEnabled(false);
@@ -98,7 +107,6 @@ public class UserMenu extends JMenuBar {
 					flag = true;
 
 					mapPanel.repaint();
-					f4.setEnabled(true);
 					Main.setON(true);
 				} 
 				catch (Exception e1) {
@@ -147,15 +155,65 @@ public class UserMenu extends JMenuBar {
 			}
 		});
 
-		f4 = new JMenuItem("EXIT");// to stop and then exit ( need to add setEnable for exit according to stop)
+		f4 = new JMenuItem("SAVE LOG FILE");// to stop and then exit ( need to add setEnable for exit according to stop)
+		f4.setEnabled(false);
 		f4.addActionListener(new ActionListener() {
+
+
+			public void actionPerformed(ActionEvent e) {
+				Date date = new Date(System.currentTimeMillis()); // This object contains the current date value
+				SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+				String update;
+				JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+		        jfc.setDialogTitle("Choose a directory to save your file: ");
+		        jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		        
+		        String str = null;
+		        
+		        int returnValue = jfc.showSaveDialog(null);
+		       
+		        if (returnValue == JFileChooser.APPROVE_OPTION) {
+		            if (jfc.getSelectedFile().isDirectory()) {
+		                str =  jfc.getSelectedFile().toString();
+		                
+		                //setting name to the file
+		                str = str+"\\update.log";
+		            }
+		        }        
+		        
+		        File fos = new File(str);
+				PrintWriter pw = null;
+				try {
+					pw = new PrintWriter(fos);
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				for(int i = 0; i < Main.getMap().getSettlements().length; i++) {
+					 //reading from the object and writing into the file
+					update = "CURENNT TIME: " + formatter.format(date) + "\nSETTLEMENT NAME: " + Main.getMap().getSettlements()[i].getName() 
+							+ "\nNUMBER OF SICK: " + Main.getMap().getSettlements()[i].getSick().size()
+							+ "\nNUMBER OF DEAD PEOPLE: " + Main.getMap().getSettlements()[i].getNumberOfDead();		
+					pw.println(update);
+				}
+
+				
+				
+				
+				pw.close();
+			}
+		});
+
+		f5 = new JMenuItem("EXIT");// to stop and then exit ( need to add setEnable for exit according to stop)
+		f5.setEnabled(true);
+		f5.addActionListener(new ActionListener() {
 
 
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		});
-
+		
 		l1 = new JMenuItem("PLAY");
 		l1.setEnabled(false);
 		l1.addActionListener(new ActionListener() {
@@ -201,7 +259,7 @@ public class UserMenu extends JMenuBar {
 
 				f1.setEnabled(true);
 				f2.setEnabled(false);
-
+				f4.setEnabled(false);
 				l1.setEnabled(false);
 				l2.setEnabled(false);
 				l3.setEnabled(false);
@@ -312,6 +370,7 @@ public class UserMenu extends JMenuBar {
 		op1.add(f2);
 		op1.add(f3);
 		op1.add(f4);
+		op1.add(f5);
 
 		op2.add(l1);
 		op2.add(l2);

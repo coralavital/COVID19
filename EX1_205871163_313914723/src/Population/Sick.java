@@ -99,7 +99,7 @@ public class Sick extends Person{
 	 * Method that try to kill the sick person with his virus attribute
 	 * @return boolean, true if the person died, else false
 	 */
-	private boolean tryToDie() {
+	public boolean tryToDie() {
 		return this.virus.tryToKill(this);
 	}
 

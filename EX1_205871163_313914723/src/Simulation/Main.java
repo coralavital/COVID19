@@ -35,11 +35,12 @@ public class Main {
 				//The role of the method is to sample 20% of patients out of all the people in localities that have already been initialized 
 				//on the map and for each person who has become ill an attempt will be made to infect three different people
 				//And for this purpose uses another method whose function is to try to infect a random person who is not ill
-				s.initialization();
-				s.recoverToHealthy();
-				s.moveSettlement();
-				s.vaccinateHealthy();
-
+				for(int i = 0; i < Main.getMap().getSettlements().length; i++) {
+					s.initialization(Main.getMap().getSettlements()[i]);
+					s.recoverToHealthy(Main.getMap().getSettlements()[i]);
+					s.moveSettlement(Main.getMap().getSettlements()[i]);
+					s.vaccinateHealthy(Main.getMap().getSettlements()[i]);
+				}
 				//Update the map panel according to recalculations of the data needed for drawing
 				Main.getMain().getMapPanel().repaint();
 

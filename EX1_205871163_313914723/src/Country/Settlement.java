@@ -33,6 +33,7 @@ public abstract class Settlement {
 	private int totalPersons;
 	private int totalVaccines;
 	private List<Settlement> linkTo;
+	private int numberOfDead;
 
 
 	//Constructor 
@@ -58,6 +59,7 @@ public abstract class Settlement {
 		}
 		else
 			this.totalPersons = 0;
+		this.numberOfDead = 0;
 
 	}
 
@@ -71,6 +73,7 @@ public abstract class Settlement {
 		this.totalVaccines = s.totalVaccines;
 		this.linkTo = s.linkTo;
 		this.totalPersons = s.totalPersons;
+		this.numberOfDead = s.numberOfDead;
 
 
 	}
@@ -244,6 +247,14 @@ public abstract class Settlement {
 			return "MOSHAV";
 		else
 			return "KIBBUTZ";
+	}
+	
+	public int getNumberOfDead() {
+		return this.numberOfDead;
+	}
+	
+	public void setNumberOfDead() {
+		this.numberOfDead += 1; 
 	}
 
 	/**
