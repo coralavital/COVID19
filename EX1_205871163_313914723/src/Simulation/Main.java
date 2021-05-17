@@ -12,37 +12,39 @@ import UI.MainWindow;
  *
  */
 public class Main {
-/*
 
-	MainWindow main;
-	
+	static MainWindow main = new MainWindow();
+
 	//Load function
-	public void load() throws InterruptedException {
+	public static void load() throws InterruptedException {
 
-		while(true) {
+		while(main.getUserMenu().isON()) {
 			//When getIsON true the user press play and the simulation start 
 			//s = new Simulation();
 
-			while(isPLAY() == true) {
-				
+			while(main.getUserMenu().isPLAY()) {
+
 				//The role of the method is to sample 20% of patients out of all the people in localities that have already been initialized 
 				//on the map and for each person who has become ill an attempt will be made to infect three different people
 				//And for this purpose uses another method whose function is to try to infect a random person who is not ill
-				for(int i = 0; i < .getSettlements().length; i++) {
-					s.initialization(Main.getMap().getSettlements()[i]);
-					s.recoverToHealthy(Main.getMap().getSettlements()[i]);
-					s.moveSettlement(Main.getMap().getSettlements()[i]);
-					s.vaccinateHealthy(Main.getMap().getSettlements()[i]);
+				for(int i = 0; i < main.getMapPointer().getSettlements().length; i++) {
+					main.simulation.initialization(main.getMapPointer().getSettlements()[i]);
+					main.simulation.recoverToHealthy(main.getMapPointer().getSettlements()[i]);
+					main.simulation.moveSettlement(main.getMapPointer().getSettlements()[i]);
+					main.simulation.vaccinateHealthy(main.getMapPointer().getSettlements()[i]);
+					main.simulation.killPeople(main.getMapPointer().getSettlements()[i]);
+					main.getMapPanel().repaint();
+					if (main.getStatistics() != null)
+						main.getStatistics().getModel().fireTableStructureChanged();
 				}
 				//Update the map panel according to recalculations of the data needed for drawing
-				Main.getMain().getMapPanel().repaint();
-
+				main.getMapPanel().repaint();
 				//inc by one the time in the simulation
 				Clock.nextTick();
 				//The thread goes to sleep between iterations and iterations according to the value entered by the user in JSlider 
-				Thread.sleep(Main.getMain().getJSlider().getValue()*1000);
+				Thread.sleep(main.getJSlider().getValue()*1000);
 			}
-
+			Thread.sleep(1000);
 		}
 
 
@@ -50,14 +52,13 @@ public class Main {
 
 
 	public static void main(String[] args) throws InterruptedException {
-		main = new MainWindow();
-		
+
 		//A while loop that makes sure that between each charge there is a second sleep
 		while(true) {
 			load();
 			Thread.sleep(1000);
 		}
-		
+
 	}
-*/
+
 }

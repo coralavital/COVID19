@@ -170,7 +170,6 @@ public class SimulationFile {
 	public List<Settlement> readFromFile() throws IOException {
 
 		String[] buffer;
-		int size = sumOfLine();
 		List<Settlement> settlement = new ArrayList<>();
 		BufferedReader br= new BufferedReader(new FileReader(path));
 
@@ -194,14 +193,14 @@ public class SimulationFile {
 					Integer.parseInt(buffer[5]));
 
 			List<Sick> sick = new ArrayList<>();
-			List<Person> healthy = new ArrayList<>();
+			List<Person> NonSick = new ArrayList<>();
 			List<Settlement> linkTo = new ArrayList<>();
 			RamzorColor ramzorColor = RamzorColor.Green;
-			Map map = new Map(null);
+			Map map = null;
 
 
 			if(buffer[0].equals("City")) {
-				City newCity = new City(name, location, sick, healthy, ramzorColor, 0, linkTo, map);
+				City newCity = new City(name, location, sick, NonSick, ramzorColor, 0, linkTo, map);
 				for(int j = 0; j < Integer.parseInt(buffer[6]); j++) {
 					int age = getAge();
 					Healthy h = new Healthy(age, newCity.randomLocation(), newCity);
@@ -211,7 +210,7 @@ public class SimulationFile {
 			}
 
 			else if(buffer[0].equals("Moshav")) {
-				Moshav newMoshav = new Moshav(name, location, sick, healthy, ramzorColor, 0, linkTo, map);
+				Moshav newMoshav = new Moshav(name, location, sick, NonSick, ramzorColor, 0, linkTo, map);
 				for(int j = 0; j < Integer.parseInt(buffer[6]); j++) {
 					int age = getAge();
 					Healthy h = new Healthy(age, newMoshav.randomLocation(), newMoshav);
@@ -222,7 +221,7 @@ public class SimulationFile {
 			}
 
 			else if(buffer[0].equals("Kibbutz")) {
-				Kibbutz newKibbutz = new Kibbutz(name, location, sick, healthy, ramzorColor, 0, linkTo, map);
+				Kibbutz newKibbutz = new Kibbutz(name, location, sick, NonSick, ramzorColor, 0, linkTo, map);
 				for(int j = 0; j < Integer.parseInt(buffer[6]); j++) {
 					int age = getAge();
 					Healthy h = new Healthy(age, newKibbutz.randomLocation(), newKibbutz);

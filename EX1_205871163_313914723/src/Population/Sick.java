@@ -100,7 +100,7 @@ public class Sick extends Person{
 	 * @return boolean, true if the person died, else false
 	 */
 	public boolean tryToDie() {
-		return this.virus.tryToKill(this);
+		return virus.tryToKill(this);
 	}
 
 	/**

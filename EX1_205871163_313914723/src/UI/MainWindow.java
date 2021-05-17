@@ -46,11 +46,11 @@ import Virus.SouthAfricanVariant;
 public class MainWindow extends JFrame {
 
 	public StatisticsWindow statistics;
-	public Simulation simulation;
+	public Simulation simulation = new Simulation();
 	public Map mapPointer;
 	public  MapPanel mapPanel;
 	public UserMenu userMenu;
-	private boolean isPLAY = false;
+	public SimulationFile simulationFile;
 
 	JSlider slider = new JSlider();
 
@@ -105,7 +105,6 @@ public class MainWindow extends JFrame {
 				int x,y,width,height;
 				int x1,x2,y1,y2;
 				int i = 0;
-				Color color;
 				String sName = "";
 
 
@@ -213,8 +212,6 @@ public class MainWindow extends JFrame {
 		return slider;
 	}
 
-
-
 	public class RowedTableScroll extends JScrollPane {
 		private class RowHeaderRenderer extends JLabel
 		implements ListCellRenderer<String> {
@@ -313,7 +310,7 @@ public class MainWindow extends JFrame {
 
 		//the categories inside the chart
 		private final String [] columnNames = { "NAME", "TYPE", "LOCATION", "RAMZOR COLOR", "NUMBER OF PEOPLE", "NUMBER OF VACCINATE",
-				"LINKED SETTLEMENT","NUMBER OF SICK","NUMBER OF NON-SICK"};
+				"LINKED SETTLEMENT","NUMBER OF SICK","NUMBER OF NON-SICK", "NUMBER OF DEAD"};
 
 		/**
 		 * used for filtering the stasts table by text
@@ -525,7 +522,7 @@ public class MainWindow extends JFrame {
 
 			//giving the size of ampunt of column to the stats table
 			public int getColumnCount () {
-				return 9; 
+				return 10; 
 			}
 
 			public String getColumnName(int column) { 
@@ -548,8 +545,9 @@ public class MainWindow extends JFrame {
 				case 4 : return settlement.getSick().size() + settlement.getNonSick().size();
 				case 5 : return settlement.getTotalVaccines();
 				case 6 : return settlement.printLinked();
-				case 7:return settlement.getSick().size();
-				case 8:return settlement.getNonSick().size();
+				case 7 : return settlement.getSick().size();
+				case 8 : return settlement.getNonSick().size();
+				case 9 : return settlement.getNumberOfDead();
 
 				}
 				return null;
@@ -569,9 +567,9 @@ public class MainWindow extends JFrame {
 		boolean data[][] = {{true,false,false}, {false,true,false}, {false, false, true}};
 
 		private boolean flag;
+		private boolean isPLAY, isON;
 
-
-		SimulationFile simolation;
+		SimulationFile simulationFile;
 
 		/**
 		 * op1: file menu, op2: simulation menu, op3: help menu
@@ -598,6 +596,7 @@ public class MainWindow extends JFrame {
 
 			// create menuitems
 			f1 = new JMenuItem("LOAD");
+
 			f1.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
@@ -615,12 +614,18 @@ public class MainWindow extends JFrame {
 					if (fd.getFile() == null)
 						return;
 					File f = new File(fd.getDirectory(), fd.getFile());
-					simolation = new SimulationFile(f.getPath());
+					simulationFile = new SimulationFile(f.getPath());
 					System.out.println(f.getPath());
-					simolation = new SimulationFile(f.getPath());
+
 					try {
-						final Map map = new Map(simolation.readFromFile());
+						
+						final Map map = new Map(simulationFile.readFromFile());
+						for(int i = 0; i < map.getSettlements().length; i++) {
+							map.getSettlements()[i].setMap(map);
+						}
 						flag = true;
+						isON = true;
+
 						mapPointer = map;
 						mapPanel.repaint();
 
@@ -730,14 +735,13 @@ public class MainWindow extends JFrame {
 			});
 
 			l1 = new JMenuItem("PLAY");
+
 			l1.setEnabled(false);
 			l1.addActionListener(new ActionListener() {
 
-
 				public void actionPerformed(ActionEvent e) {
 					//update the relevant flags
-
-
+					isPLAY = true;
 					l2.setEnabled(true);
 					l1.setEnabled(false);
 
@@ -747,12 +751,13 @@ public class MainWindow extends JFrame {
 
 
 			l2 = new JMenuItem("PAUSE");
+
 			l2.setEnabled(false);
 			l2.addActionListener(new ActionListener() {
 
 
 				public void actionPerformed(ActionEvent e) {
-
+					isPLAY = false;
 
 					l2.setEnabled(false);
 					l1.setEnabled(true);
@@ -763,13 +768,11 @@ public class MainWindow extends JFrame {
 
 
 			l3 = new JMenuItem("STOP");
-
 			l3.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
 
-
-
+					isON = false;
 					flag = false;
 
 					f1.setEnabled(true);
@@ -781,8 +784,7 @@ public class MainWindow extends JFrame {
 
 
 					mapPanel.repaint();
-					//Main.getStatistics().statisticFrame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
-					setMapPointer(new Map(null));
+					setMapPointer(null);
 
 				}
 			});
@@ -917,11 +919,28 @@ public class MainWindow extends JFrame {
 			return data;
 		}
 
+
+		/**
+		 * Get for the flag that indicates if the file is play
+		 * @return isPLAY, boolean
+		 */
+		public boolean isPLAY() {
+			return isPLAY;
+		}
+
+		/**
+		 * Get for the flag that indicates if the file is play
+		 * @return isPLAY, boolean
+		 */
+		public boolean isON() {
+			return isON;
+		}
+
 	}
 
 	public class Simulation{
 
-		
+
 		//The simulation from assignment 3
 		// Initialization
 		/**
@@ -1095,7 +1114,7 @@ public class MainWindow extends JFrame {
 
 			}
 		}
-		
+
 		/**
 		 * Method that try to recover sick people to be convalescent people if they getContagiousTime > 25 days.
 		 */
@@ -1167,12 +1186,13 @@ public class MainWindow extends JFrame {
 		}
 
 
-
 		public void killPeople(Settlement settlement) {
 
 			if(settlement.getSick().size() > 0) {
+				System.out.println("There are sick people in this settlement,the system will try to kill them");
 				for(int j = 0; j < settlement.getSick().size(); j++) {
 					if(settlement.getSick().get(j).tryToDie() == true) {
+						System.out.println("the person form sick list in the index " + j + "is dead!");
 						settlement.getSick().remove(j);
 						settlement.setNumberOfDead();
 					}
@@ -1184,23 +1204,6 @@ public class MainWindow extends JFrame {
 
 
 	}//Simulation class
-	
-	
-	/**
-	 * Get for the flag that indicates if the file is play
-	 * @return isPLAY, boolean
-	 */
-	public boolean isPLAY() {
-		return isPLAY;
-	}
-
-	/**
-	 * Set for the flag that indicates if the file is play
-	 * @param isPLAY, boolean
-	 */
-	public void setPLAY(boolean isPLAY) {
-		isPLAY = isPLAY;
-	}
 
 	public void setMapPointer(Map map) {
 		this.mapPointer = map;
@@ -1217,7 +1220,6 @@ public class MainWindow extends JFrame {
 	public StatisticsWindow getStatistics() {
 		return this.statistics;
 	}
-	
 
 
 }
