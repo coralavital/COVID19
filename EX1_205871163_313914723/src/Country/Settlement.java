@@ -325,13 +325,6 @@ public abstract class Settlement implements Runnable {
 		return p;
 	}
 
-	public void run() {
-
-		while(true) {
-
-		}
-
-	}//Settlement class
 	
 	public void setMap(Map map) {
 		this.map = map;
@@ -340,4 +333,12 @@ public abstract class Settlement implements Runnable {
 	public Map getMap() {
 		return this.map;
 	}
-}
+	public void run() {
+
+		while(true) {
+
+		}
+
+	}
+
+}//Settlement class
