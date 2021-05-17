@@ -28,11 +28,11 @@ public class Main {
 				//on the map and for each person who has become ill an attempt will be made to infect three different people
 				//And for this purpose uses another method whose function is to try to infect a random person who is not ill
 				for(int i = 0; i < main.getMapPointer().getSettlements().length; i++) {
-					main.simulation.initialization(main.getMapPointer().getSettlements()[i]);
-					main.simulation.recoverToHealthy(main.getMapPointer().getSettlements()[i]);
-					main.simulation.moveSettlement(main.getMapPointer().getSettlements()[i]);
-					main.simulation.vaccinateHealthy(main.getMapPointer().getSettlements()[i]);
-					main.simulation.killPeople(main.getMapPointer().getSettlements()[i]);
+					main.getSimulation().initialization(main.getMapPointer().getSettlements()[i]);
+					main.getSimulation().recoverToHealthy(main.getMapPointer().getSettlements()[i]);
+					main.getSimulation().moveSettlement(main.getMapPointer().getSettlements()[i]);
+					main.getSimulation().vaccinateHealthy(main.getMapPointer().getSettlements()[i]);
+					main.getSimulation().killPeople(main.getMapPointer().getSettlements()[i]);
 					main.getMapPanel().repaint();
 					if (main.getStatistics() != null)
 						main.getStatistics().getModel().fireTableStructureChanged();
@@ -49,7 +49,6 @@ public class Main {
 
 
 	}
-
 
 	public static void main(String[] args) throws InterruptedException {
 

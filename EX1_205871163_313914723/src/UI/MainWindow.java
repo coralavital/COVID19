@@ -45,14 +45,96 @@ import Virus.SouthAfricanVariant;
  */
 public class MainWindow extends JFrame {
 
-	public StatisticsWindow statistics;
-	public Simulation simulation = new Simulation();
-	public Map mapPointer;
-	public  MapPanel mapPanel;
-	public UserMenu userMenu;
-	public SimulationFile simulationFile;
+	//Data members 
+	private StatisticsWindow statistics;
+	private Simulation simulation = new Simulation();
+	private Map mapPointer;
+	private  MapPanel mapPanel;
+	private UserMenu userMenu;
+	private SimulationFile simulationFile;
 
 	JSlider slider = new JSlider();
+
+	/**
+	 * The constructor that initializes the entire main window and creates from it an object in front of which our main function will work
+	 */
+	public MainWindow() {
+		super("Main");
+		this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
+		mapPanel=  new MapPanel();
+		setJMenuBar(userMenu = new UserMenu(this,mapPanel));//User menu
+		// create mapPanel
+		mapPanel.setPreferredSize(new Dimension(600, 600));
+		mapPanel.setBackground(Color.WHITE);
+		this.add(mapPanel); //Map panel}
+		//Creating JSlider
+		JLabel label = new JLabel("Current value: " + slider.getValue());
+
+		//Set
+		slider.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				int value = slider.getValue();
+				label.setText("current value: " + value);
+			}
+
+		});
+
+		this.add(slider);
+		this.add(label);
+		this.pack();
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setVisible(true);
+
+	}
+
+	/**
+	 * getter function for userMenu
+	 * @return: object, usermenu
+	 */
+	public UserMenu getUserMenu() {
+		return this.userMenu;
+	}
+	//Setter for mapPointer
+	public void setMapPointer(Map map) {
+		this.mapPointer = map;
+	}
+	//Getter for mapPointer
+	public Map getMapPointer() {
+		return this.mapPointer;
+	}
+	//Setter for statistics
+	public void setStatistics(StatisticsWindow statistics) {
+		this.statistics = statistics;
+	}
+	//Getter for statistics
+	public StatisticsWindow getStatistics() {
+		return this.statistics;
+	}
+	//Getter for simulation
+	public Simulation getSimulation() {
+		return this.simulation;
+	}
+	//Getter for simulationFile
+	public SimulationFile getSimulationFile() {
+		return this.simulationFile;
+	}
+
+	/**
+	 * getter function for mapPanel
+	 * @return: object, mapPanel
+	 */
+	public MapPanel getMapPanel() {
+		return this.mapPanel;
+	}
+
+	/**
+	 * getter function for slider
+	 * @return: object, slider
+	 */
+	public JSlider getJSlider() {
+		return slider;
+	}
 
 	// Inner class if Map panel
 	public  class MapPanel extends JPanel {
@@ -99,7 +181,7 @@ public class MainWindow extends JFrame {
 
 		//The method that actually draws the map in our main frame
 		protected void paintComponent(Graphics gr) {
-			if(userMenu.getFlag()) {
+			if(getUserMenu().getFlag()) {
 				Graphics2D g = (Graphics2D)gr;
 				rectangles = new ArrayList<>();
 				int x,y,width,height;
@@ -153,63 +235,6 @@ public class MainWindow extends JFrame {
 			else
 				return;
 		}
-	}
-
-	/**
-	 * The constructor that initializes the entire main window and creates from it an object in front of which our main function will work
-	 */
-	public MainWindow() {
-		super("Main");
-		this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
-		mapPanel=  new MapPanel();
-		setJMenuBar(userMenu = new UserMenu(this,mapPanel));//User menu
-		// create mapPanel
-		mapPanel.setPreferredSize(new Dimension(600, 600));
-		mapPanel.setBackground(Color.WHITE);
-		this.add(mapPanel); //Map panel}
-		//Creating JSlider
-		JLabel label = new JLabel("Current value: " + slider.getValue());
-
-		//Set
-		slider.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				int value = slider.getValue();
-				label.setText("current value: " + value);
-			}
-
-		});
-
-		this.add(slider);
-		this.add(label);
-		this.pack();
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setVisible(true);
-
-	}
-
-	/**
-	 * getter function for userMenu
-	 * @return: object, usermenu
-	 */
-	public UserMenu getUserMenu() {
-		return userMenu;
-	}
-
-	/**
-	 * getter function for mapPanel
-	 * @return: object, mapPanel
-	 */
-	public MapPanel getMapPanel() {
-		return mapPanel;
-	}
-
-	/**
-	 * getter function for slider
-	 * @return: object, slider
-	 */
-	public JSlider getJSlider() {
-		return slider;
 	}
 
 	public class RowedTableScroll extends JScrollPane {
@@ -556,6 +581,7 @@ public class MainWindow extends JFrame {
 		}
 
 	}
+	
 	/**
 	 * UserMenu class which contain all the options and thier click event
 	 * in each evenet we added setVisible according to the assigment and thier task
@@ -568,8 +594,6 @@ public class MainWindow extends JFrame {
 
 		private boolean flag;
 		private boolean isPLAY, isON;
-
-		SimulationFile simulationFile;
 
 		/**
 		 * op1: file menu, op2: simulation menu, op3: help menu
@@ -618,8 +642,8 @@ public class MainWindow extends JFrame {
 					System.out.println(f.getPath());
 
 					try {
-						
-						final Map map = new Map(simulationFile.readFromFile());
+
+						final Map map = new Map(getSimulationFile().readFromFile());
 						for(int i = 0; i < map.getSettlements().length; i++) {
 							map.getSettlements()[i].setMap(map);
 						}
@@ -627,7 +651,7 @@ public class MainWindow extends JFrame {
 						isON = true;
 
 						mapPointer = map;
-						mapPanel.repaint();
+						getMapPanel().repaint();
 
 					} 
 					catch (Exception e1) {
@@ -783,7 +807,7 @@ public class MainWindow extends JFrame {
 					l3.setEnabled(false);
 
 
-					mapPanel.repaint();
+					getMapPanel().repaint();
 					setMapPointer(null);
 
 				}
@@ -1192,10 +1216,12 @@ public class MainWindow extends JFrame {
 				System.out.println("There are sick people in this settlement,the system will try to kill them");
 				for(int j = 0; j < settlement.getSick().size(); j++) {
 					if(settlement.getSick().get(j).tryToDie() == true) {
-						System.out.println("the person form sick list in the index " + j + "is dead!");
+						System.out.println("the person form sick list in the index " + j + " is dead!");
 						settlement.getSick().remove(j);
 						settlement.setNumberOfDead();
 					}
+					else
+						System.out.println("the person form sick list in the index " + j + " is not dead!");
 				}
 			}
 
@@ -1204,22 +1230,5 @@ public class MainWindow extends JFrame {
 
 
 	}//Simulation class
-
-	public void setMapPointer(Map map) {
-		this.mapPointer = map;
-	}
-
-	public Map getMapPointer() {
-		return this.mapPointer;
-	}
-
-	public void setStatistics(StatisticsWindow statistics) {
-		this.statistics = statistics;
-	}
-
-	public StatisticsWindow getStatistics() {
-		return this.statistics;
-	}
-
 
 }
