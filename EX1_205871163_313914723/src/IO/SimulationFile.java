@@ -193,16 +193,15 @@ public class SimulationFile {
 					Integer.parseInt(buffer[4]),
 					Integer.parseInt(buffer[5]));
 
-			List<Person> people = new ArrayList<>();
 			List<Sick> sick = new ArrayList<>();
 			List<Person> healthy = new ArrayList<>();
 			List<Settlement> linkTo = new ArrayList<>();
 			RamzorColor ramzorColor = RamzorColor.Green;
-
+			Map map = new Map(null);
 
 
 			if(buffer[0].equals("City")) {
-				City newCity = new City(name, location, people, sick, healthy, ramzorColor, 0, linkTo);
+				City newCity = new City(name, location, sick, healthy, ramzorColor, 0, linkTo, map);
 				for(int j = 0; j < Integer.parseInt(buffer[6]); j++) {
 					int age = getAge();
 					Healthy h = new Healthy(age, newCity.randomLocation(), newCity);
@@ -212,7 +211,7 @@ public class SimulationFile {
 			}
 
 			else if(buffer[0].equals("Moshav")) {
-				Moshav newMoshav = new Moshav(name, location, people, sick, healthy, ramzorColor, 0, linkTo);
+				Moshav newMoshav = new Moshav(name, location, sick, healthy, ramzorColor, 0, linkTo, map);
 				for(int j = 0; j < Integer.parseInt(buffer[6]); j++) {
 					int age = getAge();
 					Healthy h = new Healthy(age, newMoshav.randomLocation(), newMoshav);
@@ -223,7 +222,7 @@ public class SimulationFile {
 			}
 
 			else if(buffer[0].equals("Kibbutz")) {
-				Kibbutz newKibbutz = new Kibbutz(name, location, people, sick, healthy, ramzorColor, 0, linkTo);
+				Kibbutz newKibbutz = new Kibbutz(name, location, sick, healthy, ramzorColor, 0, linkTo, map);
 				for(int j = 0; j < Integer.parseInt(buffer[6]); j++) {
 					int age = getAge();
 					Healthy h = new Healthy(age, newKibbutz.randomLocation(), newKibbutz);

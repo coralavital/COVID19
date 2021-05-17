@@ -25,20 +25,13 @@ public class Moshav extends Settlement {
 	 * @param people, List of Person
 	 * @param ramzorColor, Enum
 	 */
-	public Moshav(String name, Location location, List<Person> people, List<Sick> sick, List<Person> healthy,  RamzorColor ramzorColor, int totalVaccines, List<Settlement> linkTo) {
-		super(name, location, people, sick, healthy, ramzorColor, totalVaccines, linkTo);
+	public Moshav(String name, Location location, List<Sick> sick, List<Person> healthy,  RamzorColor ramzorColor, int totalVaccines, List<Settlement> linkTo, Map map) {
+		super(name, location, sick, healthy, ramzorColor, totalVaccines, linkTo, map);
 	}
 	
-	//Copy constructor
-	/***
-	  * Copy constructor 
-	  * @param m, Object
-	  */
 	public Moshav(Moshav m) {
-		super(m.getName(), m.getLocation(), m.getPeople(), m.getSick(), m.getNonSick(), m.getRamzorColor(), m.getTotalPersons(), m.getLinkTo());
+		super(m.getName(), m.getLocation(), m.getSick(), m.getNonSick(), m.getRamzorColor(), m.getTotalVaccines(), m.getLinkTo(), m.getMap());
 	}
-
-	
 	//Equals
 	/***
 	 * Equals method
@@ -50,8 +43,10 @@ public class Moshav extends Settlement {
 		Settlement s = (Settlement) obj;
 		if(this.getName() == s.getName() 
 				&& (this.getLocation().equals(s.getLocation()) 
-						&& this.getPeople().equals(s.getPeople()) 
-						&& this.getRamzorColor().equals(s.getRamzorColor())))
+						&& this.getSick().equals(s.getSick()) 
+						&& this.getNonSick().equals(s.getNonSick())
+						&& this.getRamzorColor().equals(s.getRamzorColor())
+						&& this.getMap().equals(s.getMap())))
 			return true;
 		else
 			return false;

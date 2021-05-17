@@ -21,12 +21,11 @@ import java.util.Random;
  *
  */
 
-public abstract class Settlement {
+public abstract class Settlement implements Runnable {
 
 	//data members 
 	private String name;
 	private Location location;
-	private List<Person> people;
 	private List<Sick> sick;
 	private List<Person> NonSick;
 	private RamzorColor ramzorColor;
@@ -34,7 +33,7 @@ public abstract class Settlement {
 	private int totalVaccines;
 	private List<Settlement> linkTo;
 	private int numberOfDead;
-
+	private Map map;
 
 	//Constructor 
 	/**
@@ -44,29 +43,30 @@ public abstract class Settlement {
 	 * @param List people.
 	 * @param RamzorColor ramzorColor.
 	 */
-	public Settlement(String name, Location location, List<Person> people, List<Sick> sick, List<Person> NonSick, RamzorColor ramzorColor, int totalVaccines, List<Settlement> linkTo) {
+	// delete person list
+	public Settlement(String name, Location location, List<Sick> sick, List<Person> NonSick, RamzorColor ramzorColor, int totalVaccines, List<Settlement> linkTo, Map map) {
 		this.name = name;
 		this.location = location;
-		this.people = people;
 		this.sick = sick;
 		this.NonSick = NonSick;
 		this.ramzorColor = ramzorColor;
 		this.totalVaccines = totalVaccines;
 		this.linkTo = linkTo;
 
-		if(people != null) {
-			this.totalPersons = (int)(people.size()*1.3);
+		if(NonSick != null && sick != null) {
+			this.totalPersons = (int)((NonSick.size() + sick.size())*1.3);
 		}
+
 		else
 			this.totalPersons = 0;
 		this.numberOfDead = 0;
+		this.map = map;
 
 	}
 
 	public Settlement(Settlement s) {
 		this.name = s.name;
 		this.location = s.location;
-		this.people = s.people;
 		this.sick = s.sick;
 		this.NonSick = s.NonSick;
 		this.ramzorColor = s.ramzorColor;
@@ -74,8 +74,7 @@ public abstract class Settlement {
 		this.linkTo = s.linkTo;
 		this.totalPersons = s.totalPersons;
 		this.numberOfDead = s.numberOfDead;
-
-
+		this.map = s.map;
 	}
 
 	//ToString
@@ -86,7 +85,7 @@ public abstract class Settlement {
 	public String toString() {
 		return "\n\t\tForm of locality --> " + this.getName() 
 		+ "\n\t\t" + this.getLocation().toString() 
-		+ "\n\t\tNumber of people --> " + this.getPeople().size()
+		+ "\n\t\tNumber of people --> " + this.getNonSick().size() + this.getSick().size()
 		+ "\n\t\tRamzorColor is -->  "+ this.getRamzorColor()
 		+ "\n\t\tLinked settlement -->" + this.getLinkTo();
 	}
@@ -103,7 +102,7 @@ public abstract class Settlement {
 	 * @return String
 	 */
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	/*
@@ -113,15 +112,6 @@ public abstract class Settlement {
 	public Location getLocation() {
 		return location;
 	}
-
-	/*
-	 * Getter function to List of people
-	 * @return List
-	 */
-	public List<Person> getPeople() {
-		return people;
-	}
-
 
 	/**
 	 * get functions that give ramzorColor object.
@@ -151,16 +141,10 @@ public abstract class Settlement {
 	 * @return double
 	 */
 	public double contaiousPercent() {
-		int counter = 0;
-		for(int i = 0; i < people.size(); i++) {
-			if(people.get(i) instanceof Sick) {
-				counter++;
-			}
-		}
-		if(counter == 0)
+		if(getSick().size() == 0)
 			return 0;
 		else
-			return (double) counter / people.size();
+			return (double) getSick().size() / (NonSick.size() + sick.size());
 	}
 
 
@@ -172,18 +156,18 @@ public abstract class Settlement {
 		return sick;
 	}
 
-	 /**
-	  * getter function for non sick 
-	  * @return: list , NonSick
-	  */
+	/**
+	 * getter function for non sick 
+	 * @return: list , NonSick
+	 */
 	public List<Person> getNonSick() {
 		return NonSick;
 	}
 
-	 /**
-	  * getter function for total persons
-	  * @return: list , sick
-	  */
+	/**
+	 * getter function for total persons
+	 * @return: list , sick
+	 */
 	public int getTotalPersons() {
 		return totalPersons;
 	}
@@ -214,10 +198,10 @@ public abstract class Settlement {
 		return totalVaccines;
 	}
 
-	 /**
-	  * getter function for linked settlements to the current settlement
-	  * @return: list, linkTo
-	  */
+	/**
+	 * getter function for linked settlements to the current settlement
+	 * @return: list, linkTo
+	 */
 	public List<Settlement> getLinkTo() {
 		return this.linkTo;
 	}
@@ -248,11 +232,11 @@ public abstract class Settlement {
 		else
 			return "KIBBUTZ";
 	}
-	
+
 	public int getNumberOfDead() {
 		return this.numberOfDead;
 	}
-	
+
 	public void setNumberOfDead() {
 		this.numberOfDead += 1; 
 	}
@@ -266,7 +250,6 @@ public abstract class Settlement {
 		if(p instanceof Sick) {
 			//thie person is sick so we add him to the sick people
 			Sick s = (Sick) p;
-			this.people.add(s);
 			this.sick.add(s);
 			return true;
 
@@ -275,17 +258,14 @@ public abstract class Settlement {
 
 			if(p instanceof Healthy) {
 				Healthy h = (Healthy) p;
-				this.people.add(h);
 				this.NonSick.add(h);
 			}
 			else if(p instanceof Convalescent) {
 				Convalescent c = (Convalescent) p;
-				this.people.add(c);
 				this.NonSick.add(c);
 			}
 			else {
 				Vaccinated v = (Vaccinated) p; 
-				this.people.add(v);
 				this.NonSick.add(v);
 			}
 			return true;
@@ -305,10 +285,9 @@ public abstract class Settlement {
 	 */
 	public boolean transferPerson(Person p, Settlement s) {
 		if (!(this.equals(s))) {
-			if ((s.getTotalPersons() > s.getPeople().size()) || 
+			if ((s.getTotalPersons() > (s.getNonSick().size() + getSick().size())) || 
 					(this.getRamzorColor().getProbability() * s.getRamzorColor().getProbability() <= Math.random())) {
 				if(p instanceof Sick) {
-					this.getPeople().remove(p);
 					this.getSick().remove(p);
 					s.addPerson(p);
 					return true;
@@ -316,7 +295,6 @@ public abstract class Settlement {
 
 				}
 				else if(!(p instanceof Sick)) {
-					this.getPeople().remove(p);
 					this.getNonSick().remove(p);
 					s.addPerson(p);
 					return true;
@@ -346,6 +324,19 @@ public abstract class Settlement {
 		return p;
 	}
 
+	public void run() {
 
+		while(true) {
 
-}//Settlement class
+		}
+
+	}//Settlement class
+	
+	public void setMap(Map map) {
+		this.map = map;
+	}
+	
+	public Map getMap() {
+		return this.map;
+	}
+}

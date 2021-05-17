@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.util.Arrays;
 import java.util.List;
 
+import Simulation.Main;
+
 /***
  * Representation of a Map class
  * 
@@ -16,6 +18,7 @@ public class Map {
 
 	private Settlement[] settlements;
 	List<Settlement> setAllSettlement;
+	private boolean isON = false;
 
 	//Constructor
 	/***
@@ -42,6 +45,7 @@ public class Map {
 
 			}
 		}
+		isON = true;
 	}
 
 	//ToString
@@ -106,6 +110,22 @@ public class Map {
 		System.out.println("cannot find settlement in indexByStr");
 		return -1;
 	}
+	
+	/**
+	 * Get for the flag that indicates if the file is loaded
+	 * @return isON, boolean
+	 */
+	public boolean isON() {
+		return isON;
+	}
+	/**
+	 * Set for the flag that indicates if the file is loaded
+	 * @param isON, boolean
+	 */
+	public void setON(boolean isON) {
+		isON = isON;
+	}
+
 
 
 }//Map class

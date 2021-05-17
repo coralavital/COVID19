@@ -26,20 +26,14 @@ public class Kibbutz extends Settlement{
 	 * @param people, List of Person
 	 * @param ramzorColor, Enum
 	 */
-	public Kibbutz(String name, Location location, List<Person> people, List<Sick> sick, List<Person> healthy,  RamzorColor ramzorColor, int totalVaccines, List<Settlement> linkTo) {
-		super(name, location, people, sick, healthy, ramzorColor, totalVaccines, linkTo);
-	}
+	public Kibbutz(String name, Location location, List<Sick> sick, List<Person> healthy,  RamzorColor ramzorColor, int totalVaccines, List<Settlement> linkTo, Map map) {
+		super(name, location, sick, healthy, ramzorColor, totalVaccines, linkTo, map);
+	}	
 	
-	//Copy constructor
-	/***
-	  * Copy constructor 
-	  * @param k, Object
-	  */
+	
 	public Kibbutz(Kibbutz k) {
-		super(k.getName(), k.getLocation(), k.getPeople(), k.getSick(), k.getNonSick(), k.getRamzorColor(), k.getTotalPersons(), k.getLinkTo());
+		super(k.getName(), k.getLocation(), k.getSick(), k.getNonSick(), k.getRamzorColor(), k.getTotalVaccines(), k.getLinkTo(), k.getMap());
 	}
-	
-	
 
 	//Equals
 	/***
@@ -52,8 +46,10 @@ public class Kibbutz extends Settlement{
 		Settlement s = (Settlement) obj;
 		if(this.getName() == s.getName() 
 				&& (this.getLocation().equals(s.getLocation()) 
-						&& this.getPeople().equals(s.getPeople()) 
-						&& this.getRamzorColor().equals(s.getRamzorColor())))
+						&& this.getSick().equals(s.getSick()) 
+						&& this.getNonSick().equals(s.getNonSick())
+						&& this.getRamzorColor().equals(s.getRamzorColor())
+						&& this.getMap().equals(s.getMap())))
 			return true;
 		else
 			return false;
