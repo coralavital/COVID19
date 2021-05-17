@@ -47,7 +47,7 @@ public class MainWindow extends JFrame {
 
 	//Data members 
 	private StatisticsWindow statistics;
-	private Simulation simulation = new Simulation();
+	private Simulation simulation;
 	private Map mapPointer;
 	private  MapPanel mapPanel;
 	private UserMenu userMenu;
@@ -85,6 +85,8 @@ public class MainWindow extends JFrame {
 		this.pack();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
+		
+		this.simulation = new Simulation();
 
 	}
 
@@ -651,6 +653,7 @@ public class MainWindow extends JFrame {
 						isON = true;
 
 						mapPointer = map;
+						
 						getMapPanel().repaint();
 
 					} 

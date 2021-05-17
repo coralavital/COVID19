@@ -7,7 +7,10 @@ import Population.Healthy;
 import Population.Person;
 import Population.Sick;
 import Population.Vaccinated;
+import Simulation.Clock;
 import Simulation.Main;
+import UI.MainWindow;
+import UI.MainWindow.Simulation;
 
 import java.util.*;
 import java.util.List;
@@ -34,7 +37,8 @@ public abstract class Settlement implements Runnable {
 	private List<Settlement> linkTo;
 	private int numberOfDead;
 	private Map map;
-
+	private Simulation simulation;
+	
 	//Constructor 
 	/**
 	 * constructor functions.
@@ -333,12 +337,21 @@ public abstract class Settlement implements Runnable {
 	public Map getMap() {
 		return this.map;
 	}
+	
 	public void run() {
 
-		while(true) {
+			//The role of the method is to sample 20% of patients out of all the people in localities that have already been initialized 
+			//on the map and for each person who has become ill an attempt will be made to infect three different people
+			//And for this purpose uses another method whose function is to try to infect a random person who is not ill
+			simulation.initialization(this);
+			simulation.recoverToHealthy(this);
+			simulation.moveSettlement(this);
+			simulation.vaccinateHealthy(this);
+			simulation.killPeople(this);
 
-		}
 
 	}
+	
+	
 
 }//Settlement class

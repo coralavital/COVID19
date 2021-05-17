@@ -33,7 +33,8 @@ public class Main {
 					main.getSimulation().moveSettlement(main.getMapPointer().getSettlements()[i]);
 					main.getSimulation().vaccinateHealthy(main.getMapPointer().getSettlements()[i]);
 					main.getSimulation().killPeople(main.getMapPointer().getSettlements()[i]);
-					main.getMapPanel().repaint();
+					if(main.getMapPanel() != null)
+							main.getMapPanel().repaint();
 					if (main.getStatistics() != null)
 						main.getStatistics().getModel().fireTableStructureChanged();
 				}
