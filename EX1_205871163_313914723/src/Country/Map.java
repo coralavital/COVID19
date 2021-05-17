@@ -16,6 +16,7 @@ import Simulation.Main;
 
 public class Map {
 
+	Thread[] thread;
 	private Settlement[] settlements;
 	List<Settlement> setAllSettlement;
 	private boolean isON = false;
@@ -26,22 +27,31 @@ public class Map {
 	 * @param settlements, Settlement list
 	 */
 	public Map(List<Settlement> settlements) {
+		
+		thread = new Thread[settlements.size()];
 		this.settlements = new Settlement[settlements.size()]; //Allocation of a new locality
+		
 		//Deep copying
 		for (int i = 0; i < settlements.size(); i++) {
 			if (settlements.get(i) instanceof Moshav) {
 				//The settlement in the index i is Moshav
 				this.settlements[i] = new Moshav((Moshav) settlements.get(i));
+				//creating a thread for this settlement
+				this.thread[i] = new Thread(this.settlements[i]);
 
 			}
 			if (settlements.get(i) instanceof City) {
 				//The settlement in the index i is City
 				this.settlements[i] = new City((City) settlements.get(i));
+				//creating a thread for this settlement
+				this.thread[i] = new Thread(this.settlements[i]);
 
 			}
 			if (settlements.get(i) instanceof Kibbutz) {
 				//The settlement in the index i is Kibbutz
 				this.settlements[i] = new Kibbutz((Kibbutz) settlements.get(i));
+				//creating a thread for this settlement
+				this.thread[i] = new Thread(this.settlements[i]);
 
 			}
 		}
@@ -127,6 +137,9 @@ public class Map {
 	}
 
 
+	public void runAll() {
+		runAll();
+	}
 
 }//Map class
 

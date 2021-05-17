@@ -47,7 +47,7 @@ public class MainWindow extends JFrame {
 
 	//Data members 
 	private StatisticsWindow statistics;
-	private Simulation simulation;
+	//private Simulation simulation;
 	private Map mapPointer;
 	private  MapPanel mapPanel;
 	private UserMenu userMenu;
@@ -86,7 +86,7 @@ public class MainWindow extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 		
-		this.simulation = new Simulation();
+		//this.simulation = new Simulation();
 
 	}
 
@@ -114,9 +114,10 @@ public class MainWindow extends JFrame {
 		return this.statistics;
 	}
 	//Getter for simulation
-	public Simulation getSimulation() {
+	/*public Simulation getSimulation() {
 		return this.simulation;
 	}
+	*/
 	//Getter for simulationFile
 	public SimulationFile getSimulationFile() {
 		return this.simulationFile;
@@ -651,7 +652,7 @@ public class MainWindow extends JFrame {
 						}
 						flag = true;
 						isON = true;
-
+						
 						mapPointer = map;
 						
 						getMapPanel().repaint();
@@ -965,7 +966,7 @@ public class MainWindow extends JFrame {
 
 	}
 
-	public class Simulation{
+	public class Simulation {
 
 
 		//The simulation from assignment 3
