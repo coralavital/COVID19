@@ -237,9 +237,10 @@ public abstract class Settlement implements Runnable {
 		return this.numberOfDead;
 	}
 
-	public void setNumberOfDead() {
+	public void incNumberOfDead() {
 		this.numberOfDead += 1; 
 	}
+	
 
 	/**
 	 * Method that add Person into list of people 

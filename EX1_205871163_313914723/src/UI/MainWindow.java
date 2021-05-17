@@ -1215,15 +1215,17 @@ public class MainWindow extends JFrame {
 			if(settlement.getSick().size() > 0) {
 				System.out.println("There are sick people in this settlement,the system will try to kill them");
 				for(int j = 0; j < settlement.getSick().size(); j++) {
-					if(settlement.getSick().get(j).tryToDie() == true) {
+					if(settlement.getSick().get(j).tryToDie()) {
 						System.out.println("the person form sick list in the index " + j + " is dead!");
 						settlement.getSick().remove(j);
-						settlement.setNumberOfDead();
+						settlement.incNumberOfDead();
 					}
 					else
 						System.out.println("the person form sick list in the index " + j + " is not dead!");
 				}
 			}
+			else
+				System.out.println("There are no sick people in this settlement");
 
 
 		}
