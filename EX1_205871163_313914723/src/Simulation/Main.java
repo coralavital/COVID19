@@ -13,46 +13,35 @@ import UI.MainWindow;
  */
 public class Main {
 	
-	private MainWindow main;
 	
 	//Load function
-	public static void load() throws InterruptedException {
+	public static void load(MainWindow main) throws InterruptedException {
 		
 		
-		while(.getUserMenu().isON()) {
+		while(main.getUserMenu().isON()) {
 			//When getIsON true the user press play and the simulation start 
 			//s = new Simulation();
 
-			while(getMain().getUserMenu().isPLAY()) {
-
-				getMain().getMapPointer().runAll();
-				//Update the map panel according to recalculations of the data needed for drawing
-				getMain().getMapPanel().repaint();
-				//inc by one the time in the simulation
-				Clock.nextTick();
-				//The thread goes to sleep between iterations and iterations according to the value entered by the user in JSlider 
-				Thread.sleep(getMain().getJSlider().getValue()*1000);
+			while(main.getUserMenu().isPLAY()) {
+				
 			}
-			Thread.sleep(1000);
+			
 		}
 
 
 	}
 
 	public static void main(String[] args) throws InterruptedException {
-		
+		MainWindow main = new MainWindow();
 		
 		
 		//A while loop that makes sure that between each charge there is a second sleep
 		while(true) {
-			load();
-			Thread.sleep(1000);
+			load(main);
 		}
 
 	}
 	
-	public MainWindow getMain() {
-		return this.main;
-	}
+
 
 }

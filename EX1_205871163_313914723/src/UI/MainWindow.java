@@ -654,7 +654,6 @@ public class MainWindow extends JFrame {
 						isON = true;
 						
 						mapPointer = map;
-						
 						getMapPanel().repaint();
 
 					} 
@@ -770,6 +769,17 @@ public class MainWindow extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					//update the relevant flags
 					isPLAY = true;
+					try {
+						getMapPointer().runAll();
+						getMapPanel().repaint();
+						Clock.nextTick();
+						Thread.sleep(getJSlider().getValue()*1000);
+						if(getStatistics() != null)
+							getStatistics().getModel().fireTableDataChanged();
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					l2.setEnabled(true);
 					l1.setEnabled(false);
 

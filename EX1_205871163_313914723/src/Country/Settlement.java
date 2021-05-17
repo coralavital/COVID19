@@ -348,7 +348,7 @@ public abstract class Settlement implements Runnable {
 			simulation.moveSettlement(this);
 			simulation.vaccinateHealthy(this);
 			simulation.killPeople(this);
-			Thread.sleep(1000);
+			
 
 	}
 	

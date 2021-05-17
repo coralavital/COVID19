@@ -137,8 +137,11 @@ public class Map {
 	}
 
 
-	public void runAll() {
-		runAll();
+	public void runAll() throws InterruptedException {
+		for(int i = 0; i < getSettlements().length; i++)
+			thread[i].start();
+		this.runAll();
+		Thread.sleep(1000);
 	}
 
 }//Map class
