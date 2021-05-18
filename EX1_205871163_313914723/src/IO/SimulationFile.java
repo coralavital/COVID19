@@ -196,8 +196,7 @@ public class SimulationFile {
 			List<Person> NonSick = new ArrayList<>();
 			List<Settlement> linkTo = new ArrayList<>();
 			RamzorColor ramzorColor = RamzorColor.Green;
-			Map map = null;
-
+			Map map = new Map();
 
 			if(buffer[0].equals("City")) {
 				City newCity = new City(name, location, sick, NonSick, ramzorColor, 0, linkTo, map);

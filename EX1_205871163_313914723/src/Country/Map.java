@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CyclicBarrier;
-
 import Simulation.Clock;
 import Simulation.Main;
 import UI.MainWindow.MapPanel;
@@ -26,36 +25,43 @@ public class Map {
 	private List<Settlement> setAllSettlement;
 	private boolean isPLAY; 
 	private boolean isON;
-	public CyclicBarrier cyclic;
-
+	private CyclicBarrier cyclic;
+	private boolean flagToDead;
+	
+	public Map() {
+		this.thread = null;
+		this.settlements = null;
+		this.setAllSettlement = null;
+		this.cyclic = null;
+		setON(false);
+		setPLAY(false);
+		setflagToDead(false);
+	}
+	
+	
 	//Constructor
 	/***
 	 * Constructor, copy the settlement list param into settlement array
 	 * @param settlements, Settlement list
 	 */
 	public Map(List<Settlement> settlements) {
-		
+		setflagToDead(false);
 		this.settlements = new Settlement[settlements.size()]; //Allocation of a new locality
-		
 		//Deep copying
 		for (int i = 0; i < settlements.size(); i++) {
 			if (settlements.get(i) instanceof Moshav) {
 				//The settlement in the index i is Moshav
 				this.settlements[i] = new Moshav((Moshav) settlements.get(i));
-
 			}
 			if (settlements.get(i) instanceof City) {
 				//The settlement in the index i is City
 				this.settlements[i] = new City((City) settlements.get(i));
-
 			}
 			if (settlements.get(i) instanceof Kibbutz) {
 				//The settlement in the index i is Kibbutz
 				this.settlements[i] = new Kibbutz((Kibbutz) settlements.get(i));
-
 			}
-		}
-		
+		}	
 	}
 
 	//ToString
@@ -96,6 +102,21 @@ public class Map {
 	}
 
 	/**
+	 * Get 
+	 * @return flagToDead, boolean
+	 */
+	public boolean isflagToDead() {
+		return flagToDead;
+	}
+	/**
+	 * Set 
+	 * @param flagToDead, boolean
+	 */
+	public void setflagToDead(boolean flagToDead) {
+		this.flagToDead = flagToDead;
+	}
+
+	/**
 	 * Get for the flag that indicates if the file is loaded
 	 * @return isON, boolean
 	 */
@@ -109,7 +130,6 @@ public class Map {
 	public void setON(boolean isON) {
 		this.isON = isON;
 	}
-
 	/**
 	  * converting array to list and returning it as a list
 	  * @return: list, Settlement
@@ -139,6 +159,9 @@ public class Map {
 	public CyclicBarrier getCyclic() {
 		return this.cyclic;
 	}
+	public void setCyclic(int n, Runnable runnable) {
+		this.cyclic = new CyclicBarrier(n, runnable);
+	}
 	/**
 	  * finding the settlement by his name
 	  * @param String, name
@@ -165,6 +188,7 @@ public class Map {
 		for(int j = 0; j < getSettlements().length; j++) {
 			this.thread[j].start();
 		}
+	
 		
 	}
 	

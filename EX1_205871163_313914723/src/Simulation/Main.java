@@ -16,10 +16,27 @@ public class Main {
 	
 	//Load function
 	public static void load(MainWindow main) throws InterruptedException {
-
-		//main.getMapPointer().runAll();
-
-
+		while(main.getMapPointer() == null)
+			Thread.sleep(1000);
+		
+		int n = main.getMapPointer().getSettlements().length;
+		Runnable runnable = new Runnable() {
+			public void run() {
+				main.getMapPanel().repaint();
+				Clock.nextTick();
+				try {
+					Thread.sleep(main.getJSlider().getValue() * 1000);
+				}
+				catch(InterruptedException e){
+					e.printStackTrace();
+					
+				}
+			}
+		};	
+	
+		main.getMapPointer().setCyclic(n, runnable);
+		main.getMapPointer().runAll();
+		
 	}
 
 	public static void main(String[] args) throws InterruptedException {

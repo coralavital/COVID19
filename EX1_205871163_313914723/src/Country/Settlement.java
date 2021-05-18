@@ -392,43 +392,27 @@ public abstract class Settlement implements Runnable {
 	public void initialization() {
 		Random rand = new Random();
 		IVirus virus = null;
-
-
+		
 		for(int j = 0; j < (getNonSick().size()*0.2); j++) {
-
+			System.out.println("initialization no. " + j );
 			int index = rand.nextInt(getNonSick().size());
-
 			Person person = getNonSick().get(index);
-
 			int value = rand.nextInt(3);
-
 			if(value < 0)
 				value = Math.abs(value);
-
 			if(value == 0)
 				virus = new BritishVariant();
-
 			else if(value == 1)
 				virus = new ChineseVariant();
-
 			else if(value == 2)
 				virus = new SouthAfricanVariant();
-
-
 			Sick sick = new Sick(person.getAge(), person.getLocation(), person.getSettlement(),
 					Clock.now(), virus);
-
 			getNonSick().remove(j);
 			addPerson(sick);
 
 			for(int k = 0; k < 3; k++) {
-
-				System.out.println("The person in the index " + j + " from the settlement: " + getName() 
-				+ " became ill");
 				System.out.println("Now the system will try to infect 3 non-sick people for this sick person.");
-				System.out.println("The non sick person number "+ k + ", index of virus = " + value + ","
-						+ " the settlement name is " + getName());
-
 				if(getNonSick().size() > 3 ) {//changed from [j] to [i]
 					//Here is called a method whose function is to infect a random person with the help of 
 					//the created sick person.
@@ -438,50 +422,38 @@ public abstract class Settlement implements Runnable {
 
 		}
 	}
+	
 	/**
 	 * Method that try to infect 3 non-sick people by one sick person
 	 * @param sick, Sick object
 	 * @param settlement, Settlement object
 	 */
 	public void tryToInfect(Sick sick) {
-
 		Random rand = new Random();
 		IVirus virus = sick.getVirus();
 		Sick s;
 		IVirus v = null;
-
 		int value = 0;
 		int index = 0;
 		int newP = 0;
 
-
 		newP = rand.nextInt(getNonSick().size());
 		if(newP < 0)
 			newP = Math.abs(newP);
-
 		Person p = getNonSick().get(newP);
-
-
 		if(virus instanceof BritishVariant) {
 			for(int n = 0; n < 3; n++) {
 				if(MainWindow.getData()[0][n])
 					value++;
 			}
-
 			index = rand.nextInt(value);
-
 			if(index == 0) 
 				v = new BritishVariant();
-
 			else if(index == 1)
 				v = new ChineseVariant();
-
 			else if(index == 2)
 				v = new SouthAfricanVariant();
-
-
 			s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), v);
-
 			if(v.tryToContagion(s, p)) {
 				addPerson(p.contagion(v));
 				getNonSick().remove(newP);
@@ -489,29 +461,22 @@ public abstract class Settlement implements Runnable {
 			}
 			else
 				System.out.println("The infection failed");
-
 		}
 
 		if(virus instanceof ChineseVariant) {
+			
 			for(int n = 0; n < 3; n++) {
 				if(MainWindow.getData()[1][n])
 					value++;
 			}
-
 			index = rand.nextInt(value);
-
 			if(index == 0) 
 				v = new BritishVariant();
-
 			if(index == 1)
 				v = new ChineseVariant();
-
 			if(index == 2)
 				v = new SouthAfricanVariant();
-
-
 			s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), v);
-
 			if(v.tryToContagion(s, p)) {
 				addPerson(p.contagion(v));
 				getNonSick().remove(newP);
@@ -519,30 +484,21 @@ public abstract class Settlement implements Runnable {
 			}
 			else
 				System.out.println("The infection failed");
-
 		}
-
 		if(virus instanceof SouthAfricanVariant) {
+			
 			for(int n = 0; n < 3; n++) {
 				if(MainWindow.getData()[2][n])
 					value++;
 			}
-
 			index = rand.nextInt(value);
-
 			if(index == 0) 
 				v = new BritishVariant();
-
 			else if(index == 1)
 				v = new ChineseVariant();
-
 			else if(index == 2)
 				v = new SouthAfricanVariant();
-
-
-
 			s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), v);
-
 			if(v.tryToContagion(s, p)) {
 				addPerson(p.contagion(v));
 				getNonSick().remove(newP);
@@ -550,9 +506,9 @@ public abstract class Settlement implements Runnable {
 			}
 			else
 				System.out.println("The infection failed");
-
 		}
 	}
+	
 	/**
 	 * Method that try to recover sick people to be convalescent people if they getContagiousTime > 25 days.
 	 */
@@ -560,13 +516,11 @@ public abstract class Settlement implements Runnable {
 
 		//A loop that passes over the person how found in the Sick-list
 		for (int k = 0; k < getSick().size(); k++) {
+			System.out.println("recoverToHealthy no. " + k);
 			//A loop that passes over the number of people who have passed 25 days from the moment they were infected with the virus 
 			if(Clock.days(getSick().get(k).getContagiousTime()) > 25) {
-
 				System.out.println("try to recover the person in the index " + k + " in the settlement " + getName());
-
 				Sick s = getSick().get(k);
-
 				getSick().remove(s);
 				s.recover();
 				addPerson(s);
@@ -574,27 +528,32 @@ public abstract class Settlement implements Runnable {
 			}
 			else
 				System.out.println("No people were found to be ill for more than 25 days");
-
 		}
-
 	}	
+	
 	/**
 	 * Method that try to transfer sick from one settlement to another
 	 */
 	public void moveSettlement() {
-
 		if(this.getLinkTo().size() > 0) {
-
-			for(int j = 0; j < getSick().size() * 0.03; j++) {
-
+			for(int j = 0; j < (getSick().size() + getNonSick().size()) * 0.03; j++) {
+				System.out.println("moveSettlement no. " + j);
 				Random rand = new Random();
 				int index = rand.nextInt(this.getLinkTo().size());
 				Settlement s = this.getLinkTo().get(index);
-
-				transferPerson(this.getSick().get(selectRandom()), s);
-
-				int valueOfNonSick = rand.nextInt(this.getNonSick().size());
-				transferPerson(this.getNonSick().get(valueOfNonSick), s);
+				
+				int[] indexes = selectRandom();
+				
+				int value = rand.nextInt(indexes.length);
+				
+				if(value == 0) {
+					transferPerson(this.getSick().get(indexes[0]), s);
+					System.out.println("The transfer was successful");
+				}
+				else if(value == 1) {
+					transferPerson(this.getNonSick().get(indexes[1]), s);
+					System.out.println("The transfer was successful");
+				}
 			}
 		}
 		else
@@ -602,11 +561,15 @@ public abstract class Settlement implements Runnable {
 	}
 	
 	//add this method to sure that we cant try to move a person that not in the settlement
-	public synchronized int selectRandom() {
-		
+	public synchronized int[] selectRandom() {
+		int[] indexes = new int[2];
 		Random rand = new Random();
 		int valueOfSick = rand.nextInt(this.getSick().size());
-		return valueOfSick;
+		int valueOfNonSick = rand.nextInt(this.getNonSick().size());
+		indexes[0] = valueOfSick;
+		indexes[1] = valueOfNonSick;
+				
+		return indexes;
 		
 	}
 	
@@ -614,35 +577,33 @@ public abstract class Settlement implements Runnable {
 	 * A method that tries to vaccinate healthy people if there are vaccine doses waiting.
 	 */
 	public void vaccinateHealthy() {
-
-
 		if(getTotalVaccines() > 0) {
+			
 			for (int k = 0; k < getNonSick().size(); k++) {
-
 				Vaccinated v = new Vaccinated(getNonSick().get(k).getAge(),
 						getNonSick().get(k).getLocation(),
 						getNonSick().get(k).getSettlement(), Clock.now());
 				getNonSick().remove(k);
 				addPerson(v);
-
 				decVaccineByOne();
-
 				System.out.println("The person in index " + k + "resilient and now he is a resilient person");
 			}
 		}
 		else
 			System.out.println("There were no vaccines left in the pool");
 	}
-
+	
 	public void killPeople() {
-
 		if(getSick().size() > 0) {
-			System.out.println("There are sick people in this settlement,the system will try to kill them");
+
 			for(int j = 0; j < getSick().size(); j++) {
+				System.out.println("killPeople no. " + j);
 				if(getSick().get(j).tryToDie()) {
 					System.out.println("the person form sick list in the index " + j + " is dead!");
 					getSick().remove(j);
 					incNumberOfDead();
+					if(getNumberOfDead() == (getSick().size() + getNonSick().size()) * 0.01 )
+						getMap().setflagToDead(true);
 				}
 				else
 					System.out.println("the person form sick list in the index " + j + " is not dead!");
@@ -650,40 +611,41 @@ public abstract class Settlement implements Runnable {
 		}
 		else
 			System.out.println("There are no sick people in this settlement");
-
+		
 
 	}
 
 	public void run() {
+		
 		while(this.getMap().isON()) {
 			//The role of the method is to sample 20% of patients out of all the people in localities that have already been initialized 
 			//on the map and for each person who has become ill an attempt will be made to infect three different people
 			//And for this purpose uses another method whose function is to try to infect a random person who is not ill
-			synchronized(map) {
-				while(!(map.isPLAY())) {
+			
+			synchronized(getMap()) {
+				
+				while(!(getMap().isPLAY())) {
 					try {
-						map.wait();
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
+						getMap().wait();
+					} 
+					catch(InterruptedException e) {
 						e.printStackTrace();
 						return;
 					}
 				}
 			}
-
 			initialization();
 			recoverToHealthy();
 			moveSettlement();
 			vaccinateHealthy();
 			killPeople();
-
-
 			try {
 				map.getCyclic().await();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (BrokenBarrierException e) {
+			} 
+			catch (BrokenBarrierException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return;
@@ -691,7 +653,6 @@ public abstract class Settlement implements Runnable {
 		}
 		return;
 	}
-
 
 
 }//Settlement class

@@ -54,11 +54,11 @@ public class MainWindow extends JFrame {
 	private SimulationFile simulationFile;
 	private JSlider slider = new JSlider();
 	private  MapPanel mapPanel;
-	
+
 	//Static Data Members
 	static boolean data[][] = {{true,false,false}, {false,true,false}, {false, false, true}};
-	
-	
+
+
 	//Constructor
 	/**
 	 * The constructor that initializes the entire main window and creates from it an object in front of which our main function will work
@@ -72,13 +72,13 @@ public class MainWindow extends JFrame {
 		mapPanel.setPreferredSize(new Dimension(600, 600));
 		mapPanel.setBackground(Color.WHITE);
 		this.add(mapPanel); 
-		
+
 		//Creating JSlider
 		JLabel label = new JLabel("Current value: " + getJSlider().getValue());
 
 		//Set
 		slider.addChangeListener(new ChangeListener() {
-			
+
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				int value = getJSlider().getValue();
@@ -154,8 +154,8 @@ public class MainWindow extends JFrame {
 		this.data = data;
 	}
 
-	
-	
+
+
 	// Inner class in MainWidow class
 	//MapPanel
 	public  class MapPanel extends JPanel {
@@ -645,7 +645,6 @@ public class MainWindow extends JFrame {
 					
 					f1.setEnabled(false);
 					f2.setEnabled(true);
-					f4.setEnabled(true);
 					l3.setEnabled(true);
 					l1.setEnabled(true);
 					l2.setEnabled(false);
@@ -662,36 +661,25 @@ public class MainWindow extends JFrame {
 					try {
 						//our final map
 						final Map map = new Map(getSimulationFile().readFromFile());
-						
-						//Update of the relevant flag
-						flag = true;
-						//pointer to the relevant map
-						mapPointer = map;	
 
 						for(int i = 0; i < map.getSettlements().length; i++) {
 							
-							map.getSettlements()[i].setMap(mapPointer);
-						}
-						
-						getMapPointer().cyclic = new CyclicBarrier(getMapPointer().getSettlements().length,
-								new Runnable() {
+							map.getSettlements()[i].setMap(map);
 							
-							public void run() {
-								
-								getMapPanel().repaint();
-								Clock.nextTick();
-								
-								try {
-									Thread.sleep(getJSlider().getValue()*1000);
-								} catch (InterruptedException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-							}
-						});
+						}
+						//Update of the relevant flag
+						flag = true;
+						//pointer to the relevant map
 						
 						
+						setMapPointer(map);
 						
+						getMapPointer().setON(true);
+						getMapPanel().repaint();
+						getMapPointer().setflagToDead(false);
+						if(getMapPointer().isflagToDead())
+							f4.setEnabled(true);
+
 					} 
 					catch (Exception e1) {
 
@@ -749,6 +737,7 @@ public class MainWindow extends JFrame {
 					String update;
 					JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 					jfc.setDialogTitle("Choose a directory to save your file: ");
+					
 					jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
 					String str = null;
@@ -803,11 +792,16 @@ public class MainWindow extends JFrame {
 			l1.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-					
+
 					//Update of the relevant flag
 					getMapPointer().setPLAY(true);
-					getMapPointer().notifyAll();
-					
+
+					synchronized(getMapPointer()) {
+						while(!(getMapPointer().isPLAY())) {
+							getMapPointer().notifyAll();
+						}
+					}
+
 					l2.setEnabled(true);
 					l1.setEnabled(false);
 
