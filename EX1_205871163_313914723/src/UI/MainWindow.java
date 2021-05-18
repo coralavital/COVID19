@@ -666,6 +666,14 @@ public class MainWindow extends JFrame {
 							
 							map.getSettlements()[i].setMap(map);
 							
+							if(map.getSettlements()[i].getSick() != null && map.getSettlements()[i].getNonSick() != null)
+								map.getSettlements()[i].setTotalPersons((int)((map.getSettlements()[i].getSick().size() + map.getSettlements()[i].getNonSick().size()) * 1.3));
+							else if(map.getSettlements()[i].getSick() != null && map.getSettlements()[i].getNonSick() == null)
+								map.getSettlements()[i].setTotalPersons((int)((map.getSettlements()[i].getSick().size()) * 1.3));
+							else if(map.getSettlements()[i].getSick() == null && map.getSettlements()[i].getNonSick() != null)
+								map.getSettlements()[i].setTotalPersons((int)((map.getSettlements()[i].getNonSick().size()) * 1.3));
+							else
+								map.getSettlements()[i].setTotalPersons(map.getSettlements()[i].getSick().size() + map.getSettlements()[i].getNonSick().size());
 						}
 						//Update of the relevant flag
 						flag = true;
