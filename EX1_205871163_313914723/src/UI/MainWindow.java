@@ -14,6 +14,8 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.CyclicBarrier;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -45,16 +47,19 @@ import Virus.SouthAfricanVariant;
  */
 public class MainWindow extends JFrame {
 
-	//Data members 
+	//Private Data Members 
 	private StatisticsWindow statistics;
-	//private Simulation simulation;
 	private Map mapPointer;
-	private  MapPanel mapPanel;
 	private UserMenu userMenu;
 	private SimulationFile simulationFile;
-
-	JSlider slider = new JSlider();
-
+	private JSlider slider = new JSlider();
+	private  MapPanel mapPanel;
+	
+	//Static Data Members
+	static boolean data[][] = {{true,false,false}, {false,true,false}, {false, false, true}};
+	
+	
+	//Constructor
 	/**
 	 * The constructor that initializes the entire main window and creates from it an object in front of which our main function will work
 	 */
@@ -66,30 +71,33 @@ public class MainWindow extends JFrame {
 		// create mapPanel
 		mapPanel.setPreferredSize(new Dimension(600, 600));
 		mapPanel.setBackground(Color.WHITE);
-		this.add(mapPanel); //Map panel}
+		this.add(mapPanel); 
+		
 		//Creating JSlider
-		JLabel label = new JLabel("Current value: " + slider.getValue());
+		JLabel label = new JLabel("Current value: " + getJSlider().getValue());
 
 		//Set
 		slider.addChangeListener(new ChangeListener() {
+			
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				int value = slider.getValue();
-				label.setText("current value: " + value);
+				int value = getJSlider().getValue();
+				label.setText("Current value: " + value);
 			}
 
 		});
 
-		this.add(slider);
+		this.add(getJSlider());
 		this.add(label);
 		this.pack();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
-		
+
 		//this.simulation = new Simulation();
 
 	}
 
+	//getter and setter
 	/**
 	 * getter function for userMenu
 	 * @return: object, usermenu
@@ -113,16 +121,10 @@ public class MainWindow extends JFrame {
 	public StatisticsWindow getStatistics() {
 		return this.statistics;
 	}
-	//Getter for simulation
-	/*public Simulation getSimulation() {
-		return this.simulation;
-	}
-	*/
 	//Getter for simulationFile
 	public SimulationFile getSimulationFile() {
 		return this.simulationFile;
 	}
-
 	/**
 	 * getter function for mapPanel
 	 * @return: object, mapPanel
@@ -130,7 +132,6 @@ public class MainWindow extends JFrame {
 	public MapPanel getMapPanel() {
 		return this.mapPanel;
 	}
-
 	/**
 	 * getter function for slider
 	 * @return: object, slider
@@ -138,8 +139,25 @@ public class MainWindow extends JFrame {
 	public JSlider getJSlider() {
 		return slider;
 	}
+	/**
+	 * getter for data which is the mutation table
+	 * @return: boolean, data
+	 */
+	public static boolean[][] getData() {
+		return data;
+	}
+	/**
+	 * setter for data which is the mutation table
+	 * @param boolean, data
+	 */
+	public void setData(boolean[][] data) {
+		this.data = data;
+	}
 
-	// Inner class if Map panel
+	
+	
+	// Inner class in MainWidow class
+	//MapPanel
 	public  class MapPanel extends JPanel {
 		private Shape rect;
 		private ArrayList<Shape> rectangles;
@@ -239,7 +257,7 @@ public class MainWindow extends JFrame {
 				return;
 		}
 	}
-
+	//RowedTableScroll
 	public class RowedTableScroll extends JScrollPane {
 		private class RowHeaderRenderer extends JLabel
 		implements ListCellRenderer<String> {
@@ -278,7 +296,7 @@ public class MainWindow extends JFrame {
 		}
 
 	}
-
+	//MutationsTable
 	public class MutationsTable extends AbstractTableModel {
 
 		private String[] col_names ;
@@ -327,7 +345,7 @@ public class MainWindow extends JFrame {
 		}
 
 	}
-
+	//StatisticsWindow
 	public class StatisticsWindow extends JFrame {
 
 		public JFrame statisticFrame = new JFrame("Statistics Window");
@@ -584,7 +602,7 @@ public class MainWindow extends JFrame {
 		}
 
 	}
-	
+	//UserMenu
 	/**
 	 * UserMenu class which contain all the options and thier click event
 	 * in each evenet we added setVisible according to the assigment and thier task
@@ -593,10 +611,7 @@ public class MainWindow extends JFrame {
 	 */
 	public class UserMenu extends JMenuBar {	
 
-		boolean data[][] = {{true,false,false}, {false,true,false}, {false, false, true}};
-
 		private boolean flag;
-		private boolean isPLAY, isON;
 
 		/**
 		 * op1: file menu, op2: simulation menu, op3: help menu
@@ -627,7 +642,7 @@ public class MainWindow extends JFrame {
 			f1.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-
+					
 					f1.setEnabled(false);
 					f2.setEnabled(true);
 					f4.setEnabled(true);
@@ -645,17 +660,38 @@ public class MainWindow extends JFrame {
 					System.out.println(f.getPath());
 
 					try {
-
+						//our final map
 						final Map map = new Map(getSimulationFile().readFromFile());
-						for(int i = 0; i < map.getSettlements().length; i++) {
-							map.getSettlements()[i].setMap(map);
-						}
-						flag = true;
-						isON = true;
 						
-						mapPointer = map;
-						getMapPanel().repaint();
+						//Update of the relevant flag
+						flag = true;
+						//pointer to the relevant map
+						mapPointer = map;	
 
+						for(int i = 0; i < map.getSettlements().length; i++) {
+							
+							map.getSettlements()[i].setMap(mapPointer);
+						}
+						
+						getMapPointer().cyclic = new CyclicBarrier(getMapPointer().getSettlements().length,
+								new Runnable() {
+							
+							public void run() {
+								
+								getMapPanel().repaint();
+								Clock.nextTick();
+								
+								try {
+									Thread.sleep(getJSlider().getValue()*1000);
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+						});
+						
+						
+						
 					} 
 					catch (Exception e1) {
 
@@ -767,19 +803,11 @@ public class MainWindow extends JFrame {
 			l1.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-					//update the relevant flags
-					isPLAY = true;
-					try {
-						getMapPointer().runAll();
-						getMapPanel().repaint();
-						Clock.nextTick();
-						Thread.sleep(getJSlider().getValue()*1000);
-						if(getStatistics() != null)
-							getStatistics().getModel().fireTableDataChanged();
-					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					
+					//Update of the relevant flag
+					getMapPointer().setPLAY(true);
+					getMapPointer().notifyAll();
+					
 					l2.setEnabled(true);
 					l1.setEnabled(false);
 
@@ -795,7 +823,8 @@ public class MainWindow extends JFrame {
 
 
 				public void actionPerformed(ActionEvent e) {
-					isPLAY = false;
+					//Update of the relevant flag
+					getMapPointer().setPLAY(false);
 
 					l2.setEnabled(false);
 					l1.setEnabled(true);
@@ -809,8 +838,9 @@ public class MainWindow extends JFrame {
 			l3.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-
-					isON = false;
+					//Update of the relevant flag
+					getMapPointer().setON(false);
+					getMapPointer().setPLAY(false);
 					flag = false;
 
 					f1.setEnabled(true);
@@ -819,10 +849,6 @@ public class MainWindow extends JFrame {
 					l1.setEnabled(false);
 					l2.setEnabled(false);
 					l3.setEnabled(false);
-
-
-					getMapPanel().repaint();
-					setMapPointer(null);
 
 				}
 			});
@@ -949,302 +975,9 @@ public class MainWindow extends JFrame {
 			return flag;
 		}
 
-		/**
-		 * getter for data which is the mutation table
-		 * @return: boolean, data
-		 */
-		public boolean[][] getData() {
-			return data;
-		}
 
-
-		/**
-		 * Get for the flag that indicates if the file is play
-		 * @return isPLAY, boolean
-		 */
-		public boolean isPLAY() {
-			return isPLAY;
-		}
-
-		/**
-		 * Get for the flag that indicates if the file is play
-		 * @return isPLAY, boolean
-		 */
-		public boolean isON() {
-			return isON;
-		}
 
 	}
 
-	public class Simulation {
 
-
-		//The simulation from assignment 3
-		// Initialization
-		/**
-		 * Running on all the settlements and the 20% of people in it and make them sick
-		 * @param map, Map object
-		 * @param settlement, Settlement object
-		 */
-		public void initialization(Settlement settlement) {
-			Random rand = new Random();
-			IVirus virus = null;
-
-
-			for(int j = 0; j < (settlement.getNonSick().size()*0.2); j++) {
-
-				int index = rand.nextInt(settlement.getNonSick().size());
-
-				Person person = settlement.getNonSick().get(index);
-
-				int value = rand.nextInt(3);
-
-				if(value < 0)
-					value = Math.abs(value);
-
-				if(value == 0)
-					virus = new BritishVariant();
-
-				else if(value == 1)
-					virus = new ChineseVariant();
-
-				else if(value == 2)
-					virus = new SouthAfricanVariant();
-
-
-				Sick sick = new Sick(person.getAge(), person.getLocation(), person.getSettlement(),
-						Clock.now(), virus);
-
-				settlement.getNonSick().remove(j);
-				settlement.addPerson(sick);
-
-				for(int k = 0; k < 3; k++) {
-
-					System.out.println("The person in the index " + j + " from the settlement: " + settlement.getName() 
-					+ " became ill");
-					System.out.println("Now the system will try to infect 3 non-sick people for this sick person.");
-					System.out.println("The non sick person number "+ k + ", index of virus = " + value + ","
-							+ " the settlement name is " + settlement.getName());
-
-					if(settlement.getNonSick().size() > 3 ) {//changed from [j] to [i]
-						//Here is called a method whose function is to infect a random person with the help of 
-						//the created sick person.
-						tryToInfect(sick, settlement);
-					}
-				}
-
-			}
-		}
-
-
-		/**
-		 * Method that try to infect 3 non-sick people by one sick person
-		 * @param sick, Sick object
-		 * @param settlement, Settlement object
-		 */
-		public void tryToInfect(Sick sick, Settlement settlement) {
-
-			Random rand = new Random();
-			IVirus virus = sick.getVirus();
-			Sick s;
-			IVirus v = null;
-
-			int value = 0;
-			int index = 0;
-			int newP = 0;
-
-
-			newP = rand.nextInt(settlement.getNonSick().size());
-			if(newP < 0)
-				newP = Math.abs(newP);
-
-			Person p = settlement.getNonSick().get(newP);
-
-
-			if(virus instanceof BritishVariant) {
-				for(int n = 0; n < 3; n++) {
-					if(getUserMenu().getData()[0][n])
-						value++;
-				}
-
-				index = rand.nextInt(value);
-
-				if(index == 0) 
-					v = new BritishVariant();
-
-				else if(index == 1)
-					v = new ChineseVariant();
-
-				else if(index == 2)
-					v = new SouthAfricanVariant();
-
-
-				s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), v);
-
-				if(v.tryToContagion(s, p)) {
-					settlement.addPerson(p.contagion(v));
-					settlement.getNonSick().remove(newP);
-					System.out.println("The infection succeeded");
-				}
-				else
-					System.out.println("The infection failed");
-
-			}
-
-			if(virus instanceof ChineseVariant) {
-				for(int n = 0; n < 3; n++) {
-					if(getUserMenu().getData()[1][n])
-						value++;
-				}
-
-				index = rand.nextInt(value);
-
-				if(index == 0) 
-					v = new BritishVariant();
-
-				if(index == 1)
-					v = new ChineseVariant();
-
-				if(index == 2)
-					v = new SouthAfricanVariant();
-
-
-				s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), v);
-
-				if(v.tryToContagion(s, p)) {
-					settlement.addPerson(p.contagion(v));
-					settlement.getNonSick().remove(newP);
-					System.out.println("The infection succeeded");
-				}
-				else
-					System.out.println("The infection failed");
-
-			}
-
-			if(virus instanceof SouthAfricanVariant) {
-				for(int n = 0; n < 3; n++) {
-					if(getUserMenu().getData()[2][n])
-						value++;
-				}
-
-				index = rand.nextInt(value);
-
-				if(index == 0) 
-					v = new BritishVariant();
-
-				else if(index == 1)
-					v = new ChineseVariant();
-
-				else if(index == 2)
-					v = new SouthAfricanVariant();
-
-
-
-				s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), v);
-
-				if(v.tryToContagion(s, p)) {
-					settlement.addPerson(p.contagion(v));
-					settlement.getNonSick().remove(newP);
-					System.out.println("The infection succeeded");
-				}
-				else
-					System.out.println("The infection failed");
-
-			}
-		}
-
-		/**
-		 * Method that try to recover sick people to be convalescent people if they getContagiousTime > 25 days.
-		 */
-		public void recoverToHealthy(Settlement settlement) {
-
-			//A loop that passes over the person how found in the Sick-list
-			for (int k = 0; k < settlement.getSick().size(); k++) {
-				//A loop that passes over the number of people who have passed 25 days from the moment they were infected with the virus 
-				if(Clock.days(settlement.getSick().get(k).getContagiousTime()) > 25) {
-
-					System.out.println("try to recover the person in the index " + k + " in the settlement " + settlement.getName());
-
-					Sick s = settlement.getSick().get(k);
-
-					settlement.getSick().remove(s);
-					s.recover();
-					settlement.addPerson(s);
-					System.out.println("this person was a sick and now he healthy");
-				}
-				else
-					System.out.println("No people were found to be ill for more than 25 days");
-
-			}
-
-		}	
-
-		/**
-		 * Method that try to transfer sick from one settlement to another
-		 */
-		public void moveSettlement(Settlement settlement) {
-
-			if(settlement.getLinkTo().size() > 0) {
-				for(int j = 0; j < (settlement.getNonSick().size() + settlement.getSick().size())*0.03; j++) {
-
-					Random rand = new Random();
-					int index = rand.nextInt(settlement.getLinkTo().size());
-					Settlement s = settlement.getLinkTo().get(index);
-
-					//int value = rand.nextInt(settlement.getNonSick().size() + settlement.getSick().size());
-					//settlement.transferPerson(settlement.getPeople().get(value), s);
-				}
-			}
-			else
-				System.out.println("There are not link settlement for this settlement");
-		}
-
-		/**
-		 * A method that tries to vaccinate healthy people if there are vaccine doses waiting.
-		 */
-		public void vaccinateHealthy(Settlement settlement) {
-
-
-			if(settlement.getTotalVaccines() > 0) {
-				for (int k = 0; k < settlement.getNonSick().size(); k++) {
-
-					Vaccinated v = new Vaccinated(settlement.getNonSick().get(k).getAge(),
-							settlement.getNonSick().get(k).getLocation(),
-							settlement.getNonSick().get(k).getSettlement(), Clock.now());
-					settlement.getNonSick().remove(k);
-					settlement.addPerson(v);
-
-					settlement.decVaccineByOne();
-
-					System.out.println("The person in index " + k + "resilient and now he is a resilient person");
-				}
-			}
-			else
-				System.out.println("There were no vaccines left in the pool");
-		}
-
-
-		public void killPeople(Settlement settlement) {
-
-			if(settlement.getSick().size() > 0) {
-				System.out.println("There are sick people in this settlement,the system will try to kill them");
-				for(int j = 0; j < settlement.getSick().size(); j++) {
-					if(settlement.getSick().get(j).tryToDie()) {
-						System.out.println("the person form sick list in the index " + j + " is dead!");
-						settlement.getSick().remove(j);
-						settlement.incNumberOfDead();
-					}
-					else
-						System.out.println("the person form sick list in the index " + j + " is not dead!");
-				}
-			}
-			else
-				System.out.println("There are no sick people in this settlement");
-
-
-		}
-
-
-	}//Simulation class
-
-}
+}//Class MainWindow

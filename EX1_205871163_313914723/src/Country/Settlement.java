@@ -10,11 +10,14 @@ import Population.Vaccinated;
 import Simulation.Clock;
 import Simulation.Main;
 import UI.MainWindow;
-import UI.MainWindow.Simulation;
-
+import Virus.BritishVariant;
+import Virus.ChineseVariant;
+import Virus.IVirus;
+import Virus.SouthAfricanVariant;
 import java.util.*;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.BrokenBarrierException;
 
 /*
  * Representation of a Settlement class 
@@ -37,8 +40,8 @@ public abstract class Settlement implements Runnable {
 	private List<Settlement> linkTo;
 	private int numberOfDead;
 	private Map map;
-	private Simulation simulation;
-	
+
+
 	//Constructor 
 	/**
 	 * constructor functions.
@@ -151,7 +154,6 @@ public abstract class Settlement implements Runnable {
 			return (double) getSick().size() / (NonSick.size() + sick.size());
 	}
 
-
 	/**
 	 *  getter function for sick
 	 * @return: list , sick
@@ -210,7 +212,6 @@ public abstract class Settlement implements Runnable {
 		return this.linkTo;
 	}
 
-
 	/**
 	 * returning a string that match inside to the cell of the Excel file
 	 * @return: String, finalString
@@ -244,7 +245,6 @@ public abstract class Settlement implements Runnable {
 	public void incNumberOfDead() {
 		this.numberOfDead += 1; 
 	}
-	
 
 	/**
 	 * Method that add Person into list of people 
@@ -281,7 +281,6 @@ public abstract class Settlement implements Runnable {
 
 	}
 
-
 	/**
 	 * take the person that we got and move him to the settlement we got 
 	 * @param p, Object Person
@@ -289,28 +288,75 @@ public abstract class Settlement implements Runnable {
 	 * @return boolean, true if the transfer was complete, else false
 	 */
 	public boolean transferPerson(Person p, Settlement s) {
-		if (!(this.equals(s))) {
-			if ((s.getTotalPersons() > (s.getNonSick().size() + getSick().size())) || 
-					(this.getRamzorColor().getProbability() * s.getRamzorColor().getProbability() <= Math.random())) {
-				if(p instanceof Sick) {
-					this.getSick().remove(p);
-					s.addPerson(p);
-					return true;
 
+		int s1 = System.identityHashCode(this);
+		int s2 = System.identityHashCode(s);
+		
+		if(s1 <= s2) {
+			//Prevent dead lock with the smaller int id of the settlement - now its this before 
+			synchronized(this) {
+				synchronized(s) {
 
+					if (!(this.equals(s))) {
+						if ((s.getTotalPersons() > (s.getNonSick().size() + getSick().size())) || 
+								(this.getRamzorColor().getProbability() * s.getRamzorColor().getProbability() <= Math.random())) {
+							if(p instanceof Sick) {
+								this.getSick().remove(p);
+								s.addPerson(p);
+								System.out.println("This person move to the new settlement");
+								return true;
+							}
+							else if(!(p instanceof Sick)) {
+								this.getNonSick().remove(p);
+								s.addPerson(p);
+								System.out.println("This person move to the new settlement");
+								return true;
+							}
+
+							else {
+								System.out.println("This person caonnot move to the new settlement");
+								return false;
+							}
+						}
+						else 
+							System.out.println("This person is allready in the settlement");
+						return false;
+					}
 				}
-				else if(!(p instanceof Sick)) {
-					this.getNonSick().remove(p);
-					s.addPerson(p);
-					return true;
-				}
-
-				else 
-					return false;
 			}
-			else 
-				System.out.println("this person is allready in the settlement");
-			return false;
+		}
+		else {
+			//Prevent dead lock with the smaller int id of the settlement - now its s before
+			synchronized(s) {
+				synchronized(this) {
+
+					if (!(this.equals(s))) {
+						if ((s.getTotalPersons() > (s.getNonSick().size() + getSick().size())) || 
+								(this.getRamzorColor().getProbability() * s.getRamzorColor().getProbability() <= Math.random())) {
+							if(p instanceof Sick) {
+								this.getSick().remove(p);
+								s.addPerson(p);
+								System.out.println("This person move to the new settlement");
+								return true;
+							}
+							else if(!(p instanceof Sick)) {
+								this.getNonSick().remove(p);
+								s.addPerson(p);
+								System.out.println("This person move to the new settlement");
+								return true;
+							}
+
+							else {
+								System.out.println("This person caonnot move to the new settlement");
+								return false;
+							}
+						}
+						else 
+							System.out.println("This person is allready in the settlement");
+						return false;
+					}
+				}
+			}
 		}
 		return false;
 	}
@@ -329,29 +375,323 @@ public abstract class Settlement implements Runnable {
 		return p;
 	}
 
-	
 	public void setMap(Map map) {
 		this.map = map;
 	}
-	
+
 	public Map getMap() {
 		return this.map;
 	}
-	
-	public void run() {
 
+	// Initialization
+	/**
+	 * Running on all the settlements and the 20% of people in it and make them sick
+	 * @param map, Map object
+	 * @param settlement, Settlement object
+	 */
+	public void initialization() {
+		Random rand = new Random();
+		IVirus virus = null;
+
+
+		for(int j = 0; j < (getNonSick().size()*0.2); j++) {
+
+			int index = rand.nextInt(getNonSick().size());
+
+			Person person = getNonSick().get(index);
+
+			int value = rand.nextInt(3);
+
+			if(value < 0)
+				value = Math.abs(value);
+
+			if(value == 0)
+				virus = new BritishVariant();
+
+			else if(value == 1)
+				virus = new ChineseVariant();
+
+			else if(value == 2)
+				virus = new SouthAfricanVariant();
+
+
+			Sick sick = new Sick(person.getAge(), person.getLocation(), person.getSettlement(),
+					Clock.now(), virus);
+
+			getNonSick().remove(j);
+			addPerson(sick);
+
+			for(int k = 0; k < 3; k++) {
+
+				System.out.println("The person in the index " + j + " from the settlement: " + getName() 
+				+ " became ill");
+				System.out.println("Now the system will try to infect 3 non-sick people for this sick person.");
+				System.out.println("The non sick person number "+ k + ", index of virus = " + value + ","
+						+ " the settlement name is " + getName());
+
+				if(getNonSick().size() > 3 ) {//changed from [j] to [i]
+					//Here is called a method whose function is to infect a random person with the help of 
+					//the created sick person.
+					tryToInfect(sick);
+				}
+			}
+
+		}
+	}
+	/**
+	 * Method that try to infect 3 non-sick people by one sick person
+	 * @param sick, Sick object
+	 * @param settlement, Settlement object
+	 */
+	public void tryToInfect(Sick sick) {
+
+		Random rand = new Random();
+		IVirus virus = sick.getVirus();
+		Sick s;
+		IVirus v = null;
+
+		int value = 0;
+		int index = 0;
+		int newP = 0;
+
+
+		newP = rand.nextInt(getNonSick().size());
+		if(newP < 0)
+			newP = Math.abs(newP);
+
+		Person p = getNonSick().get(newP);
+
+
+		if(virus instanceof BritishVariant) {
+			for(int n = 0; n < 3; n++) {
+				if(MainWindow.getData()[0][n])
+					value++;
+			}
+
+			index = rand.nextInt(value);
+
+			if(index == 0) 
+				v = new BritishVariant();
+
+			else if(index == 1)
+				v = new ChineseVariant();
+
+			else if(index == 2)
+				v = new SouthAfricanVariant();
+
+
+			s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), v);
+
+			if(v.tryToContagion(s, p)) {
+				addPerson(p.contagion(v));
+				getNonSick().remove(newP);
+				System.out.println("The infection succeeded");
+			}
+			else
+				System.out.println("The infection failed");
+
+		}
+
+		if(virus instanceof ChineseVariant) {
+			for(int n = 0; n < 3; n++) {
+				if(MainWindow.getData()[1][n])
+					value++;
+			}
+
+			index = rand.nextInt(value);
+
+			if(index == 0) 
+				v = new BritishVariant();
+
+			if(index == 1)
+				v = new ChineseVariant();
+
+			if(index == 2)
+				v = new SouthAfricanVariant();
+
+
+			s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), v);
+
+			if(v.tryToContagion(s, p)) {
+				addPerson(p.contagion(v));
+				getNonSick().remove(newP);
+				System.out.println("The infection succeeded");
+			}
+			else
+				System.out.println("The infection failed");
+
+		}
+
+		if(virus instanceof SouthAfricanVariant) {
+			for(int n = 0; n < 3; n++) {
+				if(MainWindow.getData()[2][n])
+					value++;
+			}
+
+			index = rand.nextInt(value);
+
+			if(index == 0) 
+				v = new BritishVariant();
+
+			else if(index == 1)
+				v = new ChineseVariant();
+
+			else if(index == 2)
+				v = new SouthAfricanVariant();
+
+
+
+			s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), v);
+
+			if(v.tryToContagion(s, p)) {
+				addPerson(p.contagion(v));
+				getNonSick().remove(newP);
+				System.out.println("The infection succeeded");
+			}
+			else
+				System.out.println("The infection failed");
+
+		}
+	}
+	/**
+	 * Method that try to recover sick people to be convalescent people if they getContagiousTime > 25 days.
+	 */
+	public void recoverToHealthy() {
+
+		//A loop that passes over the person how found in the Sick-list
+		for (int k = 0; k < getSick().size(); k++) {
+			//A loop that passes over the number of people who have passed 25 days from the moment they were infected with the virus 
+			if(Clock.days(getSick().get(k).getContagiousTime()) > 25) {
+
+				System.out.println("try to recover the person in the index " + k + " in the settlement " + getName());
+
+				Sick s = getSick().get(k);
+
+				getSick().remove(s);
+				s.recover();
+				addPerson(s);
+				System.out.println("this person was a sick and now he healthy");
+			}
+			else
+				System.out.println("No people were found to be ill for more than 25 days");
+
+		}
+
+	}	
+	/**
+	 * Method that try to transfer sick from one settlement to another
+	 */
+	public void moveSettlement() {
+
+		if(this.getLinkTo().size() > 0) {
+
+			for(int j = 0; j < getSick().size() * 0.03; j++) {
+
+				Random rand = new Random();
+				int index = rand.nextInt(this.getLinkTo().size());
+				Settlement s = this.getLinkTo().get(index);
+
+				transferPerson(this.getSick().get(selectRandom()), s);
+
+				int valueOfNonSick = rand.nextInt(this.getNonSick().size());
+				transferPerson(this.getNonSick().get(valueOfNonSick), s);
+			}
+		}
+		else
+			System.out.println("There are not link settlement for this settlement");
+	}
+	
+	//add this method to sure that we cant try to move a person that not in the settlement
+	public synchronized int selectRandom() {
+		
+		Random rand = new Random();
+		int valueOfSick = rand.nextInt(this.getSick().size());
+		return valueOfSick;
+		
+	}
+	
+	/**
+	 * A method that tries to vaccinate healthy people if there are vaccine doses waiting.
+	 */
+	public void vaccinateHealthy() {
+
+
+		if(getTotalVaccines() > 0) {
+			for (int k = 0; k < getNonSick().size(); k++) {
+
+				Vaccinated v = new Vaccinated(getNonSick().get(k).getAge(),
+						getNonSick().get(k).getLocation(),
+						getNonSick().get(k).getSettlement(), Clock.now());
+				getNonSick().remove(k);
+				addPerson(v);
+
+				decVaccineByOne();
+
+				System.out.println("The person in index " + k + "resilient and now he is a resilient person");
+			}
+		}
+		else
+			System.out.println("There were no vaccines left in the pool");
+	}
+
+	public void killPeople() {
+
+		if(getSick().size() > 0) {
+			System.out.println("There are sick people in this settlement,the system will try to kill them");
+			for(int j = 0; j < getSick().size(); j++) {
+				if(getSick().get(j).tryToDie()) {
+					System.out.println("the person form sick list in the index " + j + " is dead!");
+					getSick().remove(j);
+					incNumberOfDead();
+				}
+				else
+					System.out.println("the person form sick list in the index " + j + " is not dead!");
+			}
+		}
+		else
+			System.out.println("There are no sick people in this settlement");
+
+
+	}
+
+	public void run() {
+		while(this.getMap().isON()) {
 			//The role of the method is to sample 20% of patients out of all the people in localities that have already been initialized 
 			//on the map and for each person who has become ill an attempt will be made to infect three different people
 			//And for this purpose uses another method whose function is to try to infect a random person who is not ill
-			simulation.initialization(this);
-			simulation.recoverToHealthy(this);
-			simulation.moveSettlement(this);
-			simulation.vaccinateHealthy(this);
-			simulation.killPeople(this);
-			
+			synchronized(map) {
+				while(!(map.isPLAY())) {
+					try {
+						map.wait();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						return;
+					}
+				}
+			}
 
+			initialization();
+			recoverToHealthy();
+			moveSettlement();
+			vaccinateHealthy();
+			killPeople();
+
+
+			try {
+				map.getCyclic().await();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (BrokenBarrierException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return;
+			}
+		}
+		return;
 	}
-	
-	
+
+
 
 }//Settlement class

@@ -3,8 +3,11 @@ package Country;
 import java.io.BufferedReader;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CyclicBarrier;
 
+import Simulation.Clock;
 import Simulation.Main;
+import UI.MainWindow.MapPanel;
 
 /***
  * Representation of a Map class
@@ -16,10 +19,14 @@ import Simulation.Main;
 
 public class Map {
 
-	Thread[] thread;
+	
+	//Private Data Members
+	private Thread[] thread;
 	private Settlement[] settlements;
-	List<Settlement> setAllSettlement;
-	private boolean isON = false;
+	private List<Settlement> setAllSettlement;
+	private boolean isPLAY; 
+	private boolean isON;
+	public CyclicBarrier cyclic;
 
 	//Constructor
 	/***
@@ -28,7 +35,6 @@ public class Map {
 	 */
 	public Map(List<Settlement> settlements) {
 		
-		thread = new Thread[settlements.size()];
 		this.settlements = new Settlement[settlements.size()]; //Allocation of a new locality
 		
 		//Deep copying
@@ -36,26 +42,20 @@ public class Map {
 			if (settlements.get(i) instanceof Moshav) {
 				//The settlement in the index i is Moshav
 				this.settlements[i] = new Moshav((Moshav) settlements.get(i));
-				//creating a thread for this settlement
-				this.thread[i] = new Thread(this.settlements[i]);
 
 			}
 			if (settlements.get(i) instanceof City) {
 				//The settlement in the index i is City
 				this.settlements[i] = new City((City) settlements.get(i));
-				//creating a thread for this settlement
-				this.thread[i] = new Thread(this.settlements[i]);
 
 			}
 			if (settlements.get(i) instanceof Kibbutz) {
 				//The settlement in the index i is Kibbutz
 				this.settlements[i] = new Kibbutz((Kibbutz) settlements.get(i));
-				//creating a thread for this settlement
-				this.thread[i] = new Thread(this.settlements[i]);
 
 			}
 		}
-		isON = true;
+		
 	}
 
 	//ToString
@@ -72,7 +72,7 @@ public class Map {
 	}
 
 
-	//Getter
+	//Getter and Setter
 	/***
 	 * getter method 
 	 * @return: Settlement[]
@@ -80,7 +80,36 @@ public class Map {
 	public Settlement[] getSettlements() {
 		return settlements;
 	}
-	
+	/**
+	 * Get for the flag that indicates if the file is play
+	 * @return isPLAY, boolean
+	 */
+	public boolean isPLAY() {
+		return isPLAY;
+	}
+	/**
+	 * Set for the flag that indicates if the file is play
+	 * @return isPLAY, boolean
+	 */
+	public void setPLAY(boolean isPLAY) {
+		this.isPLAY = isPLAY;
+	}
+
+	/**
+	 * Get for the flag that indicates if the file is loaded
+	 * @return isON, boolean
+	 */
+	public boolean isON() {
+		return isON;
+	}
+	/**
+	 * Set for the flag that indicates if the file is loaded
+	 * @param isON, boolean
+	 */
+	public void setON(boolean isON) {
+		this.isON = isON;
+	}
+
 	/**
 	  * converting array to list and returning it as a list
 	  * @return: list, Settlement
@@ -93,12 +122,12 @@ public class Map {
 		return setAllSettlement;
 	}
 
-	
+	//get the settlement for the index sent
 	public Settlement at(int index) {
 		return settlements[index];
 	}
 	
-	
+	//get the size
 	public int getSize() {
 		int counter = 0;
 		for(int i = 0; i < settlements.length; i++) {
@@ -106,7 +135,10 @@ public class Map {
 		}
 		return counter;
 	}
-	
+	//get cyclic
+	public CyclicBarrier getCyclic() {
+		return this.cyclic;
+	}
 	/**
 	  * finding the settlement by his name
 	  * @param String, name
@@ -121,28 +153,22 @@ public class Map {
 		return -1;
 	}
 	
-	/**
-	 * Get for the flag that indicates if the file is loaded
-	 * @return isON, boolean
-	 */
-	public boolean isON() {
-		return isON;
-	}
-	/**
-	 * Set for the flag that indicates if the file is loaded
-	 * @param isON, boolean
-	 */
-	public void setON(boolean isON) {
-		isON = isON;
-	}
-
-
+	//run all function
 	public void runAll() throws InterruptedException {
-		for(int i = 0; i < getSettlements().length; i++)
-			thread[i].start();
-		this.runAll();
-		Thread.sleep(1000);
+		
+		thread = new Thread[getSettlements().length];
+		
+		for(int i = 0; i < thread.length; i++) {
+			this.thread[i] = new Thread(this.settlements[i]);
+		}
+		
+		for(int j = 0; j < getSettlements().length; j++) {
+			this.thread[j].start();
+		}
+		
 	}
+	
+
 
 }//Map class
 
