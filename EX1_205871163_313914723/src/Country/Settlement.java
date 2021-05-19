@@ -14,6 +14,8 @@ import Virus.BritishVariant;
 import Virus.ChineseVariant;
 import Virus.IVirus;
 import Virus.SouthAfricanVariant;
+
+import java.awt.event.ActionEvent;
 import java.util.*;
 import java.util.List;
 import java.util.Random;
@@ -40,6 +42,7 @@ public abstract class Settlement implements Runnable {
 	private List<Settlement> linkTo;
 	private int numberOfDead;
 	private Map map;
+	private boolean flagToDead;
 
 
 	//Constructor 
@@ -244,6 +247,21 @@ public abstract class Settlement implements Runnable {
 	}
 
 	/**
+	 * Get 
+	 * @return flagToDead, boolean
+	 */
+	public boolean isflagToDead() {
+		return flagToDead;
+	}
+	/**
+	 * Set 
+	 * @param flagToDead, boolean
+	 */
+	public void setflagToDead(boolean flagToDead) {
+		this.flagToDead = flagToDead;
+	}
+
+	/**
 	 * Method that add Person into list of people 
 	 * @param p, Person object that can be Healthy or Sick or Convalescent or Vaccinated
 	 * @return boolean, true if the Person object was from the object that are mention above, else false
@@ -277,6 +295,37 @@ public abstract class Settlement implements Runnable {
 			return false;
 
 	}
+
+
+	public synchronized boolean addSick() {
+		Random rand = new Random();
+		IVirus virus;
+
+		/**
+		 * running on all the settlements if we found what the user selected then add a random virus into their people
+		 * if he didnt selected then we wont be able to add sick people
+		 */
+
+		for(int j = 0; j < getNonSick().size() * 0.01; j++) {
+			int index = rand.nextInt(getNonSick().size());
+			Person person = getNonSick().get(index);
+			int value = rand.nextInt(3);
+			if(value == 1)
+				virus = new BritishVariant();
+			else if(value == 2)
+				virus = new ChineseVariant();
+			else
+				virus = new SouthAfricanVariant();
+
+			Sick sick = new Sick(person.getAge(), person.getLocation(), person.getSettlement(), Clock.now(), virus);
+			if(addPerson(sick)) {
+				getNonSick().remove(j);
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 	/**
 	 * take the person that we got and move him to the settlement we got 
@@ -533,9 +582,9 @@ public abstract class Settlement implements Runnable {
 	 * Method that try to transfer sick from one settlement to another
 	 */
 	public void moveSettlement() {
-		
+
 		int[] indexes = new int[2];
-		
+
 		if(this.getLinkTo().size() > 0) {
 			for(int j = 0; j < (getSick().size() + getNonSick().size()) * 0.03; j++) {
 				System.out.println("moveSettlement no. " + j);
@@ -602,7 +651,7 @@ public abstract class Settlement implements Runnable {
 					getSick().remove(j);
 					incNumberOfDead();
 					if(getNumberOfDead() == (getSick().size() + getNonSick().size()) * 0.01 )
-						getMap().setflagToDead(true);
+						setflagToDead(true);
 				}
 				else
 					System.out.println("the person form sick list in the index " + j + " is not dead!");
@@ -614,8 +663,8 @@ public abstract class Settlement implements Runnable {
 
 	}
 
-	
-	
+
+
 	public void run() {
 
 		while(this.getMap().isON()) {
@@ -635,13 +684,13 @@ public abstract class Settlement implements Runnable {
 					}
 				}
 			}
-			
+
 			initialization();
 			recoverToHealthy();
 			moveSettlement();
 			vaccinateHealthy();
 			killPeople();
-			
+
 			try {
 				getMap().getCyclic().await();
 			} catch (InterruptedException e) {

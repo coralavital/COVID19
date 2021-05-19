@@ -459,37 +459,13 @@ public class MainWindow extends JFrame {
 			//infect 10% non-sicks people to the selected settlement
 			add.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Random rand = new Random();
 					String selectedName = (String) table.getValueAt(table.getSelectedRow(), 0);
-					IVirus virus;
-
-					/**
-					 * running on all the settlements if we found what the user selected then add a random virus into their people
-					 * if he didnt selected then we wont be able to add sick people
-					 */
 					for(int i = 0; i < getMapPointer().getSettlements().length; i++) {
-						if(getMapPointer().getSettlements()[i].getName() == selectedName) {
-							for(int j = 0; j < getMapPointer().getSettlements()[i].getNonSick().size()*0.01; j++) {
-								int index = rand.nextInt(getMapPointer().getSettlements()[i].getNonSick().size());
-								Person person = getMapPointer().getSettlements()[i].getNonSick().get(index);
-								int value = rand.nextInt(3);
-								if(value == 1)
-									virus = new BritishVariant();
-								else if(value == 2)
-									virus = new ChineseVariant();
-								else
-									virus = new SouthAfricanVariant();
-
-								Sick sick = new Sick(person.getAge(), person.getLocation(), person.getSettlement(), Clock.now(), virus);
-								getMapPointer().getSettlements()[i].getSick().add(sick);
-								getMapPointer().getSettlements()[i].getNonSick().remove(j);
-
-							}
-							model.fireTableDataChanged();
-						}
+						if(getMapPointer().getSettlements()[i].getName() == selectedName)
+							getMapPointer().getSettlements()[i].addSick();
 					}
+					model.fireTableDataChanged();
 				}
-
 			});
 
 
@@ -667,17 +643,19 @@ public class MainWindow extends JFrame {
 							//need to check if working
 							getMapPointer().getSettlements()[i].setTotalPersons((int)((getMapPointer().getSettlements()[i].getSick().size() + getMapPointer().getSettlements()[i].getSick().size()) * 1.3));
 							getMapPointer().getSettlements()[i].setMap(getMapPointer());
+							getMapPointer().getSettlements()[i].setflagToDead(false);
 						}
+
 						getMapPanel().repaint();
 						//Update of the relevant flag
 						flag = true;
 						//pointer to the relevant map
 
 						getMapPointer().setON(true);
-						getMapPointer().setflagToDead(false);
-						
+
+
 						getMapPointer().setCyclic(getMapPointer().getSettlements().length, new Runnable() {
-							
+
 							public void run() {
 								synchronized(getMapPointer()) {
 									getMapPanel().repaint();
