@@ -677,6 +677,7 @@ public class MainWindow extends JFrame {
 						getMapPointer().setflagToDead(false);
 						
 						getMapPointer().setCyclic(getMapPointer().getSettlements().length, new Runnable() {
+							
 							public void run() {
 								synchronized(getMapPointer()) {
 									getMapPanel().repaint();
@@ -686,7 +687,6 @@ public class MainWindow extends JFrame {
 									try {
 										Thread.sleep(getJSlider().getValue() * 1000);
 									} catch (InterruptedException e) {
-										// TODO Auto-generated catch block
 										e.printStackTrace();
 									}
 								}
