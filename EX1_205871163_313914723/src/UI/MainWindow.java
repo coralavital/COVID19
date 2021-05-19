@@ -627,35 +627,28 @@ public class MainWindow extends JFrame {
 
 					FileDialog fd = new FileDialog(frame, "PLEASE CHOOSE A FILE:", FileDialog.LOAD);
 					fd.setVisible(true);
-
 					if (fd.getFile() == null)
 						return;
 					File f = new File(fd.getDirectory(), fd.getFile());
 					simulationFile = new SimulationFile(f.getPath());
 					System.out.println(f.getPath());
-
 					try {
 						//our final map
 						final Map map = new Map(getSimulationFile().readFromFile());
 						setMapPointer(map);
-
+						getMapPointer().setON(true);
 						for(int i = 0; i < getMapPointer().getSettlements().length; i++) {
 							//need to check if working
 							getMapPointer().getSettlements()[i].setTotalPersons((int)((getMapPointer().getSettlements()[i].getSick().size() + getMapPointer().getSettlements()[i].getSick().size()) * 1.3));
 							getMapPointer().getSettlements()[i].setMap(getMapPointer());
 							getMapPointer().getSettlements()[i].setflagToDead(false);
 						}
-
 						getMapPanel().repaint();
 						//Update of the relevant flag
 						flag = true;
 						//pointer to the relevant map
-
-						getMapPointer().setON(true);
-
-
+						
 						getMapPointer().setCyclic(getMapPointer().getSettlements().length, new Runnable() {
-
 							public void run() {
 								synchronized(getMapPointer()) {
 									getMapPanel().repaint();
@@ -676,9 +669,7 @@ public class MainWindow extends JFrame {
 
 						JOptionPane.showConfirmDialog(frame, "INVALID FILE", "ERROR", JOptionPane.DEFAULT_OPTION);
 					}
-
 				}
-
 			});
 
 			f2 = new JMenuItem("STATISTICS");
@@ -778,70 +769,49 @@ public class MainWindow extends JFrame {
 			});
 
 			l1 = new JMenuItem("PLAY");
-
 			l1.setEnabled(false);
 			l1.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-
 					//Update of the relevant flag
 					getMapPointer().setPLAY(true);
-
 					synchronized(getMapPointer()) {
 						getMapPointer().notifyAll();
 					}
-					
 					l2.setEnabled(true);
 					l1.setEnabled(false);
-
 				}
 			});
 
-
-
 			l2 = new JMenuItem("PAUSE");
-
 			l2.setEnabled(false);
 			l2.addActionListener(new ActionListener() {
-
-
 				public void actionPerformed(ActionEvent e) {
 					//Update of the relevant flag
 					getMapPointer().setPLAY(false);
-
 					l2.setEnabled(false);
 					l1.setEnabled(true);
-
-
 				}
 			});
 
-
 			l3 = new JMenuItem("STOP");
 			l3.addActionListener(new ActionListener() {
-
 				public void actionPerformed(ActionEvent e) {
 					//Update of the relevant flag
 					getMapPointer().setON(false);
 					getMapPointer().setPLAY(false);
 					flag = false;
-
 					f1.setEnabled(true);
 					f2.setEnabled(false);
 					f4.setEnabled(false);
 					l1.setEnabled(false);
 					l2.setEnabled(false);
 					l3.setEnabled(false);
-
 				}
 			});
 
-
 			l4 = new JMenuItem("SET TICKS PER DAY");
-
 			l4.addActionListener(new ActionListener() {
-
-
 				public void actionPerformed(ActionEvent e) {
 					double tmp = 0;
 					SpinnerNumberModel Model = new SpinnerNumberModel(1.0, 1.00, 100.00, 1.00);// start with 0, the minimum  is 0, the maximum is 0 and increase steps is 1;
@@ -859,13 +829,8 @@ public class MainWindow extends JFrame {
 
 			h1 = new JMenuItem("HELP");
 			h1.addActionListener(new ActionListener() {
-
-
 				public void actionPerformed(ActionEvent e) {
-
-
 					JDialog dialog;
-
 					String multiMessage = "\r\n\n As part of a study project in an advanced object-oriented programming course,\r\n"
 							+ "we were asked to prepare a system for the State of Israel that experienced a health-economic crisis \r\nfollowing an outbreak of a virus that carries with it three different strains"
 							+ "that spread rapidly in it.\r\n"
@@ -891,9 +856,7 @@ public class MainWindow extends JFrame {
 							+ "Editors:\r\n"
 							+ "Coral Avital and Yoni Yifrach.";
 					JOptionPane pane = new JOptionPane();
-
 					pane.setMessage(multiMessage);
-
 					dialog = pane.createDialog(null, "HELP WINDOW");
 					dialog.setVisible(true);
 				}
@@ -901,8 +864,6 @@ public class MainWindow extends JFrame {
 
 			h2 = new JMenuItem("ABOUT");
 			h2.addActionListener(new ActionListener() {//new
-
-
 				public void actionPerformed(ActionEvent e) {
 					//author details in Dialog
 					JDialog dialog = new JDialog(frame,"ABOUT WINDOW" ,false);
@@ -922,10 +883,6 @@ public class MainWindow extends JFrame {
 					dialog.add(new JLabel(""));
 					dialog.pack();
 					dialog.setVisible(true);
-
-
-
-
 				}
 			});
 
@@ -959,6 +916,5 @@ public class MainWindow extends JFrame {
 		}
 
 	}
-
 
 }//Class MainWindow

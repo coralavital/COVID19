@@ -526,7 +526,7 @@ public abstract class Settlement implements Runnable {
 				v = new SouthAfricanVariant();
 			s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), v);
 			if(v.tryToContagion(s, p)) {
-				addPerson(p.contagion(v));
+				addPerson(p.con	tagion(v));
 				getNonSick().remove(newP);
 				System.out.println("The infection succeeded");
 			}
