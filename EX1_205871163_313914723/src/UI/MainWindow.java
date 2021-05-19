@@ -642,7 +642,7 @@ public class MainWindow extends JFrame {
 			f1.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-					
+
 					f1.setEnabled(false);
 					f2.setEnabled(true);
 					l3.setEnabled(true);
@@ -661,22 +661,37 @@ public class MainWindow extends JFrame {
 					try {
 						//our final map
 						final Map map = new Map(getSimulationFile().readFromFile());
+						setMapPointer(map);
 
-						for(int i = 0; i < map.getSettlements().length; i++) {
-							map.getSettlements()[i].setMap(map);
+						for(int i = 0; i < getMapPointer().getSettlements().length; i++) {
+							//need to check if working
+							getMapPointer().getSettlements()[i].setTotalPersons((int)((getMapPointer().getSettlements()[i].getSick().size() + getMapPointer().getSettlements()[i].getSick().size()) * 1.3));
+							getMapPointer().getSettlements()[i].setMap(getMapPointer());
 						}
+						getMapPanel().repaint();
 						//Update of the relevant flag
 						flag = true;
 						//pointer to the relevant map
-						
-						
-						setMapPointer(map);
-						
+
 						getMapPointer().setON(true);
-						getMapPanel().repaint();
 						getMapPointer().setflagToDead(false);
-						if(getMapPointer().isflagToDead())
-							f4.setEnabled(true);
+						
+						getMapPointer().setCyclic(getMapPointer().getSettlements().length, new Runnable() {
+							public void run() {
+								synchronized(getMapPointer()) {
+									getMapPanel().repaint();
+									getStatistics().getModel().fireTableDataChanged();
+									Clock.nextTick();
+
+									try {
+										Thread.sleep(getJSlider().getValue() * 1000);
+									} catch (InterruptedException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+								}
+							}
+						});
 
 					} 
 					catch (Exception e1) {
@@ -735,7 +750,7 @@ public class MainWindow extends JFrame {
 					String update;
 					JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 					jfc.setDialogTitle("Choose a directory to save your file: ");
-					
+
 					jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
 					String str = null;
@@ -795,9 +810,7 @@ public class MainWindow extends JFrame {
 					getMapPointer().setPLAY(true);
 
 					synchronized(getMapPointer()) {
-						while(!(getMapPointer().isPLAY())) {
-							getMapPointer().notifyAll();
-						}
+						getMapPointer().notifyAll();
 					}
 
 					l2.setEnabled(true);
@@ -966,8 +979,6 @@ public class MainWindow extends JFrame {
 		public boolean getFlag() {
 			return flag;
 		}
-
-
 
 	}
 

@@ -177,22 +177,14 @@ public class Map {
 	}
 	
 	//run all function
-	public void runAll() throws InterruptedException {
+	public void runAll() {
 		
 		thread = new Thread[getSettlements().length];
 		
-		for(int i = 0; i < thread.length; i++) {
-			this.thread[i] = new Thread(this.settlements[i]);
+		for(int i = 0; i < getSettlements().length; i++) {
+			new Thread(getSettlements()[i]).start();
 		}
-		
-		for(int j = 0; j < getSettlements().length; j++) {
-			this.thread[j].start();
-		}
-	
-		
 	}
 	
-
-
 }//Map class
 

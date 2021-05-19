@@ -614,6 +614,8 @@ public abstract class Settlement implements Runnable {
 
 	}
 
+	
+	
 	public void run() {
 
 		while(this.getMap().isON()) {
@@ -633,13 +635,15 @@ public abstract class Settlement implements Runnable {
 					}
 				}
 			}
+			
 			initialization();
 			recoverToHealthy();
 			moveSettlement();
 			vaccinateHealthy();
 			killPeople();
+			
 			try {
-				map.getCyclic().await();
+				getMap().getCyclic().await();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
