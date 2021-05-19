@@ -790,7 +790,7 @@ public class MainWindow extends JFrame {
 					synchronized(getMapPointer()) {
 						getMapPointer().notifyAll();
 					}
-
+					
 					l2.setEnabled(true);
 					l1.setEnabled(false);
 

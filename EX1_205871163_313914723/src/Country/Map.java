@@ -26,7 +26,7 @@ public class Map {
 	private boolean isPLAY; 
 	private boolean isON;
 	private CyclicBarrier cyclic;
-	private boolean flagToDead;
+	
 	
 	public Map() {
 		this.thread = null;
@@ -99,21 +99,6 @@ public class Map {
 	 */
 	public void setPLAY(boolean isPLAY) {
 		this.isPLAY = isPLAY;
-	}
-
-	/**
-	 * Get 
-	 * @return flagToDead, boolean
-	 */
-	public boolean isflagToDead() {
-		return flagToDead;
-	}
-	/**
-	 * Set 
-	 * @param flagToDead, boolean
-	 */
-	public void setflagToDead(boolean flagToDead) {
-		this.flagToDead = flagToDead;
 	}
 
 	/**

@@ -182,7 +182,7 @@ public abstract class Settlement implements Runnable {
 	 * setter function for the number of vaccines
 	 * @param: int, number
 	 */
-	public void setTotalVaccines(int number) {
+	public synchronized void setTotalVaccines(int number) {
 		this.totalVaccines += number;
 	}
 
@@ -325,6 +325,7 @@ public abstract class Settlement implements Runnable {
 		}
 		return false;
 	}
+	
 
 
 	/**
