@@ -32,10 +32,8 @@ public class Map {
 		this.thread = null;
 		this.settlements = null;
 		this.setAllSettlement = null;
-		this.cyclic = null;
 		setON(false);
 		setPLAY(false);
-		setflagToDead(false);
 	}
 	
 	
@@ -45,7 +43,6 @@ public class Map {
 	 * @param settlements, Settlement list
 	 */
 	public Map(List<Settlement> settlements) {
-		setflagToDead(false);
 		this.settlements = new Settlement[settlements.size()]; //Allocation of a new locality
 		//Deep copying
 		for (int i = 0; i < settlements.size(); i++) {
@@ -62,6 +59,8 @@ public class Map {
 				this.settlements[i] = new Kibbutz((Kibbutz) settlements.get(i));
 			}
 		}	
+		setON(false);
+		setPLAY(false);
 	}
 
 	//ToString

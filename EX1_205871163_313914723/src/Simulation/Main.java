@@ -2,6 +2,8 @@ package Simulation;
 
 import java.awt.Window;
 import java.util.concurrent.TimeUnit;
+
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import UI.MainWindow;
 
@@ -17,9 +19,6 @@ public class Main {
 
 		//our main window
 		MainWindow main = new MainWindow();
-		while(main.getMapPointer() != null) {
-			main.getMapPointer().runAll();
-			Thread.sleep(1000);
-		}
+		main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }

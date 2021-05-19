@@ -437,7 +437,7 @@ public abstract class Settlement implements Runnable {
 	 * @param map, Map object
 	 * @param settlement, Settlement object
 	 */
-	public void initialization() {
+	private void initialization() {
 		Random rand = new Random();
 		IVirus virus = null;
 
@@ -476,7 +476,7 @@ public abstract class Settlement implements Runnable {
 	 * @param sick, Sick object
 	 * @param settlement, Settlement object
 	 */
-	public void tryToInfect(Sick sick) {
+	private void tryToInfect(Sick sick) {
 		Random rand = new Random();
 		IVirus virus = sick.getVirus();
 		Sick s;
@@ -560,7 +560,7 @@ public abstract class Settlement implements Runnable {
 	/**
 	 * Method that try to recover sick people to be convalescent people if they getContagiousTime > 25 days.
 	 */
-	public void recoverToHealthy() {
+	private void recoverToHealthy() {
 
 		//A loop that passes over the person how found in the Sick-list
 		for (int k = 0; k < getSick().size(); k++) {
@@ -582,7 +582,7 @@ public abstract class Settlement implements Runnable {
 	/**
 	 * Method that try to transfer sick from one settlement to another
 	 */
-	public void moveSettlement() {
+	private void moveSettlement() {
 
 		int[] indexes = new int[2];
 
@@ -610,7 +610,7 @@ public abstract class Settlement implements Runnable {
 	}
 
 	//add this method to sure that we cant try to move a person that not in the settlement
-	public synchronized int[] selectRandom() {
+	private synchronized int[] selectRandom() {
 		int[] indexes = new int[2];
 		Random rand = new Random();
 		int valueOfSick = rand.nextInt(this.getSick().size());
@@ -625,7 +625,7 @@ public abstract class Settlement implements Runnable {
 	/**
 	 * A method that tries to vaccinate healthy people if there are vaccine doses waiting.
 	 */
-	public void vaccinateHealthy() {
+	private void vaccinateHealthy() {
 		if(getTotalVaccines() > 0) {
 
 			for (int k = 0; k < getNonSick().size(); k++) {
@@ -642,7 +642,7 @@ public abstract class Settlement implements Runnable {
 			System.out.println("There were no vaccines left in the pool");
 	}
 
-	public void killPeople() {
+	private void killPeople() {
 		if(getSick().size() > 0) {
 
 			for(int j = 0; j < getSick().size(); j++) {

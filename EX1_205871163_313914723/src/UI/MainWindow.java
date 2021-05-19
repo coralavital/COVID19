@@ -659,9 +659,9 @@ public class MainWindow extends JFrame {
 							public void run() {
 								synchronized(getMapPointer()) {
 									getMapPanel().repaint();
+									getMapPointer().runAll();
 									getStatistics().getModel().fireTableDataChanged();
 									Clock.nextTick();
-
 									try {
 										Thread.sleep(getJSlider().getValue() * 1000);
 									} catch (InterruptedException e) {
