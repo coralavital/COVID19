@@ -106,7 +106,7 @@ public class SouthAfricanVariant implements IVirus {
 		double p = Probability_Death(s);
 		long t = (long) Clock.days(s.getContagiousTime());
 
-		if (Math.max(0, p - 0.01 * p * (Math.pow((t - 15), 2))) < 1)
+		if (Math.max(0, p - 0.01 * p * (Math.pow((t - 15), 2))) > Math.random())
 			return true;
 		else
 			return false;

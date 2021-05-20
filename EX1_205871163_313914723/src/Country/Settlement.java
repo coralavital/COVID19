@@ -643,7 +643,7 @@ public abstract class Settlement implements Runnable {
 		if(this.getSick() != null) {
 			for(int j = 0; j < this.getSick().size(); j++) {
 				System.out.println("killPeople no. " + j);
-				if(getSick().get(j).tryToDie() && getSick().contains(getSick().get(j))) {
+				if(getSick().get(j).tryToDie()) {
 					System.out.println("the person form sick list in the index " + j + " is dead!");
 					getSick().remove(j);
 					incNumberOfDead();

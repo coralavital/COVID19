@@ -112,7 +112,7 @@ public class ChineseVariant implements IVirus {
 		double p = Probability_Death(p1);
 		long t = (long) Clock.days(p1.getContagiousTime());
 
-		if (Math.max(0, p - 0.01 * p * (Math.pow((t - 15), 2))) < 1)
+		if (Math.max(0, p - 0.01 * p * (Math.pow((t - 15), 2))) > Math.random())
 			return true;
 		else
 			return false;

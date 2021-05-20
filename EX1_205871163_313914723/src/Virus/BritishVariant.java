@@ -100,11 +100,12 @@ public class BritishVariant implements IVirus{
 	 * Calculate the percentage of getting killed
 	 * @return boolean, true if the chance to kill is more than 100%, else false
 	 */
-	public boolean tryToKill(Sick p1) {
-		double p = Probability_Death(p1);
-		long t = (long) Clock.days(p1.getContagiousTime());
-		
-		if (Math.max(0, p - 0.01 * p * (Math.pow((t - 15), 2))) < 1)
+	public boolean tryToKill(Sick s) {
+
+		double p = Probability_Death(s);
+		long t = (long) Clock.days(s.getContagiousTime());
+
+		if (Math.max(0, p - 0.01 * p * (Math.pow((t - 15), 2))) > Math.random())
 			return true;
 		else
 			return false;
