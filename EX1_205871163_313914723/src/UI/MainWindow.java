@@ -53,7 +53,7 @@ public class MainWindow extends JFrame {
 	private UserMenu userMenu;
 	private SimulationFile simulationFile;
 	private JSlider slider = new JSlider();
-	private  MapPanel mapPanel;
+	private MapPanel mapPanel;
 
 	//Static Data Members
 	static boolean data[][] = {{true,false,false}, {false,true,false}, {false, false, true}};
@@ -146,6 +146,7 @@ public class MainWindow extends JFrame {
 	public static boolean[][] getData() {
 		return data;
 	}
+
 	/**
 	 * setter for data which is the mutation table
 	 * @param boolean, data
@@ -618,7 +619,7 @@ public class MainWindow extends JFrame {
 			f1.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-
+					f4.setEnabled(true);
 					f1.setEnabled(false);
 					f2.setEnabled(true);
 					l3.setEnabled(true);
@@ -645,8 +646,8 @@ public class MainWindow extends JFrame {
 						getMapPanel().repaint();
 						//Update of the relevant flag
 						flag = true;
-						//pointer to the relevant map
-						
+						getMapPointer().setflagLogFile(false);
+
 						getMapPointer().setCyclic(getMapPointer().getSettlements().length, new Runnable() {
 							public void run() {
 								synchronized(getMapPointer()) {
@@ -712,49 +713,36 @@ public class MainWindow extends JFrame {
 			f4.setEnabled(false);
 			f4.addActionListener(new ActionListener() {
 
-
 				public void actionPerformed(ActionEvent e) {
-					Date date = new Date(System.currentTimeMillis()); // This object contains the current date value
-					SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-					String update;
-					JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-					jfc.setDialogTitle("Choose a directory to save your file: ");
-
-					jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-					String str = null;
-
-					int returnValue = jfc.showSaveDialog(null);
-
-					if (returnValue == JFileChooser.APPROVE_OPTION) {
-						if (jfc.getSelectedFile().isDirectory()) {
-							str =  jfc.getSelectedFile().toString();
-
-							//setting name to the file
-							str = str+"\\update.log";
-						}
-					}        
-
-					File fos = new File(str);
+					File fos = null;
 					PrintWriter pw = null;
-					try {
-						pw = new PrintWriter(fos);
-					} catch (FileNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+					String str = null;
+					JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+					while(!getMapPointer().getFlagLogFile()) {
+						jfc.setDialogTitle("Choose a directory to save your file: ");
+						jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+						int returnValue = jfc.showSaveDialog(null);
+						if (returnValue == JFileChooser.APPROVE_OPTION) {
+							if (jfc.getSelectedFile().isDirectory()) {
+								str =  jfc.getSelectedFile().toString();
+								//setting name to the file
+								str = str+"\\update.log";
+							}
+						}        
+						fos = new File(str);
+						
+						try {
+							pw = new PrintWriter(fos);
+						} catch (FileNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						getMapPointer().setflagLogFile(true);
 					}
-					for(int i = 0; i < getMapPointer().getSettlements().length; i++) {
-						//reading from the object and writing into the file
-						update = "CURENNT TIME: " + formatter.format(date) + "\nSETTLEMENT NAME: " + getMapPointer().getSettlements()[i].getName() 
-								+ "\nNUMBER OF SICK: " + getMapPointer().getSettlements()[i].getSick().size()
-								+ "\nNUMBER OF DEAD PEOPLE: " + getMapPointer().getSettlements()[i].getNumberOfDead();		
-						pw.println(update);
-					}
 
+					if(getMapPointer().isflagToDead())
+						getMapPointer().saveLogFile(fos, pw);
 
-
-
-					pw.close();
 				}
 			});
 

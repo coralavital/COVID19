@@ -205,6 +205,7 @@ public class SimulationFile {
 					Healthy h = new Healthy(age, newCity.randomLocation(), newCity);
 					newCity.addPerson(h);
 				}
+				newCity.setTotalPersons();
 				settlement.add(newCity);
 			}
 
@@ -215,7 +216,7 @@ public class SimulationFile {
 					Healthy h = new Healthy(age, newMoshav.randomLocation(), newMoshav);
 					newMoshav.addPerson(h);
 				}
-
+				newMoshav.setTotalPersons();
 				settlement.add(newMoshav);
 			}
 
@@ -227,7 +228,7 @@ public class SimulationFile {
 					newKibbutz.addPerson(h);
 
 				}
-
+				newKibbutz.setTotalPersons();
 				settlement.add(newKibbutz);
 			}
 

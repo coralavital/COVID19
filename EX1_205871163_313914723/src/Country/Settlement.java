@@ -16,6 +16,8 @@ import Virus.IVirus;
 import Virus.SouthAfricanVariant;
 
 import java.awt.event.ActionEvent;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.*;
 import java.util.List;
 import java.util.Random;
@@ -64,9 +66,6 @@ public abstract class Settlement implements Runnable {
 		this.linkTo = linkTo;
 		this.numberOfDead = 0;
 		this.map = map;
-
-		if(getNonSick() != null)
-			this.setTotalPersons((int)(getNonSick().size() * 1.3));
 	}
 
 	public Settlement(Settlement s) {
@@ -176,8 +175,8 @@ public abstract class Settlement implements Runnable {
 		return this.totalPersons;
 	}
 
-	public void setTotalPersons(int number) {
-		this.totalPersons = number;
+	public void setTotalPersons() {
+		this.totalPersons = (int)((getNonSick().size() + getSick().size()) * 1.3);
 	}
 	/**
 	 * setter function for the number of vaccines
@@ -257,7 +256,7 @@ public abstract class Settlement implements Runnable {
 		if(p instanceof Sick) {
 			//thie person is sick so we add him to the sick people
 			Sick s = (Sick) p;
-			this.sick.add(s);
+			this.getSick().add(s);
 			return true;
 
 		} 
@@ -265,15 +264,15 @@ public abstract class Settlement implements Runnable {
 
 			if(p instanceof Healthy) {
 				Healthy h = (Healthy) p;
-				this.NonSick.add(h);
+				this.getNonSick().add(h);
 			}
 			else if(p instanceof Convalescent) {
 				Convalescent c = (Convalescent) p;
-				this.NonSick.add(c);
+				this.getNonSick().add(c);
 			}
 			else {
 				Vaccinated v = (Vaccinated) p; 
-				this.NonSick.add(v);
+				this.getNonSick().add(v);
 			}
 			return true;
 		}
@@ -334,15 +333,15 @@ public abstract class Settlement implements Runnable {
 					if (!(this.equals(s))) {
 						if ((s.getTotalPersons() > (s.getNonSick().size() + s.getSick().size())) || 
 								(p.getSettlement().getRamzorColor().getProbability() * s.getRamzorColor().getProbability() <= Math.random())) {
-							if(p instanceof Sick) {
-								p.getSettlement().getSick().remove(p);
+							if(p instanceof Sick && !(s.getSick().contains(p))) {
 								s.addPerson(p);
+								this.getSick().remove(p);
 								System.out.println("This person move to the new settlement");
 								return true;
 							}
-							else if(!(p instanceof Sick)) {
-								p.getSettlement().getNonSick().remove(p);
+							else if((!(p instanceof Sick)) && (!(s.getNonSick().contains(p)))) {
 								s.addPerson(p);
+								this.getNonSick().remove(p);
 								System.out.println("This person move to the new settlement");
 								return true;
 							}
@@ -428,7 +427,7 @@ public abstract class Settlement implements Runnable {
 		Random rand = new Random();
 		IVirus virus = null;
 
-		for(int j = 0; j < (getNonSick().size()*0.2); j++) {
+		for(int j = 0; j < (getNonSick().size() * 0.2); j++) {
 			System.out.println("initialization no. " + j );
 			int index = rand.nextInt(getNonSick().size());
 			Person person = getNonSick().get(index);
@@ -553,12 +552,12 @@ public abstract class Settlement implements Runnable {
 		for (int k = 0; k < getSick().size(); k++) {
 			System.out.println("recoverToHealthy no. " + k);
 			//A loop that passes over the number of people who have passed 25 days from the moment they were infected with the virus 
-			if(Clock.days(getSick().get(k).getContagiousTime()) > 25) {
+			if(Clock.days(getSick().get(k).getContagiousTime()) >= 25) {
 				System.out.println("try to recover the person in the index " + k + " in the settlement " + getName());
 				Sick s = getSick().get(k);
-				getSick().remove(s);
+				this.getSick().remove(s);
 				s.recover();
-				addPerson(s);
+				this.addPerson(s);
 				System.out.println("this person was a sick and now he healthy");
 			}
 			else
@@ -628,16 +627,14 @@ public abstract class Settlement implements Runnable {
 	}
 
 	private void killPeople() {
-		if(getSick().size() > 0) {
+		if(this.getSick().size() > 0) {
 
-			for(int j = 0; j < getSick().size(); j++) {
+			for(int j = 0; j < this.getSick().size(); j++) {
 				System.out.println("killPeople no. " + j);
-				if(getSick().get(j).tryToDie()) {
+				if(this.getSick().get(j).tryToDie()) {
 					System.out.println("the person form sick list in the index " + j + " is dead!");
-					getSick().remove(j);
+					this.getSick().remove(j);
 					incNumberOfDead();
-					if(getNumberOfDead() == (getSick().size() + getNonSick().size()) * 0.01 )
-						getMap().setflagToDead(true);
 				}
 				else
 					System.out.println("the person form sick list in the index " + j + " is not dead!");
@@ -648,7 +645,6 @@ public abstract class Settlement implements Runnable {
 
 
 	}
-
 
 
 	public void run() {

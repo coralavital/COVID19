@@ -77,7 +77,6 @@ public class SouthAfricanVariant implements IVirus {
 		double x1 = p.getLocation().getX() - p1.getLocation().getX();
 		double y1 = p.getLocation().getY() - p1.getLocation().getY();
 		return Math.sqrt(Math.pow(x1, 2) + Math.pow(y1, 2));
-
 	}
 
 
@@ -103,16 +102,14 @@ public class SouthAfricanVariant implements IVirus {
 	 * calculate the percentage of getting killed
 	 * @return boolean, true if the chance to kill is more than 100%, else false
 	 */
-	public boolean tryToKill(Sick p1) {
-		
-		double p = Probability_Death(p1);
-		long t = (long) Clock.days(p1.getContagiousTime());
+	public boolean tryToKill(Sick s) {
+		double p = Probability_Death(s);
+		long t = (long) Clock.days(s.getContagiousTime());
 
 		if (Math.max(0, p - 0.01 * p * (Math.pow((t - 15), 2))) < 1)
 			return false;
 		else
 			return true;
-
 	}
 
 }//SouthAfricanVariant class

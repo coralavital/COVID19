@@ -1,6 +1,11 @@
 package Country;
 //Import staff
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CyclicBarrier;
@@ -27,6 +32,8 @@ public class Map {
 	private boolean isON;
 	private CyclicBarrier cyclic;
 	private boolean flagToDead;
+	private boolean flagLogFile;
+	File fos = null;
 	
 	
 	public Map() {
@@ -36,6 +43,7 @@ public class Map {
 		setON(false);
 		setPLAY(false);
 		setflagToDead(false);
+		setflagLogFile(false);
 	}
 	
 	
@@ -64,6 +72,7 @@ public class Map {
 		setON(false);
 		setPLAY(false);
 		setflagToDead(false);
+		setflagLogFile(false);
 	}
 
 	//ToString
@@ -132,7 +141,17 @@ public class Map {
 	public void setflagToDead(boolean flagToDead) {
 		this.flagToDead = flagToDead;
 	}
+	/**
+	 * setter for data which is the mutation table
+	 * @param boolean, data
+	 */
+	public void setflagLogFile(boolean flagLogFile) {
+		this.flagLogFile = flagLogFile;
+	}
 
+	public boolean getFlagLogFile() {
+		return this.flagLogFile;
+	}
 	
 	/**
 	  * converting array to list and returning it as a list
@@ -183,6 +202,36 @@ public class Map {
 		return -1;
 	}
 	
+	public void saveLogFile(File fos, PrintWriter pw) {
+		this.fos = fos;
+		Date date = new Date(System.currentTimeMillis()); // This object contains the current date value
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		String update;
+		
+		
+		int counter = 0;
+		for(int j = 0; j < getSettlements().length; j++) {
+			while(getSettlements()[j].getNumberOfDead() >= (getSettlements()[j].getSick().size() + getSettlements()[j].getNonSick().size()) * 0.01 )
+				counter++;
+			if(counter == getSettlements().length)
+				setflagToDead(true);
+			else
+				setflagToDead(false);
+		}
+
+		while(getFlagLogFile() && isflagToDead()) {
+			for(int i = 0; i < getSettlements().length; i++) {
+				//reading from the object and writing into the file
+				update = "CURENNT TIME: " + formatter.format(date) + "\nSETTLEMENT NAME: " + getSettlements()[i].getName() 
+						+ "\nNUMBER OF SICK: " + getSettlements()[i].getSick().size()
+						+ "\nNUMBER OF DEAD PEOPLE: " + getSettlements()[i].getNumberOfDead();		
+				pw.println(update);
+			}
+		}
+		pw.close();
+	}
+	
+	
 	//run all function
 	public void runAll() {
 		
@@ -191,6 +240,7 @@ public class Map {
 		for(int i = 0; i < getSettlements().length; i++) {
 			new Thread(getSettlements()[i]).start();
 		}
+		
 	}
 	
 }//Map class
