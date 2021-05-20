@@ -173,31 +173,25 @@ public class MainWindow extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
-					for(Shape rect:rectangles) {
-
-						Point p = e.getPoint();
-
-						if(rect.contains(p)) {
-
-							String sPoint = rect.toString();
-							int k =- 1;
-							int i;
-							for(i =0; i < getMapPointer().getSettlements().length; i++) {
-								if(getMapPointer().getSettlements()[i].getLocation().checkRect().equals(sPoint))
-									k = i;
+					if(rectangles != null) {
+						for(Shape rect:rectangles) {
+							Point p = e.getPoint();
+							if(rect.contains(p)) {
+								String sPoint = rect.toString();
+								int k =- 1;
+								int i;
+								for(i =0; i < getMapPointer().getSettlements().length; i++) {
+									if(getMapPointer().getSettlements()[i].getLocation().checkRect().equals(sPoint))
+										k = i;
+								}
+								if (k >= 0) {
+									setStatistics(new StatisticsWindow());
+									getStatistics().getTable().getSelectionModel().setSelectionInterval(0,k);
+								}
 							}
-							if (k >= 0) {
-
-								setStatistics(new StatisticsWindow());
-								getStatistics().getTable().getSelectionModel().setSelectionInterval(0,k);
-
-							}
-
 						}
-
 					}
 				}
-
 			});
 		}
 
@@ -646,7 +640,7 @@ public class MainWindow extends JFrame {
 						getMapPanel().repaint();
 						//Update of the relevant flag
 						flag = true;
-						getMapPointer().setflagLogFile(false);
+						getMapPointer().setflagToFile(false);
 
 						getMapPointer().setCyclic(getMapPointer().getSettlements().length, new Runnable() {
 							public void run() {
@@ -718,7 +712,7 @@ public class MainWindow extends JFrame {
 					PrintWriter pw = null;
 					String str = null;
 					JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-					while(!getMapPointer().getFlagLogFile()) {
+					while(!getMapPointer().isflagToFile()) {
 						jfc.setDialogTitle("Choose a directory to save your file: ");
 						jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 						int returnValue = jfc.showSaveDialog(null);
@@ -730,18 +724,17 @@ public class MainWindow extends JFrame {
 							}
 						}        
 						fos = new File(str);
-						
 						try {
 							pw = new PrintWriter(fos);
 						} catch (FileNotFoundException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-						getMapPointer().setflagLogFile(true);
+						getMapPointer().setflagToFile(true);
+						getMapPointer().setFile(str);
+
 					}
 
-					if(getMapPointer().isflagToDead())
-						getMapPointer().saveLogFile(fos, pw);
 
 				}
 			});
@@ -788,7 +781,12 @@ public class MainWindow extends JFrame {
 					//Update of the relevant flag
 					getMapPointer().setON(false);
 					getMapPointer().setPLAY(false);
+					getMapPointer().setflagToFile(false);
+					getMapPointer().setflagToDead(false);
 					flag = false;
+
+					getMapPanel().repaint();
+
 					f1.setEnabled(true);
 					f2.setEnabled(false);
 					f4.setEnabled(false);

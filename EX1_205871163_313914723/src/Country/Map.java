@@ -3,6 +3,8 @@ package Country;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -23,7 +25,7 @@ import UI.MainWindow.MapPanel;
 
 public class Map {
 
-	
+
 	//Private Data Members
 	private Thread[] thread;
 	private Settlement[] settlements;
@@ -32,10 +34,11 @@ public class Map {
 	private boolean isON;
 	private CyclicBarrier cyclic;
 	private boolean flagToDead;
-	private boolean flagLogFile;
-	File fos = null;
-	
-	
+	private boolean flagToFile;
+	private String file;
+
+
+
 	public Map() {
 		this.thread = null;
 		this.settlements = null;
@@ -43,10 +46,10 @@ public class Map {
 		setON(false);
 		setPLAY(false);
 		setflagToDead(false);
-		setflagLogFile(false);
+		setflagToFile(false);
 	}
-	
-	
+
+
 	//Constructor
 	/***
 	 * Constructor, copy the settlement list param into settlement array
@@ -72,7 +75,7 @@ public class Map {
 		setON(false);
 		setPLAY(false);
 		setflagToDead(false);
-		setflagLogFile(false);
+		setflagToFile(false);
 	}
 
 	//ToString
@@ -126,13 +129,24 @@ public class Map {
 	public void setON(boolean isON) {
 		this.isON = isON;
 	}
-	
+
 	/**
 	 * Get 
 	 * @return flagToDead, boolean
 	 */
 	public boolean isflagToDead() {
 		return flagToDead;
+	}
+	/**
+	 * Set 
+	 * @param flagToDead, boolean
+	 */
+	public void setflagToFile(boolean flagToFile) {
+		this.flagToFile = flagToFile;
+	}
+	
+	public boolean isflagToFile() {
+		return this.flagToFile;
 	}
 	/**
 	 * Set 
@@ -145,23 +159,24 @@ public class Map {
 	 * setter for data which is the mutation table
 	 * @param boolean, data
 	 */
-	public void setflagLogFile(boolean flagLogFile) {
-		this.flagLogFile = flagLogFile;
+
+	public void setFile(String str) {
+		this.file = str;
 	}
 
-	public boolean getFlagLogFile() {
-		return this.flagLogFile;
+	public String getFileName() {
+		return this.file;
 	}
-	
+
 	/**
-	  * converting array to list and returning it as a list
-	  * @return: list, Settlement
-	  */
+	 * converting array to list and returning it as a list
+	 * @return: list, Settlement
+	 */
 	public List<Settlement> getAllSerttlement() {
 		for(int i = 0; i < this.settlements.length; i++) {
 			setAllSettlement.add(settlements[i]);
 		}
-		
+
 		return setAllSettlement;
 	}
 
@@ -169,7 +184,7 @@ public class Map {
 	public Settlement at(int index) {
 		return settlements[index];
 	}
-	
+
 	//get the size
 	public int getSize() {
 		int counter = 0;
@@ -182,17 +197,17 @@ public class Map {
 	public CyclicBarrier getCyclic() {
 		return this.cyclic;
 	}
-	
+
 	public synchronized void setCyclic(int n, Runnable runnable) {
-		
+
 		this.cyclic = new CyclicBarrier(n, runnable);
 	}
-	
+
 	/**
-	  * finding the settlement by his name
-	  * @param String, name
-	  * @return: int, the index of the settlement by his name
-	  */
+	 * finding the settlement by his name
+	 * @param String, name
+	 * @return: int, the index of the settlement by his name
+	 */
 	public int indexByStr(String name) {
 		for (int i = 0; i < settlements.length; i++) {
 			if(settlements[i].getName().equals(name))
@@ -201,47 +216,35 @@ public class Map {
 		System.out.println("cannot find settlement in indexByStr");
 		return -1;
 	}
-	
-	public void saveLogFile(File fos, PrintWriter pw) {
-		this.fos = fos;
+
+	public void saveLogFile() throws IOException {
 		Date date = new Date(System.currentTimeMillis()); // This object contains the current date value
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		String update;
-		
-		
-		int counter = 0;
-		for(int j = 0; j < getSettlements().length; j++) {
-			while(getSettlements()[j].getNumberOfDead() >= (getSettlements()[j].getSick().size() + getSettlements()[j].getNonSick().size()) * 0.01 )
-				counter++;
-			if(counter == getSettlements().length)
-				setflagToDead(true);
-			else
-				setflagToDead(false);
-		}
+		String update = null;
 
-		while(getFlagLogFile() && isflagToDead()) {
+		File newFile = new File(this.file);
+		FileWriter fw = new FileWriter(newFile, true);
 			for(int i = 0; i < getSettlements().length; i++) {
+				if(getSettlements()[i].getNumberOfDead() >= (getSettlements()[i].getSick().size() + getSettlements()[i].getNonSick().size()) * 0.01) {
 				//reading from the object and writing into the file
 				update = "CURENNT TIME: " + formatter.format(date) + "\nSETTLEMENT NAME: " + getSettlements()[i].getName() 
 						+ "\nNUMBER OF SICK: " + getSettlements()[i].getSick().size()
 						+ "\nNUMBER OF DEAD PEOPLE: " + getSettlements()[i].getNumberOfDead();		
-				pw.println(update);
+				fw.write(update);
 			}
 		}
-		pw.close();
+		fw.close();
 	}
-	
-	
+
+
 	//run all function
 	public void runAll() {
-		
-		thread = new Thread[getSettlements().length];
-		
+		thread = new Thread[getSettlements().length];	
 		for(int i = 0; i < getSettlements().length; i++) {
 			new Thread(getSettlements()[i]).start();
 		}
-		
+
+
 	}
-	
 }//Map class
 
