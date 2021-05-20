@@ -105,9 +105,9 @@ public class BritishVariant implements IVirus{
 		long t = (long) Clock.days(p1.getContagiousTime());
 		
 		if (Math.max(0, p - 0.01 * p * (Math.pow((t - 15), 2))) < 1)
-			return false;
-		else
 			return true;
+		else
+			return false;
 	}
 
 

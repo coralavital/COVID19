@@ -227,9 +227,9 @@ public class Map {
 			for(int i = 0; i < getSettlements().length; i++) {
 				if(getSettlements()[i].getNumberOfDead() >= (getSettlements()[i].getSick().size() + getSettlements()[i].getNonSick().size()) * 0.01) {
 				//reading from the object and writing into the file
-				update = "CURENNT TIME: " + formatter.format(date) + "\nSETTLEMENT NAME: " + getSettlements()[i].getName() 
-						+ "\nNUMBER OF SICK: " + getSettlements()[i].getSick().size()
-						+ "\nNUMBER OF DEAD PEOPLE: " + getSettlements()[i].getNumberOfDead();		
+				update = "CURENNT TIME: " + formatter.format(date) + "\nSETTLEMENT NAME: " + getSettlements()[i].getName() + "\n" 
+						+ "NUMBER OF SICK: " + getSettlements()[i].getSick().size() + "\n"
+						+ "NUMBER OF DEAD PEOPLE: " + getSettlements()[i].getNumberOfDead() + "\n";		
 				fw.write(update);
 			}
 		}

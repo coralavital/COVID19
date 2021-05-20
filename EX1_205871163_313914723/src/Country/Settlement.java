@@ -566,41 +566,57 @@ public abstract class Settlement implements Runnable {
 	 * Method that try to transfer sick from one settlement to another
 	 */
 	private void moveSettlement() {
-		int[] indexes = new int[2];
+		int value;
 		int index;
-		if(this.getLinkTo().size() > 0) {
-			for(int j = 0; j < ((this.getSick().size() + this.getNonSick().size()) * 0.03); j++) {
-				System.out.println("moveSettlement no. " + j);
-				Random rand = new Random();
-				
-				index = rand.nextInt(getLinkTo().size());
-				Settlement s = getLinkTo().get(index);
+		if(getNonSick() != null) {
+			if(getLinkTo().size() > 0) {
+				for(int j = 0; j < (this.getNonSick().size() * 0.03); j++) {
+					System.out.println("moveSettlement no. " + j);
+					Random rand = new Random();
+					index = rand.nextInt(getLinkTo().size());
+					Settlement s = getLinkTo().get(index);
+					System.out.println(getName());
+					System.out.println(s.getName());
 
-				indexes = selectRandom();
-				System.out.println(getName());
-				System.out.println(s.getName());
-				System.out.println(indexes[0] + "\n" + indexes[1]);
+					value = selectRandom(0);
 
-				if(transferPerson(getSick().get(indexes[0]), s))
-					System.out.println("The transfer was successful");
-
-				if(transferPerson(getNonSick().get(indexes[1]), s))
-					System.out.println("The transfer was successful");
+					if(transferPerson(getNonSick().get(value), s))
+						System.out.println("The transfer was successful");
+				}
 			}
+			else
+				System.out.println("There are not link settlement for this settlement");
 		}
-		else
-			System.out.println("There are not link settlement for this settlement");
+		if(getSick() != null) {
+			if(getLinkTo().size() > 0) {
+				for(int j = 0; j < (this.getSick().size() * 0.03); j++) {
+					System.out.println("moveSettlement no. " + j);
+					Random rand = new Random();
+					index = rand.nextInt(getLinkTo().size());
+					Settlement s = getLinkTo().get(index);
+					System.out.println(getName());
+					System.out.println(s.getName());
+
+					value = selectRandom(1);
+
+					if(transferPerson(getSick().get(value), s))
+						System.out.println("The transfer was successful");
+				}
+			}
+			else
+				System.out.println("There are not link settlement for this settlement");
+		}
 	}
 
 	//add this method to sure that we cant try to move a person that not in the settlement
-	private synchronized int[] selectRandom() {
-		int[] indexes = new int[2];
+	private synchronized int selectRandom(int numberOfList) {
 		Random rand = new Random();
-		int valueOfSick = rand.nextInt(getSick().size());
-		int valueOfNonSick = rand.nextInt(getNonSick().size());
-		indexes[0] = valueOfSick;
-		indexes[1] = valueOfNonSick;
-		return indexes;
+		int value = 0;
+		if(numberOfList == 0)
+			value = rand.nextInt(getNonSick().size());
+		else if(numberOfList == 1)
+			value = rand.nextInt(getSick().size());
+		return value;
 
 	}
 
@@ -624,13 +640,13 @@ public abstract class Settlement implements Runnable {
 	}
 
 	private void killPeople() {
-		if(this.getSick().size() > 0) {
+		if(this.getSick() != null) {
 			for(int j = 0; j < this.getSick().size(); j++) {
 				System.out.println("killPeople no. " + j);
-				if(this.getSick().get(j).tryToDie()) {
+				if(getSick().get(j).tryToDie() && getSick().contains(getSick().get(j))) {
 					System.out.println("the person form sick list in the index " + j + " is dead!");
-					this.getSick().remove(j);
-					this.incNumberOfDead();
+					getSick().remove(j);
+					incNumberOfDead();
 				}
 				else
 					System.out.println("the person form sick list in the index " + j + " is not dead!");
@@ -659,11 +675,11 @@ public abstract class Settlement implements Runnable {
 				}
 			}
 
-			//initialization();
-			//recoverToHealthy();
+			initialization();
+			recoverToHealthy();
 			moveSettlement();
-			//vaccinateHealthy();
-			//killPeople();
+			vaccinateHealthy();
+			killPeople();
 
 			if(getMap().getFileName() != null) {
 				try {

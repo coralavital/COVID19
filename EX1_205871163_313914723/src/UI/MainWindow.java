@@ -645,9 +645,9 @@ public class MainWindow extends JFrame {
 						getMapPointer().setCyclic(getMapPointer().getSettlements().length, new Runnable() {
 							public void run() {
 								synchronized(getMapPointer()) {
+									getMapPanel().repaint();
 									if(getStatistics() != null)
 										getStatistics().getModel().fireTableDataChanged();
-									getMapPanel().repaint();
 									Clock.nextTick();
 									try {
 										Thread.sleep(getJSlider().getValue() * 1000);
@@ -732,10 +732,7 @@ public class MainWindow extends JFrame {
 						}
 						getMapPointer().setflagToFile(true);
 						getMapPointer().setFile(str);
-
 					}
-
-
 				}
 			});
 
