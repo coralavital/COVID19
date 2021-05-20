@@ -637,6 +637,8 @@ public abstract class Settlement implements Runnable {
 		}
 		else
 			System.out.println("There were no vaccines left in the pool");
+	
+		System.out.println("Finish vaccinateHealthy for this settlement");
 	}
 
 	private void killPeople() {
