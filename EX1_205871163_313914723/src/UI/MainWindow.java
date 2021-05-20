@@ -639,9 +639,9 @@ public class MainWindow extends JFrame {
 						getMapPointer().setON(true);
 						for(int i = 0; i < getMapPointer().getSettlements().length; i++) {
 							//need to check if working
-							getMapPointer().getSettlements()[i].setTotalPersons((int)((getMapPointer().getSettlements()[i].getSick().size() + getMapPointer().getSettlements()[i].getSick().size()) * 1.3));
+							getMapPointer().getSettlements()[i].setTotalPersons((int)((getMapPointer().getSettlements()[i].getSick().size() + getMapPointer().getSettlements()[i].getNonSick().size()) * 1.3));
 							getMapPointer().getSettlements()[i].setMap(getMapPointer());
-							getMapPointer().getSettlements()[i].setflagToDead(false);
+							getMapPointer().setflagToDead(false);
 						}
 						getMapPanel().repaint();
 						//Update of the relevant flag
@@ -652,7 +652,6 @@ public class MainWindow extends JFrame {
 							public void run() {
 								synchronized(getMapPointer()) {
 									getMapPanel().repaint();
-									getMapPointer().runAll();
 									getStatistics().getModel().fireTableDataChanged();
 									Clock.nextTick();
 									try {
@@ -663,6 +662,7 @@ public class MainWindow extends JFrame {
 								}
 							}
 						});
+						getMapPointer().runAll();
 
 					} 
 					catch (Exception e1) {

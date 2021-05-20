@@ -26,6 +26,7 @@ public class Map {
 	private boolean isPLAY; 
 	private boolean isON;
 	private CyclicBarrier cyclic;
+	private boolean flagToDead;
 	
 	
 	public Map() {
@@ -34,6 +35,7 @@ public class Map {
 		this.setAllSettlement = null;
 		setON(false);
 		setPLAY(false);
+		setflagToDead(false);
 	}
 	
 	
@@ -114,6 +116,23 @@ public class Map {
 	public void setON(boolean isON) {
 		this.isON = isON;
 	}
+	
+	/**
+	 * Get 
+	 * @return flagToDead, boolean
+	 */
+	public boolean isflagToDead() {
+		return flagToDead;
+	}
+	/**
+	 * Set 
+	 * @param flagToDead, boolean
+	 */
+	public void setflagToDead(boolean flagToDead) {
+		this.flagToDead = flagToDead;
+	}
+
+	
 	/**
 	  * converting array to list and returning it as a list
 	  * @return: list, Settlement

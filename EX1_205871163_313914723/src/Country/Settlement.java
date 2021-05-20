@@ -42,7 +42,7 @@ public abstract class Settlement implements Runnable {
 	private List<Settlement> linkTo;
 	private int numberOfDead;
 	private Map map;
-	private boolean flagToDead;
+
 
 
 	//Constructor 
@@ -62,7 +62,6 @@ public abstract class Settlement implements Runnable {
 		this.ramzorColor = ramzorColor;
 		this.totalVaccines = totalVaccines;
 		this.linkTo = linkTo;
-		this.totalPersons = 0;
 		this.numberOfDead = 0;
 		this.map = map;
 
@@ -246,21 +245,7 @@ public abstract class Settlement implements Runnable {
 		this.numberOfDead += 1; 
 	}
 
-	/**
-	 * Get 
-	 * @return flagToDead, boolean
-	 */
-	public boolean isflagToDead() {
-		return flagToDead;
-	}
-	/**
-	 * Set 
-	 * @param flagToDead, boolean
-	 */
-	public void setflagToDead(boolean flagToDead) {
-		this.flagToDead = flagToDead;
-	}
-
+	
 	/**
 	 * Method that add Person into list of people 
 	 * @param p, Person object that can be Healthy or Sick or Convalescent or Vaccinated
@@ -526,7 +511,7 @@ public abstract class Settlement implements Runnable {
 				v = new SouthAfricanVariant();
 			s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), v);
 			if(v.tryToContagion(s, p)) {
-				addPerson(p.con	tagion(v));
+				addPerson(p.contagion(v));
 				getNonSick().remove(newP);
 				System.out.println("The infection succeeded");
 			}
@@ -583,9 +568,7 @@ public abstract class Settlement implements Runnable {
 	 * Method that try to transfer sick from one settlement to another
 	 */
 	private void moveSettlement() {
-
-		int[] indexes = new int[2];
-
+		
 		if(this.getLinkTo().size() > 0) {
 			for(int j = 0; j < (getSick().size() + getNonSick().size()) * 0.03; j++) {
 				System.out.println("moveSettlement no. " + j);
@@ -594,7 +577,7 @@ public abstract class Settlement implements Runnable {
 				Settlement s = this.getLinkTo().get(index);
 				System.out.println(this.getName());
 				System.out.println(s.getName());
-				indexes = selectRandom();
+				int[] indexes = selectRandom();
 				System.out.println(indexes[0] + "\n" + indexes[1]);
 
 				if(transferPerson(this.getSick().get(indexes[0]), s))
@@ -652,7 +635,7 @@ public abstract class Settlement implements Runnable {
 					getSick().remove(j);
 					incNumberOfDead();
 					if(getNumberOfDead() == (getSick().size() + getNonSick().size()) * 0.01 )
-						setflagToDead(true);
+						getMap().setflagToDead(true);
 				}
 				else
 					System.out.println("the person form sick list in the index " + j + " is not dead!");
@@ -681,7 +664,6 @@ public abstract class Settlement implements Runnable {
 					} 
 					catch(InterruptedException e) {
 						e.printStackTrace();
-						return;
 					}
 				}
 			}
