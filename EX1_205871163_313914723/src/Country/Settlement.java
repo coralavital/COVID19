@@ -65,6 +65,8 @@ public abstract class Settlement implements Runnable {
 		this.numberOfDead = 0;
 		this.map = map;
 
+		if(getNonSick() != null)
+			this.setTotalPersons((int)(getNonSick().size() * 1.3));
 	}
 
 	public Settlement(Settlement s) {

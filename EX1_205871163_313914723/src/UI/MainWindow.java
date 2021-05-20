@@ -639,7 +639,6 @@ public class MainWindow extends JFrame {
 						getMapPointer().setON(true);
 						for(int i = 0; i < getMapPointer().getSettlements().length; i++) {
 							//need to check if working
-							getMapPointer().getSettlements()[i].setTotalPersons((int)((getMapPointer().getSettlements()[i].getSick().size() + getMapPointer().getSettlements()[i].getNonSick().size()) * 1.3));
 							getMapPointer().getSettlements()[i].setMap(getMapPointer());
 							getMapPointer().setflagToDead(false);
 						}
@@ -651,8 +650,9 @@ public class MainWindow extends JFrame {
 						getMapPointer().setCyclic(getMapPointer().getSettlements().length, new Runnable() {
 							public void run() {
 								synchronized(getMapPointer()) {
+									if(getStatistics() != null)
+										getStatistics().getModel().fireTableDataChanged();
 									getMapPanel().repaint();
-									getStatistics().getModel().fireTableDataChanged();
 									Clock.nextTick();
 									try {
 										Thread.sleep(getJSlider().getValue() * 1000);

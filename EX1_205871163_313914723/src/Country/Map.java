@@ -63,6 +63,7 @@ public class Map {
 		}	
 		setON(false);
 		setPLAY(false);
+		setflagToDead(false);
 	}
 
 	//ToString
@@ -162,9 +163,12 @@ public class Map {
 	public CyclicBarrier getCyclic() {
 		return this.cyclic;
 	}
-	public void setCyclic(int n, Runnable runnable) {
+	
+	public synchronized void setCyclic(int n, Runnable runnable) {
+		
 		this.cyclic = new CyclicBarrier(n, runnable);
 	}
+	
 	/**
 	  * finding the settlement by his name
 	  * @param String, name
