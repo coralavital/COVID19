@@ -3,18 +3,13 @@ package Population;
 import Country.Settlement;
 import Location.Point;
 import Simulation.Clock;
-import Virus.IVirus;
 
 /***
  * Representation of a Healthy class 
- * 
  * @author Yoni Ifrah 313914723, Coral Avital 205871163
- * 
- *
  */
 
 public class Healthy extends Person{
-
 
 	//Constructor
 	/**
@@ -82,7 +77,6 @@ public class Healthy extends Person{
 		Point point = this.getLocation();
 		Settlement settlement = this.getSettlement();
 		return new Vaccinated(age, point, settlement, Clock.now());
-
 	}
 
 }//Healthy class

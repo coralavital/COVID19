@@ -1,25 +1,20 @@
 package Country;
-
+//Import staff
 import java.awt.Color;
-import java.awt.color.ColorSpace;
 
 /***
  * Representation of a RamzorColor enum 
- * 
  * @author Yoni Ifrah 313914723, Coral Avital 205871163
- * 
- *
  */
 
 public enum RamzorColor {
 	
-	
 	Green(0.4, Color.green, 1), Yellow(0.6, Color.yellow, 0.8), Orange(0.8, Color.orange, 0.6), Red(1.0, Color.red, 0.4);
 
+	//Data members
 	private final double coefficient;
 	private Color color;
 	private double probability;
-	
 	
 	//Constructor
 	/***
@@ -46,14 +41,13 @@ public enum RamzorColor {
 
 	//Getter
 	/***
-	    * Getter method that return the coefficient
-	    * @return:  double
-	    */
+	  * Getter method that return the coefficient
+	  * @return:  double
+	  */
 	public double getCoefficient() {
 		return this.coefficient;
 	}
 
-	
 	//Method
 	/***
 	  * The method calculate the RamzorColor according to the double she got
@@ -77,7 +71,7 @@ public enum RamzorColor {
 	}
 	
 	 /**
-	  * getter function for probability
+	  * Getter function for probability
 	  * @return: double, probability
 	  */
 	public double getProbability() {
@@ -85,7 +79,7 @@ public enum RamzorColor {
 	}
 
 	/**
-	 * reading the enum number and converting it into String in order to show it in the stats table
+	 * Reading the enum number and converting it into String in order to show it in the stats table
 	 * @return:String, GREEN/YELLOW/ORANGE/RED/Unknow Color
 	 */
 	public String getColorOfGuitar() {
@@ -103,7 +97,7 @@ public enum RamzorColor {
 	}
 	
 	/**
-	  * returning the enum color
+	  * Returning the enum color
 	  * @return: Color, color.green/color.yellow/color.orange/color.red
 	  */
 	public Color getColorEnum() {

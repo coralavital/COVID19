@@ -2,17 +2,12 @@ package Country;
 //Import staff
 import java.util.List;
 import Location.Location;
-import Location.Point;
-import Population.Healthy;
 import Population.Person;
 import Population.Sick;
 
 /***
  * Representation of a Moshav class
- * 
  * @author Yoni Ifrah 313914723, Coral Avital 205871163
- * 
- *
  */ 
 
 public class Moshav extends Settlement {
@@ -29,6 +24,10 @@ public class Moshav extends Settlement {
 		super(name, location, sick, healthy, ramzorColor, totalVaccines, linkTo, map);
 	}
 
+	/***
+	 * Copy constructor
+	 * @param Moshav Object
+	 */
 	public Moshav(Moshav m) {
 		super(m.getName(), m.getLocation(), m.getSick(), m.getNonSick(), m.getRamzorColor(), m.getTotalVaccines(), m.getLinkTo(), m.getMap());
 	}
@@ -62,8 +61,6 @@ public class Moshav extends Settlement {
 		c = 0.3 + 3 * (Math.pow(Math.pow(1.2, c) * (p - 0.35), 5));
 		this.setRamzorColor(RamzorColor.choice(c));
 		return RamzorColor.choice(c);
-
 	}
-
 
 }//Moshav class

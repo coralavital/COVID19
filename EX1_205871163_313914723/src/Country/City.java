@@ -1,23 +1,17 @@
 package Country;
 //Import staff
 import java.util.List;
-
 import Location.Location;
-import Population.Healthy;
 import Population.Person;
 import Population.Sick;
 
 /***
  * Representation of a City class
- * 
  * @author Yoni Ifrah 313914723, Coral Avital 205871163
- * 
- *
  */
 
 public class City extends Settlement{
-
-
+	
 	//Constructor
 	/***
 	 * Constructor
@@ -30,6 +24,10 @@ public class City extends Settlement{
 		super(name, location, sick, healthy, ramzorColor, totalVaccines, linkTo, map);
 	}
 
+	/***
+	 * Copy constructor
+	 * @param City Object
+	 */
 	public City(City c) {
 		super(c.getName(), c.getLocation(), c.getSick(), c.getNonSick(), c.getRamzorColor(), c.getTotalVaccines(), c.getLinkTo(), c.getMap());
 	}

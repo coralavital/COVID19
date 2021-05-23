@@ -1,5 +1,5 @@
 package UI;
-
+//Import staff
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,13 +9,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.net.MulticastSocket;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.concurrent.CyclicBarrier;
-
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -29,16 +23,7 @@ import Country.Map;
 import Country.Settlement;
 import IO.SimulationFile;
 import IO.StatisticsFile;
-import Population.Person;
-import Population.Sick;
-import Population.Vaccinated;
 import Simulation.Clock;
-import Simulation.Main;
-import UI.MainWindow.MapPanel;
-import Virus.BritishVariant;
-import Virus.ChineseVariant;
-import Virus.IVirus;
-import Virus.SouthAfricanVariant;
 
 /*
  * Representation of a Main class
@@ -58,13 +43,12 @@ public class MainWindow extends JFrame {
 	//Static Data Members
 	static boolean data[][] = {{true,false,false}, {false,true,false}, {false, false, true}};
 
-
 	//Constructor
 	/**
 	 * The constructor that initializes the entire main window and creates from it an object in front of which our main function will work
 	 */
 	public MainWindow() {
-		super("Main");
+		super("MAIN WINDOW");
 		this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
 		mapPanel=  new MapPanel();
 		setJMenuBar(userMenu = new UserMenu(this,mapPanel));//User menu
@@ -72,75 +56,98 @@ public class MainWindow extends JFrame {
 		mapPanel.setPreferredSize(new Dimension(600, 600));
 		mapPanel.setBackground(Color.WHITE);
 		this.add(mapPanel); 
-
 		//Creating JSlider
-		JLabel label = new JLabel("Current value: " + getJSlider().getValue());
+		JLabel label = new JLabel("CURRENT VALUE: " + getJSlider().getValue());
 
 		//Set
 		slider.addChangeListener(new ChangeListener() {
-
-			@Override
 			public void stateChanged(ChangeEvent e) {
 				int value = getJSlider().getValue();
-				label.setText("Current value: " + value);
+				label.setText("CURRENT VALUE: " + value);
 			}
-
 		});
 
+		//added silder to the current frame
 		this.add(getJSlider());
+		//added label to the current frame
 		this.add(label);
 		this.pack();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
-
-		//this.simulation = new Simulation();
-
 	}
 
 	//getter and setter
 	/**
-	 * getter function for userMenu
+	 * Getter function for userMenu
 	 * @return: object, usermenu
 	 */
 	public UserMenu getUserMenu() {
 		return this.userMenu;
 	}
+
 	//Setter for mapPointer
+	/**
+	 * Setter function for mapPointer
+	 * @param map, Map
+	 */
 	public void setMapPointer(Map map) {
 		this.mapPointer = map;
 	}
+
 	//Getter for mapPointer
+	/**
+	// Getter for mapPointer
+	 * @return Map, mapPointer
+	 */
 	public Map getMapPointer() {
 		return this.mapPointer;
 	}
+
 	//Setter for statistics
+	/**
+	 * Setter for statistics
+	 * @param statistics, StatisticsWindow
+	 */
 	public void setStatistics(StatisticsWindow statistics) {
 		this.statistics = statistics;
 	}
+
 	//Getter for statistics
+	/**
+	 * Getter  for statistics
+	 * @param statistics, StatisticsWindow
+	 */
 	public StatisticsWindow getStatistics() {
 		return this.statistics;
 	}
+
 	//Getter for simulationFile
+	/**
+	 * Getter for simulation file
+	 * @return simulationFile, SimulationFile
+	 */
 	public SimulationFile getSimulationFile() {
 		return this.simulationFile;
 	}
+
 	/**
-	 * getter function for mapPanel
+	 * Getter function for mapPanel
 	 * @return: object, mapPanel
 	 */
 	public MapPanel getMapPanel() {
 		return this.mapPanel;
 	}
+
 	/**
-	 * getter function for slider
+	 * Getter function for slider
 	 * @return: object, slider
 	 */
 	public JSlider getJSlider() {
 		return slider;
 	}
+
 	/**
-	 * getter for data which is the mutation table
+	 * Getter for data which is the mutation table
 	 * @return: boolean, data
 	 */
 	public static boolean[][] getData() {
@@ -148,18 +155,17 @@ public class MainWindow extends JFrame {
 	}
 
 	/**
-	 * setter for data which is the mutation table
+	 * Setter for data which is the mutation table
 	 * @param boolean, data
 	 */
 	public void setData(boolean[][] data) {
 		this.data = data;
 	}
 
-
-
 	// Inner class in MainWidow class
 	//MapPanel
 	public  class MapPanel extends JPanel {
+		//Data members
 		private Shape rect;
 		private ArrayList<Shape> rectangles;
 
@@ -168,9 +174,9 @@ public class MainWindow extends JFrame {
 		 * Stats Table, then we will open the statistics window with mentioning the k settlement clicked
 		 */
 		MapPanel(){
-			repaint();//In order to update the GUI drawing
+			//In order to update the GUI drawing
+			repaint();
 			addMouseListener((MouseListener) new MouseAdapter() {
-				@Override
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
 					if(rectangles != null) {
@@ -204,10 +210,8 @@ public class MainWindow extends JFrame {
 				int x1,x2,y1,y2;
 				int i = 0;
 				String sName = "";
-
-
-				super.paintComponent(g); //Clears the last paint
-
+				//Clears the last paint
+				super.paintComponent(g); 
 				//Draw the connection lines
 				for(int l = 0;l < getMapPointer().getSettlements().length;++l){
 					for(int j = 0; j < getMapPointer().getSettlements()[l].getLinkTo().size(); j++) {
@@ -218,44 +222,42 @@ public class MainWindow extends JFrame {
 						g.drawLine(x1,y1,x2,y2);
 					}
 				}
-
 				//Go on all settlements and paint them with its color and name -> settlements list
 				//For each settlement we will create a rectangle, lets assume there are 10 settlements
 				while (i < getMapPointer().getSettlements().length) {
-
 					sName = getMapPointer().getSettlements()[i].getName();
 					x = getMapPointer().getSettlements()[i].getLocation().getPosition().getX();
 					y = getMapPointer().getSettlements()[i].getLocation().getPosition().getY();
 					width = getMapPointer().getSettlements()[i].getLocation().getSize().getWidth();
 					height = getMapPointer().getSettlements()[i].getLocation().getSize().getHeight();
 					g.setColor(getMapPointer().getSettlements()[i].calcuateRamzorGrade().getColorEnum());
-
 					rect = new Rectangle(x,y,width,height);
-					g.draw(rect); //Draw the settlement rectangle
-					g.fill(rect); //Paint the rectangle with the settlement color
+					//Draw the settlement rectangle
+					g.draw(rect); 
+					//Paint the rectangle with the settlement color
+					g.fill(rect); 
 					FontMetrics fm = g.getFontMetrics();
-					int stringx = x + (width - fm.stringWidth(sName)) / 2;; //Determine the X coordinate for the text
-					int stringy = y + ((height - fm.getHeight()) / 2) + fm.getAscent(); //Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
+					//Determine the X coordinate for the text
+					int stringx = x + (width - fm.stringWidth(sName)) / 2; 
+					//Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
+					int stringy = y + ((height - fm.getHeight()) / 2) + fm.getAscent(); 
 					g.setColor(Color.BLACK);
-					g.drawString(sName,stringx,stringy); //Draw the settlement name
-					rectangles.add(rect); //Adds to the rectangles list
+					//Draw the settlement name
+					g.drawString(sName,stringx,stringy); 
+					//Add to the rectangles list
+					rectangles.add(rect);
 					++i;
-
-					//Initialize x, y, width,height, color, name of the settlement
-
 				}
-
 				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			}
-
 			else
 				return;
 		}
 	}
+
 	//RowedTableScroll
 	public class RowedTableScroll extends JScrollPane {
-		private class RowHeaderRenderer extends JLabel
-		implements ListCellRenderer<String> {
+		private class RowHeaderRenderer extends JLabel implements ListCellRenderer<String> {
 			RowHeaderRenderer(JTable table) {
 				setOpaque(true);
 				setBorder(UIManager.getBorder("TableHeader.cellBorder"));
@@ -289,109 +291,130 @@ public class MainWindow extends JFrame {
 			rowHeader.setCellRenderer(new RowHeaderRenderer(table));
 			this.setRowHeaderView(rowHeader);
 		}
-
 	}
+
 	//MutationsTable
 	public class MutationsTable extends AbstractTableModel {
-
+		//Data members
 		private String[] col_names ;
 		private boolean[][] data;
-		public MutationsTable(boolean[][] data2, String[] colum) { 
 
+		//Constructor 
+		public MutationsTable(boolean[][] data2, String[] colum) { 
 			this.data = data2; 
 			this.col_names = colum;
 		}
 
-
+		/**
+		 * Getter for data.length
+		 * @return: data.length, int
+		 */
 		public int getRowCount() {
 			return data.length; 
 		}
 
-
+		/**
+		 * Getter for col_names.length
+		 * @return: col_names.length, int
+		 */
 		public int getColumnCount() { 
 			return col_names.length; 
 		}
 
-
+		/**
+		 * Getter for data specific index from the table
+		 * @param: rowIndex, int
+		 *	@param: columnIndex, int
+		 * @return: Object, data[rowIndex][columnIndex]
+		 */
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			return data[rowIndex][columnIndex];
 		}
 
+		/**
+		 * Getter for the column name 
+		 * @param: column ,int
+		 * @return: col_names[column], String
+		 */
 		public String getColumnName(int column) {
 			return col_names[column]; 
 		}
 
-		public String getRowName(int column) {
-			return col_names[column]; 
-		}
-
+		/**
+		 * Getter for class by his column
+		 * @param: column, int
+		 * @return: class of data[rowIndex][columnIndex], Class
+		 */
 		public Class getColumnClass(int column) {
 			return getValueAt(0, column).getClass(); 
 		}
 
+		/**
+		 * Checking if we can editable  the cell
+		 * @param: rowIndex, int 
+		 * @param: columnIndex, int 
+		 * @return: true, boolean
+		 */
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
 			return true;
 		}
 
+		/**
+		 * Set a boolean value into our data table according to the row and column
+		 * @param: aValue, Object
+		 * @param: col, int
+		 * @param: row, int
+		 */
 		public void setValueAt(Object aValue, int row, int col) {
 			if (aValue instanceof Boolean)
 				data[row][col]= (boolean) aValue;
 			fireTableCellUpdated(row, col);
 		}
-
 	}
+
 	//StatisticsWindow
 	public class StatisticsWindow extends JFrame {
-
+		//Data members
 		public JFrame statisticFrame = new JFrame("Statistics Window");
 		private JTextField textFilter;
 		private TableRowSorter<Model> sorter;
 		Model model;
 		private JTable table;
 
-		//the categories inside the chart
+		//The categories inside the chart
 		private final String [] columnNames = { "NAME", "TYPE", "LOCATION", "RAMZOR COLOR", "NUMBER OF PEOPLE", "NUMBER OF VACCINATE",
 				"LINKED SETTLEMENT","NUMBER OF SICK","NUMBER OF NON-SICK", "NUMBER OF DEAD"};
 
 		/**
-		 * used for filtering the stasts table by text
+		 * Used for filtering the stasts table by text
 		 */
 		private void newFilter() {
-			try {
-				sorter.setRowFilter(RowFilter.regexFilter(textFilter.getText()));
-			} catch (java.util.regex.PatternSyntaxException e) {
-				// If current expression doesn't parse, don't update.
-			}
-
+			sorter.setRowFilter(RowFilter.regexFilter(textFilter.getText()));
 		}
 
 		/**
 		 * A builder that initializes the entire statistics window
 		 */
 		public StatisticsWindow() {
-
 			super("StatisticsWindow");
 			statisticFrame.setLayout(new BorderLayout());
-
+			//New JPanel for statisticsPanel
 			JPanel statisticsPanel = new JPanel();
-
 			statisticsPanel.setLayout(new BoxLayout(statisticsPanel, BoxLayout.LINE_AXIS));
+			//New JPanel for southPanel
 			JPanel southPanel =new JPanel();
-
+			//Set layout
 			southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.LINE_AXIS));
-
-			//categories inside the comboBox
-			final String [] names = {"Col Select: NONE", "Col Select: CITY", "Col Select: MOSHAV", "Col Select: KIBBUTZ", "Col Select: GREEN",
-					"Col Select: YELLOW", "Col Select: ORANGE", "Col Select: RED"};
+			//Categories inside the comboBox
+			final String [] names = {"Col Select: NONE", "Col Select: CITY", "Col Select: MOSHAV", "Col Select: KIBBUTZ",
+					"Col Select: GREEN", "Col Select: YELLOW", "Col Select: ORANGE", "Col Select: RED"};
 			JComboBox combo = new JComboBox<String>(names);
 			statisticsPanel.add(combo);
 
-			//filter for ComboBox
+			//Filter for ComboBox
 			combo.addActionListener(new ActionListener() {
-
 				public void actionPerformed(ActionEvent e) {
 					if (e.getSource() == combo) {
-
 						switch(combo.getItemAt(combo.getSelectedIndex()).toString()) {
 						case "Col Select: NONE":sorter.setRowFilter(RowFilter.regexFilter("")); break;
 						case "Col Select: CITY": {
@@ -418,7 +441,6 @@ public class MainWindow extends JFrame {
 						}
 						model.fireTableDataChanged();
 					}
-
 				}
 			});
 
@@ -436,7 +458,6 @@ public class MainWindow extends JFrame {
 			//save into csv file the currect stats table
 			save.addActionListener(new ActionListener() {
 
-
 				public void actionPerformed(ActionEvent e) {
 					try {
 						new StatisticsFile(getMapPointer());
@@ -449,21 +470,24 @@ public class MainWindow extends JFrame {
 				}
 			});
 
-			JButton add = new JButton("Add Sick");
+			JButton add = new JButton("ADD SICK");
 			southPanel.add(add);
 			//infect 10% non-sicks people to the selected settlement
 			add.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-
-					String selectedName = (String) table.getValueAt(table.getSelectedRow(), 0);
-					for(int i = 0; i < getMapPointer().getSettlements().length; i++) {
-						if(selectedName == getMapPointer().getSettlements()[i].getName())
-							getMapPointer().getSettlements()[i].addSick();
+					String selectedName = null;
+					try { 
+						selectedName = (String) table.getValueAt(table.getSelectedRow(), 0);
+						for(int i = 0; i < getMapPointer().getSettlements().length; i++) {
+							if(selectedName == getMapPointer().getSettlements()[i].getName())
+								getMapPointer().getSettlements()[i].addSick();
+						}
+						model.fireTableDataChanged();
 					}
-					model.fireTableDataChanged();
-
+					catch(Exception ee) {
+						JOptionPane.showConfirmDialog(statisticFrame, "PLEASE SELECT A SETTLEMENT","Error",JOptionPane.DEFAULT_OPTION);
+					}
 				}
-
 			});
 
 
@@ -474,46 +498,53 @@ public class MainWindow extends JFrame {
 			table.setFillsViewportHeight(true);
 			table.setRowSorter(sorter = new TableRowSorter<Model>(model));			
 
-
-
 			/**
-			 *  adding the number we got from the user as a vaccines to the settlement 
+			 *Adding the number we got from the user as a vaccines to the settlement 
 			 */
-			JButton vaccinate = new JButton("Vaccinate");
+			JButton vaccinate = new JButton("VACCINATE");
 			vaccinate.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					String s = null;
+					String messageError = "INVALID  INPUT";
 					try {
-						String s = JOptionPane.showInputDialog("ENTER A NUMBER: ");
+
+						if(table.getSelectedRow() == -1) {
+							//If the user has not selected any locality to which he wants to add vaccines
+							messageError = "PLEASE SELECT A SETTLEMENT";
+							throw new ArithmeticException(messageError);
+						}
+						s = JOptionPane.showInputDialog("ENTER A VALID NUMBER");
 						int i = Integer.parseInt(s);
-						//System.out.println(i);
-						int row = table.getSelectedRow();
-						getMapPointer().getSettlements()[row].setTotalVaccines(i);
+						if(i < 0) {
+							//If the user selected a negative number
+							messageError = "THE VALUE ENTERED IS INVALID!!\n                     TRY AGAIN";
+							throw new ArithmeticException(messageError);
+						}
+						//Add vacinate for the chosen settlement
+						getMapPointer().getSettlements()[table.getSelectedRow()].setTotalVaccines(i);
 						//our model changes
 						model.fireTableDataChanged();					
-
 					} 
 					catch (Exception e2) {
-						JOptionPane.showConfirmDialog(statisticFrame, "Invalid input", "Error", JOptionPane.DEFAULT_OPTION);
+						//If the user selects a character that he does not number
+						JOptionPane.showConfirmDialog(statisticFrame, messageError, "Error", JOptionPane.DEFAULT_OPTION);
 					}
 				}
-
 			});
 
-
+			//Add the Vaccines option
 			southPanel.add(vaccinate);
+			//Our statistics frame
 			statisticFrame.add(statisticsPanel, BorderLayout.NORTH);
-			//creating the center which is the table class above
-
 			statisticFrame.add(new JScrollPane(table), BorderLayout.CENTER);
 			statisticFrame.add(southPanel, BorderLayout.SOUTH);
 			statisticFrame.pack();
 			statisticFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			statisticFrame.setVisible(true);
-
 		}
 
 		/**
-		 * getter function for table 
+		 * Getter function for table 
 		 * @return:Object, JTable
 		 */
 		public JTable getTable() {
@@ -521,7 +552,7 @@ public class MainWindow extends JFrame {
 		}
 
 		/**
-		 * getter function for model 
+		 * Getter function for model 
 		 * @return:Object, model
 		 */
 		public Model getModel() {
@@ -548,7 +579,6 @@ public class MainWindow extends JFrame {
 				return columnNames[column];
 			}
 
-
 			/**
 			 * @param: int, rowIndex and columnIndex
 			 * @return:Object, case 0: settlement name, case 1 settlement type by String, case 2  settlement position, case 3 settlement ramzor color, case 4 the amount of people inside the settlement,
@@ -571,10 +601,9 @@ public class MainWindow extends JFrame {
 				}
 				return null;
 			}
-
 		}
-
 	}
+
 	//UserMenu
 	/**
 	 * UserMenu class which contain all the options and thier click event
@@ -608,84 +637,86 @@ public class MainWindow extends JFrame {
 			op2 = new JMenu("SIMULATION");
 			op3 = new JMenu("HELP");
 
-
 			// create menuitems
 			f1 = new JMenuItem("LOAD");
 
 			f1.addActionListener(new ActionListener() {
-
 				public void actionPerformed(ActionEvent e) {
-					f4.setEnabled(true);
-					f1.setEnabled(false);
-					f2.setEnabled(true);
-					l3.setEnabled(true);
-					l1.setEnabled(true);
-					l2.setEnabled(false);
 
-					FileDialog fd = new FileDialog(frame, "PLEASE CHOOSE A FILE:", FileDialog.LOAD);
-					fd.setVisible(true);
-					if (fd.getFile() == null)
-						return;
-					File f = new File(fd.getDirectory(), fd.getFile());
-					simulationFile = new SimulationFile(f.getPath());
-					System.out.println(f.getPath());
+					String messageError = "INVALID FILE";
 					try {
-						//our final map
-						final Map map = new Map(getSimulationFile().readFromFile());
-						setMapPointer(map);
-						getMapPointer().setON(true);
-						for(int i = 0; i < getMapPointer().getSettlements().length; i++) {
-							//need to check if working
-							getMapPointer().getSettlements()[i].setMap(getMapPointer());
-							getMapPointer().setflagToDead(false);
+						FileDialog fd = new FileDialog(frame, "CHOOSE A DIRECTORY TO SAVE YOUR FILE: ", FileDialog.LOAD);
+						fd.setVisible(true);
+						if(fd.getFile() == null) {
+							messageError = "YOU DIDN'T REALLY SELECT A FILE TO LOAD YOUR MAP FROM!!\n                                                       TRY AGAIN";
 						}
-						getMapPanel().repaint();
-						//Update of the relevant flag
-						flag = true;
-						getMapPointer().setflagToFile(false);
-
-						getMapPointer().setCyclic(getMapPointer().getSettlements().length, new Runnable() {
-							public void run() {
-								synchronized(getMapPointer()) {
-									getMapPanel().repaint();
-									if(getStatistics() != null)
-										getStatistics().getModel().fireTableDataChanged();
-									Clock.nextTick();
-									try {
-										Thread.sleep(getJSlider().getValue() * 1000);
-									} catch (InterruptedException e) {
-										e.printStackTrace();
+						else {
+							f4.setEnabled(true);
+							f1.setEnabled(false);
+							f2.setEnabled(true);
+							l3.setEnabled(true);
+							l1.setEnabled(true);
+							l2.setEnabled(false);
+						}
+						File f = new File(fd.getDirectory(), fd.getFile());
+						simulationFile = new SimulationFile(f.getPath());
+						System.out.println(f.getPath());
+						try {
+							//our final map
+							final Map map = new Map(getSimulationFile().readFromFile());
+							setMapPointer(map);
+							getMapPointer().setON(true);
+							for(int i = 0; i < getMapPointer().getSettlements().length; i++) {
+								//need to check if working
+								getMapPointer().getSettlements()[i].setMap(getMapPointer());
+								getMapPointer().setflagToDead(false);
+							}
+							getMapPanel().repaint();
+							//Update of the relevant flag
+							flag = true;
+							getMapPointer().setflagToFile(false);
+							//Creating Cyclic for this map
+							getMapPointer().setCyclic(getMapPointer().getSettlements().length, new Runnable() {
+								public void run() {
+									synchronized(getMapPointer()) {
+										getMapPanel().repaint();
+										if(getStatistics() != null)
+											getStatistics().getModel().fireTableDataChanged();
+										Clock.nextTick();
+										try {
+											Thread.sleep(getJSlider().getValue() * 1000);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
 									}
 								}
-							}
-						});
-						getMapPointer().runAll();
-
-					} 
-					catch (Exception e1) {
-
-						JOptionPane.showConfirmDialog(frame, "INVALID FILE", "ERROR", JOptionPane.DEFAULT_OPTION);
+							});
+							getMapPointer().runAll();
+						}
+						catch (Exception e1) {
+							//If the system failed to create a map
+							JOptionPane.showConfirmDialog(frame, messageError, "ERROR", JOptionPane.DEFAULT_OPTION);
+						}
+					}
+					catch (Exception e2) {
+						//If the system failed to create a map
+						JOptionPane.showConfirmDialog(frame, messageError, "ERROR", JOptionPane.DEFAULT_OPTION);
 					}
 				}
 			});
 
 			f2 = new JMenuItem("STATISTICS");
 			f2.setEnabled(false);
-
 			f2.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-
+					//Creating our statistics window
 					statistics = new StatisticsWindow();
 				}
 			});
 
-
 			f3 = new JMenuItem("EDIT MUTATIONS");
 			f3.addActionListener(new ActionListener() {
-
 				public void actionPerformed(ActionEvent e) {
-
-
 					String colum[]={ "BRITISH VIRUS","CHINESE VIRUS","SOUTHAFRICA VIRUS"};
 					String row[]={ "B-virus","C-virus","S-Avirus"};
 					JPanel panel= new JPanel();
@@ -711,29 +742,30 @@ public class MainWindow extends JFrame {
 
 				public void actionPerformed(ActionEvent e) {
 					File fos = null;
-					PrintWriter pw = null;
 					String str = null;
+					String fileName = null;
 					JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 					while(!getMapPointer().isflagToFile()) {
-						jfc.setDialogTitle("Choose a directory to save your file: ");
+						fileName = JOptionPane.showInputDialog("PLEASE ENTER A VALID FILE NAME");
+						jfc.setDialogTitle("CHOOSE A DIRECTORY TO SAVE YOUR FILE: ");
 						jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 						int returnValue = jfc.showSaveDialog(null);
 						if (returnValue == JFileChooser.APPROVE_OPTION) {
 							if (jfc.getSelectedFile().isDirectory()) {
 								str =  jfc.getSelectedFile().toString();
-								//setting name to the file
-								str = str+"\\update.log";
+								//Setting name to the file
+								str = str + "\\" + fileName + ".log";
 							}
 						}        
 						fos = new File(str);
 						try {
-							pw = new PrintWriter(fos);
+							PrintWriter pw = new PrintWriter(fos);
 						} catch (FileNotFoundException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 						getMapPointer().setflagToFile(true);
-						getMapPointer().setFile(str);
+						getMapPointer().setFileName(str);
 					}
 				}
 			});
@@ -741,8 +773,6 @@ public class MainWindow extends JFrame {
 			f5 = new JMenuItem("EXIT");// to stop and then exit ( need to add setEnable for exit according to stop)
 			f5.setEnabled(true);
 			f5.addActionListener(new ActionListener() {
-
-
 				public void actionPerformed(ActionEvent e) {
 					System.exit(0);
 				}
@@ -751,11 +781,10 @@ public class MainWindow extends JFrame {
 			l1 = new JMenuItem("PLAY");
 			l1.setEnabled(false);
 			l1.addActionListener(new ActionListener() {
-
 				public void actionPerformed(ActionEvent e) {
-					//Update of the relevant flag
-					getMapPointer().setPLAY(true);
 					synchronized(getMapPointer()) {
+						//Update of the relevant flag
+						getMapPointer().setPLAY(true);
 						getMapPointer().notifyAll();
 					}
 					l2.setEnabled(true);
@@ -768,7 +797,10 @@ public class MainWindow extends JFrame {
 			l2.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					//Update of the relevant flag
-					getMapPointer().setPLAY(false);
+					synchronized(getMapPointer()) {
+						//Update of the relevant flag
+						getMapPointer().setPLAY(false);
+					}
 					l2.setEnabled(false);
 					l1.setEnabled(true);
 				}
@@ -816,30 +848,33 @@ public class MainWindow extends JFrame {
 			h1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					JDialog dialog;
-					String multiMessage = "\r\n\n As part of a study project in an advanced object-oriented programming course,\r\n"
-							+ "we were asked to prepare a system for the State of Israel that experienced a health-economic crisis \r\nfollowing an outbreak of a virus that carries with it three different strains"
-							+ "that spread rapidly in it.\r\n"
-							+ "Unfortunately, the virus requires us to properly manage resources and information, \r\n"
-							+ "with every form of settlement in Israel having a different probability of contracting the virus, \r\n"
-							+ "which is so important in order to allow residents to continue moving around the country.\r\n"
-							+ "The system makes it possible to select for each virus the mutations to which it can develop. \r\n"
-							+ "To start the simulation, the user must upload a file from a folder of his choice, when he must make sure that the desired amount of tics is initialized in the spider \r\n"
-							+ "(the amount received will eventually determine the number of simulations in one day.) \r\n"
-							+ "The user has to click play to start the simulation, when after clicking this action it cannot be repeated, \r\n"
-							+ "but the user will have two new options - stop and pause when if he wants to stop the current simulation he will use pause and if he wants to\r\n"
-							+ "load a new simulation he will use stop. \r\n"
-							+ "The purpose of the simulation is to describe a hypothetical situation of using a demo in the system and check its correctness.\r\n"
-							+ "The simulation process will include the following steps:\r\n"
-							+ "1. The system will sample 20 randomized patients and for each of them will try to infect with three non-sick people.\r\n"
-							+ "2. In each locality, each patient who has passed 25 days from the date of his infection, the system will make him recover.\r\n"
-							+ "3. In each locality, the system will sample 3% of all people (sick and not sick) \r\n"
-							+ "and for each of them the system will try to make a move to a random locality.\r\n"
-							+ "4. In each locality, if there are vaccine doses waiting and there are healthy people waiting, the system will vaccinate them,\r\n"
-							+ "with each healthy person vaccinated with one vaccine. \r\n"
-							+ "We hope that the simulation met your expectations and requirements and that the use came was understandable and simple. \r\n"
-							+ "We are happy to be at your disposal for any future task required\r\n"
-							+ "Editors:\r\n"
-							+ "Coral Avital and Yoni Yifrach.";
+					String multiMessage = "\r\n\n As part of a study project in an advanced object-oriented programming course,\n"
+							+ "we were asked to prepare a system for the State of Israel that experienced a health-economic crisis\n"
+							+ "following an outbreak of a virus that carries with it three different strains"
+							+ "that spread rapidly in it.\n"
+							+ "Unfortunately, the virus requires us to properly manage resources and information,\n"
+							+ "with every form of settlement in Israel having a different probability of contracting the virus,\n"
+							+ "which is so important in order to allow residents to continue moving around the country.\n"
+							+ "The system makes it possible to select for each virus the mutations to which it can develop.\n"
+							+ "To start the simulation, the user must upload a file from a folder of his choice, when he must make sure that the desired amount of tics is initialized in the spider \n"
+							+ "(the amount received will eventually determine the number of simulations in one day.) \n"
+							+ "The user has to click play to start the simulation, when after clicking this action it cannot be repeated, \n"
+							+ "but the user will have two new options - stop and pause when if he wants to stop the current simulation he will use pause and if he wants to\n"
+							+ "load a new simulation he will use stop.\n"
+							+ "The purpose of the simulation is to describe a hypothetical situation of using a demo in the system and check its correctness.\n"
+							+ "The simulation process will include the following steps:\n"
+							+ "1. The system will sample 20 randomized patients and for each of them will try to infect with three non-sick people.\n"
+							+ "2. In each locality, each patient who has passed 25 days from the date of his infection, the system will make him recover.\n"
+							+ "3. In each locality, the system will sample 3% of all people (sick and not sick)\n"
+							+ "and for each of them the system will try to make a move to a random locality.\n"
+							+ "4. In each locality, if there are vaccine doses waiting and there are healthy people waiting, the system will vaccinate them,\n"
+							+ "with each healthy person vaccinated with one vaccine.\n"
+							+ "We hope that the simulation met your expectations and requirements and that the use came was understandable and simple. \n"
+							+ "We are happy to be at your disposal for any future task required\n\n"
+							+ "Release Date:\n"
+							+ "27.05.2021\n\n"
+							+ "Editors:\n"
+							+ "Coral Avital & Yoni Ifrah.";
 					JOptionPane pane = new JOptionPane();
 					pane.setMessage(multiMessage);
 					dialog = pane.createDialog(null, "HELP WINDOW");
@@ -850,7 +885,7 @@ public class MainWindow extends JFrame {
 			h2 = new JMenuItem("ABOUT");
 			h2.addActionListener(new ActionListener() {//new
 				public void actionPerformed(ActionEvent e) {
-					//author details in Dialog
+					//Author details in Dialog
 					JDialog dialog = new JDialog(frame,"ABOUT WINDOW" ,false);
 					JLabel redMessage = new JLabel("WARNING", SwingConstants.CENTER);
 					redMessage.setForeground(Color.red);
@@ -871,7 +906,7 @@ public class MainWindow extends JFrame {
 				}
 			});
 
-			// add menu items to menu
+			//Add menu items to menu
 			op1.add(f1);
 			op1.add(f2);
 			op1.add(f3);
@@ -893,7 +928,7 @@ public class MainWindow extends JFrame {
 		}
 
 		/**
-		 * getter function for flag
+		 * Getter function for flag
 		 * @return: boolean, flag
 		 */
 		public boolean getFlag() {
@@ -901,5 +936,4 @@ public class MainWindow extends JFrame {
 		}
 
 	}
-
 }//Class MainWindow

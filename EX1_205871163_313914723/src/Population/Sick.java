@@ -1,11 +1,7 @@
 package Population;
 //Import staff
-import java.util.Random;
-
 import Country.Settlement;
 import Location.Point;
-import Simulation.Clock;
-import Virus.BritishVariant;
 import Virus.IVirus;
 
 /***
@@ -119,6 +115,5 @@ public class Sick extends Person{
 	public double contagionProbability() {
 		return 1;
 	}
-
 
 }//Sick class

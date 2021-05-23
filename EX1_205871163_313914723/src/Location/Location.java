@@ -1,13 +1,9 @@
 package Location;
-//Import staff
-import java.util.Random;
+
 
 /***
  * Representation of a Location class 
- * 
  * @author Yoni Ifrah 313914723, Coral Avital 205871163
- * 
- *
  */
 
 

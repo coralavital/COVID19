@@ -1,12 +1,7 @@
 package Virus;
 //Import staff
-import java.util.Random;
-
-import Population.Convalescent;
-import Population.Healthy;
 import Population.Person;
 import Population.Sick;
-import Population.Vaccinated;
 import Simulation.Clock;
 
 /***
@@ -14,7 +9,6 @@ import Simulation.Clock;
  * @author Yoni Ifrah 313914723, Coral Avital 205871163
  *
  */
-
 public class ChineseVariant implements IVirus {
 
 	//ToString
@@ -66,7 +60,6 @@ public class ChineseVariant implements IVirus {
 	 */
 	public double contagionProbability(Person p) {
 		return p.contagionProbability() * probability_infection(p);
-
 	}
 
 	/**
@@ -78,7 +71,6 @@ public class ChineseVariant implements IVirus {
 		double x1 = p.getLocation().getX() - p1.getLocation().getX();
 		double y1 = p.getLocation().getY() - p1.getLocation().getY();
 		return Math.sqrt(Math.pow(x1, 2) + Math.pow(y1, 2));
-
 	}
 
 
@@ -97,8 +89,7 @@ public class ChineseVariant implements IVirus {
 				return true;
 			
 			else 
-				return false;
-			
+				return false;	
 		}
 	}
 
@@ -108,7 +99,6 @@ public class ChineseVariant implements IVirus {
 	 * @return boolean, true if the chance to kill is more than 100%, else false
 	 */
 	public boolean tryToKill(Sick p1) {
-
 		double p = Probability_Death(p1);
 		long t = (long) Clock.days(p1.getContagiousTime());
 		//From a grid number between 0 and 1 and if the person's probability of dying is greater than the number drawn, the method will return true
@@ -116,7 +106,6 @@ public class ChineseVariant implements IVirus {
 			return true;
 		else
 			return false;
-
 	}
 
 }//ChineseVariant class

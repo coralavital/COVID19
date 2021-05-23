@@ -1,20 +1,11 @@
 package IO;
-
 //Import staff
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.IntStream;
 import Country.City;
 import Country.Kibbutz;
 import Country.Map;
@@ -157,8 +148,6 @@ public class SimulationFile {
 
 		br.close();
 	}
-
-
 
 	//Read from file
 	/**

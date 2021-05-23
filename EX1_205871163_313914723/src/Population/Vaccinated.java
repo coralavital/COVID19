@@ -3,7 +3,6 @@ package Population;
 import Country.Settlement;
 import Location.Point;
 import Simulation.Clock;
-import Virus.IVirus;
 
 /***
  * Representation of a Vaccinated class
@@ -92,6 +91,5 @@ public class Vaccinated extends Person{
 			p = Math.max(0.05, (1.05/ (vaccinationTime - 14))); 
 		return p;
 	}
-
 
 }//Vaccinated class

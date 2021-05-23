@@ -1,12 +1,7 @@
 package Virus;
 //Import staff
-import java.util.Random;
-
-import Population.Convalescent;
-import Population.Healthy;
 import Population.Person;
 import Population.Sick;
-import Population.Vaccinated;
 import Simulation.Clock;
 
 /***
@@ -37,11 +32,9 @@ public class SouthAfricanVariant implements IVirus {
 	public static double Probability_Death(Person p) {
 		if (p.getAge() < 18)
 			return 0.05;
-
 		else
 			return 0.08;
 	}
-
 
 	//Mathods
 	/**
@@ -52,10 +45,8 @@ public class SouthAfricanVariant implements IVirus {
 	public double probability_infection(Person p) {
 		if (p.getAge() < 18)
 			return 0.6;
-
 		else
 			return 0.5;
-
 	}
 
 	/**
@@ -65,7 +56,6 @@ public class SouthAfricanVariant implements IVirus {
 	 */
 	public double contagionProbability(Person p) {
 		return p.contagionProbability() * probability_infection(p);
-
 	}
 
 	/**

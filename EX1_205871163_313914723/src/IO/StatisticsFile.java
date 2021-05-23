@@ -1,13 +1,16 @@
 package IO;
-
+//Import staff
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileSystemView;
-
 import Country.Map;
+
+/***
+ * Representation of a Location class 
+ * @author Yoni Ifrah 313914723, Coral Avital 205871163
+ */
 
 /**
  * creating CSV file for Excel
@@ -27,13 +30,11 @@ public class StatisticsFile {
         jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         
         String str = null;
-        
         int returnValue = jfc.showSaveDialog(null);
        
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             if (jfc.getSelectedFile().isDirectory()) {
                 str =  jfc.getSelectedFile().toString();
-                
                 //setting name to the file
                 str = str+"\\statistic.csv";
             }
@@ -53,15 +54,8 @@ public class StatisticsFile {
 					+ map.getSettlements()[i].getNonSick().size() + ", " + map.getSettlements()[i].getNumberOfDead();			
 					pw.println(settlement);
 		}
-
-		
-		
-		
 		pw.close();
-
-		
 	}
 
-
-}	
+}//StatisticsFile Class	
 

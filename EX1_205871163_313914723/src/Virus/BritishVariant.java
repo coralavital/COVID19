@@ -1,11 +1,7 @@
 package Virus;
 //Import staff
-import java.util.Random;
-import Population.Convalescent;
-import Population.Healthy;
 import Population.Person;
 import Population.Sick;
-import Population.Vaccinated;
 import Simulation.Clock;
 
 /***
@@ -13,8 +9,6 @@ import Simulation.Clock;
  * @author Yoni Ifrah 313914723, Coral Avital 205871163
  *
  */
-
-
 public class BritishVariant implements IVirus{
 
 	//ToString
@@ -59,7 +53,6 @@ public class BritishVariant implements IVirus{
 	 */
 	public double contagionProbability(Person p) {
 		return p.contagionProbability() * probability_infection(p);
-
 	}
 
 	/**
@@ -71,7 +64,6 @@ public class BritishVariant implements IVirus{
 		double x1 = p.getLocation().getX() - p1.getLocation().getX();
 		double y1 = p.getLocation().getY() - p1.getLocation().getY();
 		return Math.sqrt(Math.pow(x1, 2) + Math.pow(y1, 2));
-
 	}
 
 	/**
@@ -81,7 +73,6 @@ public class BritishVariant implements IVirus{
 	 * else false
 	 */
 	public boolean tryToContagion(Sick p1, Person p2) {
-		
 		if ((p2 instanceof Sick))
 			return false;
 		else {
@@ -92,9 +83,7 @@ public class BritishVariant implements IVirus{
 			else
 				return false;
 		}
-
 	}
-
 
 	/**
 	 * Calculate the percentage of getting killed
@@ -109,6 +98,5 @@ public class BritishVariant implements IVirus{
 		else
 			return false;
 	}
-
 
 }//BritishVariant class

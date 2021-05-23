@@ -2,10 +2,7 @@ package Location;
 
 /***
  * Representation of a Size class 
- * 
  * @author Yoni Ifrah 313914723, Coral Avital 205871163
- * 
- *
  */
 
 public class Size {

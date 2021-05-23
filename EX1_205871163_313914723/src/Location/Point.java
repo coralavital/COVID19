@@ -2,10 +2,7 @@ package Location;
 
 /***
  * Representation of a Point class 
- * 
  * @author Yoni Ifrah 313914723, Coral Avital 205871163
- * 
- *
  */
 
 public class Point {
@@ -70,6 +67,5 @@ public class Point {
 	public int getY() {
 		return this.y;
 	}
-
 	
 }//Point class

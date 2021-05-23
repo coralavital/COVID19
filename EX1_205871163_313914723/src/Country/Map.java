@@ -1,33 +1,21 @@
 package Country;
 //Import staff
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CyclicBarrier;
-import Simulation.Clock;
-import Simulation.Main;
-import UI.MainWindow.MapPanel;
 
 /***
  * Representation of a Map class
- * 
  * @author Yoni Ifrah 313914723, Coral Avital 205871163
- * 
- *
  */
-
 public class Map {
-
-
+	
 	//Private Data Members
-	private Thread[] thread;
+
 	private Settlement[] settlements;
 	private List<Settlement> setAllSettlement;
 	private boolean isPLAY; 
@@ -37,10 +25,11 @@ public class Map {
 	private boolean flagToFile;
 	private String file;
 
-
-
+	//Constructors
+	/**
+	 * Default Constructor
+	 */
 	public Map() {
-		this.thread = null;
 		this.settlements = null;
 		this.setAllSettlement = null;
 		setON(false);
@@ -49,8 +38,6 @@ public class Map {
 		setflagToFile(false);
 	}
 
-
-	//Constructor
 	/***
 	 * Constructor, copy the settlement list param into settlement array
 	 * @param settlements, Settlement list
@@ -91,15 +78,15 @@ public class Map {
 		return "\t\t\t\tThis map contains the settlement:\n\n" + finalString;
 	}
 
-
 	//Getter and Setter
 	/***
-	 * getter method 
+	 * Getter method 
 	 * @return: Settlement[]
 	 */
 	public Settlement[] getSettlements() {
 		return settlements;
 	}
+	
 	/**
 	 * Get for the flag that indicates if the file is play
 	 * @return isPLAY, boolean
@@ -116,14 +103,15 @@ public class Map {
 	}
 
 	/**
-	 * Get for the flag that indicates if the file is loaded
+	 * Get for a flag that belongs to each map and indicates to the system if there is a map that is loaded at that moment
 	 * @return isON, boolean
 	 */
 	public boolean isON() {
 		return isON;
 	}
+	
 	/**
-	 * Set for the flag that indicates if the file is loaded
+	 * Set for a flag that belongs to each map and indicates to the system if there is a map that is loaded at that moment
 	 * @param isON, boolean
 	 */
 	public void setON(boolean isON) {
@@ -131,45 +119,54 @@ public class Map {
 	}
 
 	/**
-	 * Get 
+	 * Set for a flag belonging to each map and responsible for notification when 1% of the people on the map are dead 
 	 * @return flagToDead, boolean
 	 */
 	public boolean isflagToDead() {
 		return flagToDead;
 	}
-	/**
-	 * Set 
-	 * @param flagToDead, boolean
-	 */
-	public void setflagToFile(boolean flagToFile) {
-		this.flagToFile = flagToFile;
-	}
 	
-	public boolean isflagToFile() {
-		return this.flagToFile;
-	}
 	/**
-	 * Set 
+	 * Set for a flag belonging to each map and responsible for notification when 1% of the people on the map are dead 
 	 * @param flagToDead, boolean
 	 */
 	public void setflagToDead(boolean flagToDead) {
 		this.flagToDead = flagToDead;
 	}
 	/**
-	 * setter for data which is the mutation table
+	 * Set for a flag that belongs to each map and indicates to the system whether a folder has been selected for saving the log file
+	 * @param flagToDead, boolean
+	 */
+	public void setflagToFile(boolean flagToFile) {
+		this.flagToFile = flagToFile;
+	}
+	/**
+	 * Get for a flag that belongs to each map and indicates to the system whether a folder has been selected for saving the log file
+	 * @param flagToDead, boolean
+	 */
+	public boolean isflagToFile() {
+		return this.flagToFile;
+	}
+	
+	/**
+	 * Setter a variable in the file name where records will be kept when 1% of people die in each simulation
 	 * @param boolean, data
 	 */
-
-	public void setFile(String str) {
+	public void setFileName(String str) {
 		this.file = str;
 	}
+
+	/**
+	 * Getter a variable in the file name where records will be kept when 1% of people die in each simulation
+	 * @param boolean, data
+	 */
 
 	public String getFileName() {
 		return this.file;
 	}
 
 	/**
-	 * converting array to list and returning it as a list
+	 * Converting array to list and returning it as a list
 	 * @return: list, Settlement
 	 */
 	public List<Settlement> getAllSerttlement() {
@@ -185,7 +182,12 @@ public class Map {
 		return settlements[index];
 	}
 
-	//get the size
+	//Get for the number of the settlements in the map
+	/**
+	 * Get function that return the size of the 
+	 * @param n, int
+	 * @param runnable, Runnable
+	 */
 	public int getSize() {
 		int counter = 0;
 		for(int i = 0; i < settlements.length; i++) {
@@ -194,17 +196,27 @@ public class Map {
 		return counter;
 	}
 	//get cyclic
+	/**
+	 * Getter function for CyclicBarrier
+	 * @param n, int
+	 * @param runnable, Runnable
+	 */
 	public CyclicBarrier getCyclic() {
 		return this.cyclic;
 	}
-
+	
+	/**
+	 * Setter function for CyclicBarrier
+	 * @param n, int
+	 * @param runnable, Runnable
+	 */
 	public synchronized void setCyclic(int n, Runnable runnable) {
 
 		this.cyclic = new CyclicBarrier(n, runnable);
 	}
 
 	/**
-	 * finding the settlement by his name
+	 * Finding the settlement by his name
 	 * @param String, name
 	 * @return: int, the index of the settlement by his name
 	 */
@@ -217,6 +229,9 @@ public class Map {
 		return -1;
 	}
 
+	/**
+	 * A function that writes into a file every time 1% of the people on the map die.
+	 */
 	public void saveLogFile() throws IOException {
 		Date date = new Date(System.currentTimeMillis()); // This object contains the current date value
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -236,10 +251,12 @@ public class Map {
 		fw.close();
 	}
 
-
-	//run all function
+	/**
+	 * The main function that is activated as soon as a file is loaded and is responsible for activating
+	 *  a trade for each stallion belonging to the map
+	 */
 	public void runAll() {
-		thread = new Thread[getSettlements().length];	
+		Thread[] thread = new Thread[getSettlements().length];	
 		for(int i = 0; i < getSettlements().length; i++) {
 			new Thread(getSettlements()[i]).start();
 		}

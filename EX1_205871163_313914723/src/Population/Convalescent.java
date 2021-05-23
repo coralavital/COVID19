@@ -7,10 +7,7 @@ import Virus.IVirus;
 
 /***
  * Representation of a Convalescent class 
- * 
  * @author Yoni Ifrah 313914723, Coral Avital 205871163
- * 
- *
  */
 
 public class Convalescent extends Person{
@@ -31,7 +28,7 @@ public class Convalescent extends Person{
 		this.virus = virus;
 	}
 
-	//copy constructor
+	//Copy constructor
 	/**
 	  * copy constructor
 	  * @param c, object
@@ -87,7 +84,6 @@ public class Convalescent extends Person{
 		return Clock.now();//
 	}	
 
-
 	//Method's
 	/**
 	  * Calculate the  contagion probability
@@ -96,6 +92,5 @@ public class Convalescent extends Person{
 	public double contagionProbability() {
 		return 0.2;//
 	}
-
 
 }//Convalescent class

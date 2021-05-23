@@ -1,22 +1,16 @@
 package Country;
 //Import staff
 import java.util.List;
-
 import Location.Location;
-import Population.Healthy;
 import Population.Person;
 import Population.Sick;
 
 /***
  * Representation of a Kibbutz class
- * 
  * @author Yoni Ifrah 313914723, Coral Avital 205871163
- * 
- *
  */
 
 public class Kibbutz extends Settlement{
-
 
 	//Constructor
 	/***
@@ -30,7 +24,10 @@ public class Kibbutz extends Settlement{
 		super(name, location, sick, healthy, ramzorColor, totalVaccines, linkTo, map);
 	}	
 	
-	
+	/***
+	 * Copy constructor
+	 * @param Kibbutz Object
+	 */
 	public Kibbutz(Kibbutz k) {
 		super(k.getName(), k.getLocation(), k.getSick(), k.getNonSick(), k.getRamzorColor(), k.getTotalVaccines(), k.getLinkTo(), k.getMap());
 	}
@@ -66,9 +63,6 @@ public class Kibbutz extends Settlement{
 		c = 0.45 + Math.pow(Math.pow(1.5, c) * (p - 0.4), 3);
 		this.setRamzorColor(RamzorColor.choice(c));
 		return RamzorColor.choice(c);
-
 	}
-
-
 
 }//Kibbutz class

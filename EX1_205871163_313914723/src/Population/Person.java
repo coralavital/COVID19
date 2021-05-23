@@ -10,10 +10,7 @@ import Country.Settlement;
 
 /***
  * Representation of a Person class 
- * 
  * @author Yoni Ifrah 313914723, Coral Avital 205871163
- * 
- *
  */
 
 public abstract class Person{
@@ -47,18 +44,15 @@ public abstract class Person{
 		if (settlement instanceof Moshav) {// clone
 			// this.settlement= settlement.clone();
 			this.settlement = new Moshav((Moshav) p.getSettlement());
-
 		}
+		
 		if (settlement instanceof City) {
 			this.settlement = new City((City) p.getSettlement());
-
 		}
 		if (settlement instanceof Kibbutz) {
 			this.settlement = new Kibbutz((Kibbutz) p.getSettlement());
 		}
-
 	}
-
 
 	//Equals
 	/**
@@ -123,18 +117,15 @@ public abstract class Person{
 	 */
 	public Person contagion(IVirus v) {
 		if (!(this instanceof Sick)) {
-
 			long t = Clock.now();
 			Sick c = new Sick(this.getAge(), this.getLocation(), this.getSettlement(), t, v);
 			return c;
 		}
-
 		else {
 			System.out.println("Error, the person is already sick");
 		
 		return this;
 		}
-
 	}
 
 }//Person class
