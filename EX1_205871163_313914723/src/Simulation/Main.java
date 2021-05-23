@@ -6,7 +6,7 @@ import UI.MainWindow;
 
 /**
  * Main class will run the simulation
- * @author Yoni Ifrah 313914723, Coral Avital 205871163
+ * @author Coral Avital 205871163, Yoni Ifrah 313914723 
  *
  */
 public class Main {

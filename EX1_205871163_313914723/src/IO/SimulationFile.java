@@ -165,7 +165,7 @@ public class SimulationFile {
 		String s;
 		int i = 0;
 
-		while ((s = br.readLine())!= null) {
+		while ((s = br.readLine()) != null) {
 
 			//The output of the text file
 			s = s.replaceAll(" ", "");
@@ -208,35 +208,25 @@ public class SimulationFile {
 				newMoshav.setTotalPersons();
 				settlement.add(newMoshav);
 			}
-
 			else if(buffer[0].equals("Kibbutz")) {
 				Kibbutz newKibbutz = new Kibbutz(name, location, sick, NonSick, ramzorColor, 0, linkTo, map);
 				for(int j = 0; j < Integer.parseInt(buffer[6]); j++) {
 					int age = getAge();
 					Healthy h = new Healthy(age, newKibbutz.randomLocation(), newKibbutz);
 					newKibbutz.addPerson(h);
-
 				}
 				newKibbutz.setTotalPersons();
 				settlement.add(newKibbutz);
 			}
-
-
 			else {
 				System.out.println("***Error*** The type of the settlement is not definded");
-
 			}
 
 			i = i + 1;
 		}
-
 		br.close();
-
 		setLinkTo(settlement);
-		
-
 		return settlement;
 	}
-
 
 }//SimulationFile class

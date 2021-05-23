@@ -444,27 +444,27 @@ public class MainWindow extends JFrame {
 				}
 			});
 
-			statisticsPanel.add(textFilter = new JTextField("text filter...", 20));
+			statisticsPanel.add(textFilter = new JTextField("TEXT FILTER...", 20));
 			//filter text by input by the names of the settlements 
-			textFilter.setToolTipText("Filter Name Column");
+			textFilter.setToolTipText("FILTER NAME COLUMN");
 			textFilter.getDocument().addDocumentListener(new DocumentListener() {
 				public void insertUpdate(DocumentEvent e) { newFilter(); }
 				public void removeUpdate(DocumentEvent e) { newFilter(); }
 				public void changedUpdate(DocumentEvent e) { newFilter(); }
 			});
 
-			JButton save = new JButton("Save");
+			JButton save = new JButton("SAVE");
 			southPanel.add(save);
 			//save into csv file the currect stats table
 			save.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
 					try {
-						new StatisticsFile(getMapPointer());
+						new StatisticsFile(getMapPointer(), getStatistics());
 					} 
 					catch (FileNotFoundException e1) {
 						e1.printStackTrace();
-						System.out.println("Error at save action from StatisticsWindow");
+						System.out.println("ERROR AT SAVE ACTION FROM STATISTICS WINDOW");
 					}
 
 				}
@@ -485,7 +485,7 @@ public class MainWindow extends JFrame {
 						model.fireTableDataChanged();
 					}
 					catch(Exception ee) {
-						JOptionPane.showConfirmDialog(statisticFrame, "PLEASE SELECT A SETTLEMENT","Error",JOptionPane.DEFAULT_OPTION);
+						JOptionPane.showConfirmDialog(statisticFrame, "PLEASE SELECT SETTLEMENT","ERROR",JOptionPane.DEFAULT_OPTION);
 					}
 				}
 			});
@@ -505,12 +505,12 @@ public class MainWindow extends JFrame {
 			vaccinate.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String s = null;
-					String messageError = "INVALID  INPUT";
+					String messageError = "INVALID INPUT";
 					try {
 
 						if(table.getSelectedRow() == -1) {
 							//If the user has not selected any locality to which he wants to add vaccines
-							messageError = "PLEASE SELECT A SETTLEMENT";
+							messageError = "PLEASE SELECT SETTLEMENT";
 							throw new ArithmeticException(messageError);
 						}
 						s = JOptionPane.showInputDialog("ENTER A VALID NUMBER");
@@ -561,7 +561,6 @@ public class MainWindow extends JFrame {
 
 		/**
 		 * inner class which provides what we will have inside the stats table
-		 * @author yonif
 		 *
 		 */
 		public class Model extends AbstractTableModel {
@@ -746,7 +745,7 @@ public class MainWindow extends JFrame {
 					String fileName = null;
 					JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 					while(!getMapPointer().isflagToFile()) {
-						fileName = JOptionPane.showInputDialog("PLEASE ENTER A VALID FILE NAME");
+						fileName = JOptionPane.showInputDialog("PLEASE ENTER A VALID FILE NAME: ");
 						jfc.setDialogTitle("CHOOSE A DIRECTORY TO SAVE YOUR FILE: ");
 						jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 						int returnValue = jfc.showSaveDialog(null);
@@ -936,4 +935,5 @@ public class MainWindow extends JFrame {
 		}
 
 	}
+
 }//Class MainWindow
