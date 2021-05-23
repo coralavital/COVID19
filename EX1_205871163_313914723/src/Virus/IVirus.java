@@ -24,5 +24,5 @@ public interface IVirus {
 
 	public double contagionProbability(Person p);
 	public boolean tryToContagion(Sick p1, Person p2);//the first person is sick for sure and the method try to infect the second person
-	public boolean tryToKill(Sick s);
+	public boolean tryToKill(Sick s);//From a grid number between 0 and 1 and if the person's probability of dying is greater than the number drawn, the method will return true
 }//IVirus interface

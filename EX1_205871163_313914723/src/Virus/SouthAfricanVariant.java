@@ -105,8 +105,8 @@ public class SouthAfricanVariant implements IVirus {
 	public boolean tryToKill(Sick s) {
 		double p = Probability_Death(s);
 		long t = (long) Clock.days(s.getContagiousTime());
-
-		if (Math.max(0, p - 0.01 * p * (Math.pow((t - 15), 2))) > Math.random())
+		//From a grid number between 0 and 1 and if the person's probability of dying is greater than the number drawn, the method will return true
+		if(Math.max(0, p - 0.01 * p * (Math.pow((t - 15), 2))) > Math.random())
 			return true;
 		else
 			return false;
