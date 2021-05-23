@@ -292,24 +292,24 @@ public abstract class Settlement implements Runnable {
 		 * running on all the settlements if we found what the user selected then add a random virus into their people
 		 * if he didnt selected then we wont be able to add sick people
 		 */
-
-		for(int j = 0; j < getNonSick().size() * 0.01; j++) {
-			int index = rand.nextInt(getNonSick().size());
-			Person person = getNonSick().get(index);
-			int value = rand.nextInt(3);
-			if(value == 1)
-				virus = new BritishVariant();
-			else if(value == 2)
-				virus = new ChineseVariant();
-			else
-				virus = new SouthAfricanVariant();
-
-			Sick sick = new Sick(person.getAge(), person.getLocation(), person.getSettlement(), Clock.now(), virus);
-			if(addPerson(sick)) {
-				getNonSick().remove(j);
+		if(getNonSick() != null) {
+			for(int j = 0; j < getNonSick().size() * 0.01; j++) {
+				int index = rand.nextInt(getNonSick().size());
+				Person person = getNonSick().get(index);
+				int value = rand.nextInt(3);
+				if(value == 1)
+					virus = new BritishVariant();
+				else if(value == 2)
+					virus = new ChineseVariant();
+				else
+					virus = new SouthAfricanVariant();
+				
+				Sick sick = new Sick(person.getAge(), person.getLocation(), person.getSettlement(), Clock.now(), virus);
+				getNonSick().remove(person);
+				addPerson(sick);
 				return true;
+				}
 			}
-		}
 		return false;
 	}
 
@@ -637,7 +637,7 @@ public abstract class Settlement implements Runnable {
 		}
 		else
 			System.out.println("There were no vaccines left in the pool");
-	
+
 		System.out.println("Finish vaccinateHealthy for this settlement");
 	}
 
