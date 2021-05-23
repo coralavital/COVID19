@@ -292,6 +292,7 @@ public abstract class Settlement implements Runnable {
 		 * running on all the settlements if we found what the user selected then add a random virus into their people
 		 * if he didnt selected then we wont be able to add sick people
 		 */
+		System.out.println(getNonSick().size());
 		if(getNonSick() != null) {
 			for(int j = 0; j < getNonSick().size() * 0.01; j++) {
 				int index = rand.nextInt(getNonSick().size());
@@ -303,17 +304,16 @@ public abstract class Settlement implements Runnable {
 					virus = new ChineseVariant();
 				else
 					virus = new SouthAfricanVariant();
-				
+
 				Sick sick = new Sick(person.getAge(), person.getLocation(), person.getSettlement(), Clock.now(), virus);
 				getNonSick().remove(person);
 				addPerson(sick);
-				return true;
-				}
 			}
-		return false;
+			return true;
+		}
+		else
+			return false;
 	}
-
-
 
 	/**
 	 * take the person that we got and move him to the settlement we got 
@@ -322,10 +322,9 @@ public abstract class Settlement implements Runnable {
 	 * @return boolean, true if the transfer was complete, else false
 	 */
 	public boolean transferPerson(Person p, Settlement s) {
-
+		//We will select the ID number that appears in the fire table so we know who to turn on our synchronized first in order to avoid a dead lock.
 		int s1 = System.identityHashCode(this);
 		int s2 = System.identityHashCode(s);
-
 		if(s1 <= s2) {
 			//Prevent dead lock with the smaller int id of the settlement - now its this before 
 			synchronized(this) {
@@ -379,7 +378,6 @@ public abstract class Settlement implements Runnable {
 								System.out.println("This person move to the new settlement");
 								return true;
 							}
-
 							else {
 								System.out.println("This person caonnot move to the new settlement");
 								return false;

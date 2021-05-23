@@ -454,13 +454,16 @@ public class MainWindow extends JFrame {
 			//infect 10% non-sicks people to the selected settlement
 			add.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-						String selectedName = (String) table.getValueAt(table.getSelectedRow(), 0);
-						for(int i = 0; i < getMapPointer().getSettlements().length; i++) {
-							if(selectedName == getMapPointer().getSettlements()[i].getName())
-								getMapPointer().getSettlements()[i].addSick();
-						}
-						model.fireTableDataChanged();
+
+					String selectedName = (String) table.getValueAt(table.getSelectedRow(), 0);
+					for(int i = 0; i < getMapPointer().getSettlements().length; i++) {
+						if(selectedName == getMapPointer().getSettlements()[i].getName())
+							getMapPointer().getSettlements()[i].addSick();
+					}
+					model.fireTableDataChanged();
+
 				}
+
 			});
 
 
@@ -480,11 +483,11 @@ public class MainWindow extends JFrame {
 			vaccinate.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
-							String s = JOptionPane.showInputDialog("ENTER A NUMBER: ");
-							int i = Integer.parseInt(s);
-							//System.out.println(i);
-							int row = table.getSelectedRow();
-							getMapPointer().getSettlements()[row].setTotalVaccines(i);
+						String s = JOptionPane.showInputDialog("ENTER A NUMBER: ");
+						int i = Integer.parseInt(s);
+						//System.out.println(i);
+						int row = table.getSelectedRow();
+						getMapPointer().getSettlements()[row].setTotalVaccines(i);
 						//our model changes
 						model.fireTableDataChanged();					
 

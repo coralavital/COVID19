@@ -1,10 +1,6 @@
 package Virus;
-//Import staff
-import Population.Convalescent;
-import Population.Healthy;
 import Population.Person;
 import Population.Sick;
-import Population.Vaccinated;
 
 /***
  * Representation of a IVirus interface
