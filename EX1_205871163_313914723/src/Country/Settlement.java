@@ -311,7 +311,6 @@ public synchronized boolean addSick() {
 	 * Running on all the settlements if we found what the user selected then add a random virus into their people
 	 * if he didnt selected then we wont be able to add sick people
 	 */
-	System.out.println(getNonSick().size());
 	if(getNonSick() != null) {
 		for(int j = 0; j < getNonSick().size() * 0.01; j++) {
 			int index = rand.nextInt(getNonSick().size());
@@ -605,8 +604,8 @@ private void moveSettlement() {
 				Random rand = new Random();
 				index = rand.nextInt(getLinkTo().size());
 				Settlement s = getLinkTo().get(index);
-				System.out.println(getName());
-				System.out.println(s.getName());
+				System.out.println("From:" + getName());
+				System.out.println("To: " +s.getName());
 
 				value = selectRandom(0);
 
@@ -625,8 +624,8 @@ private void moveSettlement() {
 				Random rand = new Random();
 				index = rand.nextInt(getLinkTo().size());
 				Settlement s = getLinkTo().get(index);
-				System.out.println(getName());
-				System.out.println(s.getName());
+				System.out.println("From: " + getName());
+				System.out.println("To: " + s.getName());
 				value = selectRandom(1);
 				if(transferPerson(getSick().get(value), s))
 					System.out.println("The transfer was successful");
