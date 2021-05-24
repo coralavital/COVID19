@@ -249,15 +249,17 @@ public class MainWindow extends JFrame {
 				//Clears the last paint
 				super.paintComponent(g); 
 				//Draw the connection lines
-				for(int l = 0; l < getMapPointer().getSettlements().length; ++l){
+				for(int l = 0; l < getMapPointer().getSettlements().length; ++l) {
 					for(int j = 0; j < getMapPointer().getSettlements()[l].getLinkTo().size(); j++) {
 						x1 = getMapPointer().getSettlements()[l].getLocation().getPosition().getX();
 						y1 = getMapPointer().getSettlements()[l].getLocation().getPosition().getY();
-						x2 = getMapPointer().getSettlements()[j].getLocation().getPosition().getX();
-						y2 = getMapPointer().getSettlements()[j].getLocation().getPosition().getY();
+						x2 = getMapPointer().getSettlements()[l].getLinkTo().get(j).getLocation().getPosition().getX();
+						y2 = getMapPointer().getSettlements()[l].getLinkTo().get(j).getLocation().getPosition().getY();
+						//Draw the line
 						g.drawLine(x1, y1, x2, y2);
 					}
 				}
+
 				//Go on all settlements and paint them with its color and name -> settlements list
 				//For each settlement we will create a rectangle, lets assume there are 10 settlements
 				while (i < getMapPointer().getSettlements().length) {
@@ -286,8 +288,6 @@ public class MainWindow extends JFrame {
 				}
 				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			}
-			else
-				return;
 		}
 	}
 

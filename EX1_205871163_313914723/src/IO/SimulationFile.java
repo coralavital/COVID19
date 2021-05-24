@@ -132,7 +132,6 @@ public class SimulationFile {
 			if(buffer[0].equals("#")) {
 				String s1 = buffer[1];
 				String s2 = buffer[2];
-
 				for(int i = 0; i < settlement.size(); i++) {
 					if(settlement.get(i).getName().equals(s1)) {
 						for(int j = 0; j < settlement.size(); j++) {

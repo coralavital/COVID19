@@ -47,12 +47,12 @@ public class StatisticsFile {
 			PrintWriter pw = new PrintWriter(fos);
 			pw.println(columnNames);
 			for(int i = 0; i < map.getSettlements().length; i++) {
-				//reading from the object and writing into the file
+				//reading from the object and writing into the file	
 				settlement = map.getSettlements()[i].getName() + ", " + map.getSettlements()[i].getType() 
 						+ ", " + map.getSettlements()[i].getLocation().getPosition()
 						+ ", " + map.getSettlements()[i].getRamzorColor().getColorOfGuitar() + ", " +
 						(map.getSettlements()[i].getSick().size() + map.getSettlements()[i].getNonSick().size())  
-						+ ", " + map.getSettlements()[i].getTotalVaccines() + ", " + map.getSettlements()[i].printLinked() + ", " 
+						+ ", " + map.getSettlements()[i].getTotalVaccines() + ", " + map.getSettlements()[i].printLinked().replace(",", "") + ", " 
 						+ map.getSettlements()[i].getSick().size() + ", " 
 						+ map.getSettlements()[i].getNonSick().size() + ", " + map.getSettlements()[i].getNumberOfDead();			
 				pw.println(settlement);
@@ -64,7 +64,6 @@ public class StatisticsFile {
 		}
 
 	}
-
 
 }//StatisticsFile Class	
 
