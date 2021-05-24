@@ -312,7 +312,7 @@ public synchronized boolean addSick() {
 	 * if he didnt selected then we wont be able to add sick people
 	 */
 	if(getNonSick() != null) {
-		for(int j = 0; j < getNonSick().size() * 0.01; j++) {
+		for(int j = 0; j < getNonSick().size() * 0.001; j++) {
 			int index = rand.nextInt(getNonSick().size());
 			Person person = getNonSick().get(index);
 			int value = rand.nextInt(3);
