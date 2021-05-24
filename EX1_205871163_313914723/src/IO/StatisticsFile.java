@@ -58,10 +58,6 @@ public class StatisticsFile {
 				pw.println(settlement);
 			}
 			pw.close();
-<<<<<<< HEAD
-=======
-
->>>>>>> 52f0de76335bd75dad3ebe294ba8508c04f47099
 		}
 		else {
 			JOptionPane.showConfirmDialog(statisticFrame, "PLEASE SELECT NAME TO THE FILE!", "ERROR", JOptionPane.DEFAULT_OPTION);
