@@ -1,12 +1,12 @@
 package Country;
 //Import staff
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.concurrent.CyclicBarrier;
+import java.io.FileWriter;
 
 /***
  * Representation of a Map class

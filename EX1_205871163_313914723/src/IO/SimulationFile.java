@@ -135,12 +135,12 @@ public class SimulationFile {
 
 				for(int i = 0; i < settlement.size(); i++) {
 					if(settlement.get(i).getName().equals(s1)) {
-						for(int j = 0; j < settlement.size(); j++)
+						for(int j = 0; j < settlement.size(); j++) {
 							if(settlement.get(j).getName().equals(s2)) {
-
 								settlement.get(i).getLinkTo().add(settlement.get(j));
 								settlement.get(j).getLinkTo().add(settlement.get(i));
 							}
+						}
 					}
 				}
 			}
@@ -224,6 +224,7 @@ public class SimulationFile {
 
 			i = i + 1;
 		}
+		
 		br.close();
 		setLinkTo(settlement);
 		return settlement;

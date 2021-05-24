@@ -56,11 +56,11 @@ public class StatisticsFile {
 						+ map.getSettlements()[i].getSick().size() + ", " 
 						+ map.getSettlements()[i].getNonSick().size() + ", " + map.getSettlements()[i].getNumberOfDead();			
 				pw.println(settlement);
-				pw.close();
 			}
+			pw.close();
 		}
 		else {
-			JOptionPane.showConfirmDialog(statisticFrame, "PLEASE SELECT NAME TO THE FILE", "Error", JOptionPane.DEFAULT_OPTION);
+			JOptionPane.showConfirmDialog(statisticFrame, "PLEASE SELECT NAME TO THE FILE!", "ERROR", JOptionPane.DEFAULT_OPTION);
 		}
 
 	}

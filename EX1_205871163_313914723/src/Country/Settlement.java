@@ -15,8 +15,8 @@ import Virus.IVirus;
 import Virus.SouthAfricanVariant;
 import java.io.IOException;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
+import java.util.Random;
 
 /**
  * Representation of a Settlement class 

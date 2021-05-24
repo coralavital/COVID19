@@ -1,6 +1,18 @@
 package UI;
 //Import staff
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FileDialog;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -10,7 +22,32 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import javax.swing.*;
+import javax.sound.sampled.Line;
+import javax.swing.AbstractListModel;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
@@ -41,7 +78,7 @@ public class MainWindow extends JFrame {
 	private MapPanel mapPanel;
 
 	//Static Data Members
-	static boolean data[][] = {{true,false,false}, {false,true,false}, {false, false, true}};
+	static boolean data[][] = {{true, false, false}, {false, true, false}, {false, false, true}};
 
 	//Constructor
 	/**
@@ -50,15 +87,14 @@ public class MainWindow extends JFrame {
 	public MainWindow() {
 		super("MAIN WINDOW");
 		this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
-		mapPanel=  new MapPanel();
-		setJMenuBar(userMenu = new UserMenu(this,mapPanel));//User menu
+		mapPanel =  new MapPanel();
+		setJMenuBar(userMenu = new UserMenu(this, mapPanel));//User menu
 		// create mapPanel
 		mapPanel.setPreferredSize(new Dimension(600, 600));
 		mapPanel.setBackground(Color.WHITE);
 		this.add(mapPanel); 
 		//Creating JSlider
 		JLabel label = new JLabel("CURRENT VALUE: " + getJSlider().getValue());
-
 		//Set
 		slider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -206,20 +242,20 @@ public class MainWindow extends JFrame {
 			if(getUserMenu().getFlag()) {
 				Graphics2D g = (Graphics2D)gr;
 				rectangles = new ArrayList<>();
-				int x,y,width,height;
-				int x1,x2,y1,y2;
+				int x = 0, y = 0, width = 0, height = 0;
+				int x1 = 0, x2 = 0, y1 = 0, y2 = 0;
 				int i = 0;
 				String sName = "";
 				//Clears the last paint
 				super.paintComponent(g); 
 				//Draw the connection lines
-				for(int l = 0;l < getMapPointer().getSettlements().length;++l){
+				for(int l = 0; l < getMapPointer().getSettlements().length; ++l){
 					for(int j = 0; j < getMapPointer().getSettlements()[l].getLinkTo().size(); j++) {
 						x1 = getMapPointer().getSettlements()[l].getLocation().getPosition().getX();
 						y1 = getMapPointer().getSettlements()[l].getLocation().getPosition().getY();
 						x2 = getMapPointer().getSettlements()[j].getLocation().getPosition().getX();
-						y2 = getMapPointer().getSettlements()[j].getLocation().getPosition().getX();
-						g.drawLine(x1,y1,x2,y2);
+						y2 = getMapPointer().getSettlements()[j].getLocation().getPosition().getY();
+						g.drawLine(x1, y1, x2, y2);
 					}
 				}
 				//Go on all settlements and paint them with its color and name -> settlements list
@@ -231,7 +267,7 @@ public class MainWindow extends JFrame {
 					width = getMapPointer().getSettlements()[i].getLocation().getSize().getWidth();
 					height = getMapPointer().getSettlements()[i].getLocation().getSize().getHeight();
 					g.setColor(getMapPointer().getSettlements()[i].calcuateRamzorGrade().getColorEnum());
-					rect = new Rectangle(x,y,width,height);
+					rect = new Rectangle(x, y, width, height);
 					//Draw the settlement rectangle
 					g.draw(rect); 
 					//Paint the rectangle with the settlement color
@@ -243,7 +279,7 @@ public class MainWindow extends JFrame {
 					int stringy = y + ((height - fm.getHeight()) / 2) + fm.getAscent(); 
 					g.setColor(Color.BLACK);
 					//Draw the settlement name
-					g.drawString(sName,stringx,stringy); 
+					g.drawString(sName, stringx, stringy); 
 					//Add to the rectangles list
 					rectangles.add(rect);
 					++i;
@@ -378,7 +414,7 @@ public class MainWindow extends JFrame {
 		public JFrame statisticFrame = new JFrame("Statistics Window");
 		private JTextField textFilter;
 		private TableRowSorter<Model> sorter;
-		Model model;
+		public Model model;
 		private JTable table;
 
 		//The categories inside the chart
@@ -527,7 +563,7 @@ public class MainWindow extends JFrame {
 					} 
 					catch (Exception e2) {
 						//If the user selects a character that he does not number
-						JOptionPane.showConfirmDialog(statisticFrame, messageError, "Error", JOptionPane.DEFAULT_OPTION);
+						JOptionPane.showConfirmDialog(statisticFrame, messageError, "ERROR", JOptionPane.DEFAULT_OPTION);
 					}
 				}
 			});
