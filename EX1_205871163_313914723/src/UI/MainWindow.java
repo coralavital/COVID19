@@ -668,24 +668,27 @@ public class MainWindow extends JFrame {
 		JMenuItem h1, h2;
 
 		public UserMenu(JFrame frame, MapPanel mapPanel) {
-			// create a menu
+			//Create a menu
 			op1 = new JMenu("FILE");
 			op2 = new JMenu("SIMULATION");
 			op3 = new JMenu("HELP");
 
-			// create menuitems
+			//Create menuitems
 			f1 = new JMenuItem("LOAD");
 
 			f1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-
+					//our error message if nothing else bothers
 					String messageError = "INVALID FILE";
 					try {
+						//The user will be selected from where to upload the map file
 						FileDialog fd = new FileDialog(frame, "CHOOSE A DIRECTORY TO SAVE YOUR FILE: ", FileDialog.LOAD);
 						fd.setVisible(true);
+						//If the user did not select any file
 						if(fd.getFile() == null) {
 							messageError = "YOU DIDN'T REALLY SELECT A FILE TO LOAD YOUR MAP FROM!!\n                                                       TRY AGAIN";
 						}
+						//Otherwise we will make sure to update all the flags and allow the options to be opened to the user after loading
 						else {
 							f4.setEnabled(true);
 							f1.setEnabled(false);
@@ -694,6 +697,7 @@ public class MainWindow extends JFrame {
 							l1.setEnabled(true);
 							l2.setEnabled(false);
 						}
+						
 						File f = new File(fd.getDirectory(), fd.getFile());
 						simulationFile = new SimulationFile(f.getPath());
 						System.out.println(f.getPath());
@@ -740,7 +744,7 @@ public class MainWindow extends JFrame {
 					}
 				}
 			});
-
+			//Creat statistics
 			f2 = new JMenuItem("STATISTICS");
 			f2.setEnabled(false);
 			f2.addActionListener(new ActionListener() {
@@ -749,7 +753,7 @@ public class MainWindow extends JFrame {
 					statistics = new StatisticsWindow();
 				}
 			});
-
+			//Creat mutations table
 			f3 = new JMenuItem("EDIT MUTATIONS");
 			f3.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -762,8 +766,7 @@ public class MainWindow extends JFrame {
 					JTable table = new JTable(model);
 					table.setFillsViewportHeight(true);
 					panel.add(new RowedTableScroll(table, row));
-
-
+					//Creat a dialog
 					JDialog d = new JDialog(frame,"MUTATIONS WINDOW",true);
 
 					d.add(panel);
@@ -771,16 +774,18 @@ public class MainWindow extends JFrame {
 					d.setVisible(true);
 				}
 			});
-
+			//Creat log file
 			f4 = new JMenuItem("SAVE LOG FILE");// to stop and then exit ( need to add setEnable for exit according to stop)
 			f4.setEnabled(false);
 			f4.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
+					
 					File fos = null;
 					String str = null;
 					String fileName = null;
 					JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+					//If the user choose a folder to save the log file
 					while(!getMapPointer().isflagToFile()) {
 						fileName = JOptionPane.showInputDialog("PLEASE ENTER A VALID FILE NAME: ");
 						jfc.setDialogTitle("CHOOSE A DIRECTORY TO SAVE YOUR FILE: ");
@@ -797,7 +802,6 @@ public class MainWindow extends JFrame {
 						try {
 							PrintWriter pw = new PrintWriter(fos);
 						} catch (FileNotFoundException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 						getMapPointer().setflagToFile(true);
@@ -805,15 +809,16 @@ public class MainWindow extends JFrame {
 					}
 				}
 			});
-
+			//Creat exit button
 			f5 = new JMenuItem("EXIT");// to stop and then exit ( need to add setEnable for exit according to stop)
 			f5.setEnabled(true);
 			f5.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					//If user press exit the system will shut down
 					System.exit(0);
 				}
 			});
-
+			//Creat play button
 			l1 = new JMenuItem("PLAY");
 			l1.setEnabled(false);
 			l1.addActionListener(new ActionListener() {
@@ -821,13 +826,14 @@ public class MainWindow extends JFrame {
 					synchronized(getMapPointer()) {
 						//Update of the relevant flag
 						getMapPointer().setPLAY(true);
+						//notifyAll for settlement thread
 						getMapPointer().notifyAll();
 					}
 					l2.setEnabled(true);
 					l1.setEnabled(false);
 				}
 			});
-
+			//Creat pause button
 			l2 = new JMenuItem("PAUSE");
 			l2.setEnabled(false);
 			l2.addActionListener(new ActionListener() {
@@ -841,7 +847,7 @@ public class MainWindow extends JFrame {
 					l1.setEnabled(true);
 				}
 			});
-
+			//Creat stop button
 			l3 = new JMenuItem("STOP");
 			l3.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -851,7 +857,7 @@ public class MainWindow extends JFrame {
 					getMapPointer().setflagToFile(false);
 					getMapPointer().setflagToDead(false);
 					flag = false;
-
+					//repaint
 					getMapPanel().repaint();
 
 					f1.setEnabled(true);
@@ -862,7 +868,7 @@ public class MainWindow extends JFrame {
 					l3.setEnabled(false);
 				}
 			});
-
+			//Creat set ticks per day spinner
 			l4 = new JMenuItem("SET TICKS PER DAY");
 			l4.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -879,7 +885,7 @@ public class MainWindow extends JFrame {
 				}
 			});
 
-
+			//Creat help dialog
 			h1 = new JMenuItem("HELP");
 			h1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -917,7 +923,7 @@ public class MainWindow extends JFrame {
 					dialog.setVisible(true);
 				}
 			});
-
+			//Creat about dialog
 			h2 = new JMenuItem("ABOUT");
 			h2.addActionListener(new ActionListener() {//new
 				public void actionPerformed(ActionEvent e) {
@@ -970,7 +976,6 @@ public class MainWindow extends JFrame {
 		public boolean getFlag() {
 			return flag;
 		}
-
 	}
 
 }//Class MainWindow
