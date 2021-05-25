@@ -94,6 +94,7 @@ public class MainWindow extends JFrame {
 		mapPanel.setBackground(Color.WHITE);
 		this.add(mapPanel); 
 		//Creating JSlider
+		getJSlider().setValue(1);
 		JLabel label = new JLabel("CURRENT VALUE: " + getJSlider().getValue());
 		//Set
 		slider.addChangeListener(new ChangeListener() {
