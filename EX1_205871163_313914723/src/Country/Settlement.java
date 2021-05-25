@@ -306,13 +306,13 @@ public abstract class Settlement implements Runnable {
 
 		Random rand = new Random();
 		IVirus virus;
-
 		/**
 		 * Running on all the settlements if we found what the user selected then add a random virus into their people
 		 * if he didnt selected then we wont be able to add sick people
 		 */
 		if(getNonSick() != null) {
-			for(int j = 0; j < getNonSick().size() / 100; j++) {
+			int end = getNonSick().size() / 100;
+			for(int j = 0; j < end; j++) {
 				int index = rand.nextInt(getNonSick().size());
 				Person person = getNonSick().get(index);
 				int value = rand.nextInt(3);
