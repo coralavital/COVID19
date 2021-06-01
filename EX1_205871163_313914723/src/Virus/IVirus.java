@@ -2,6 +2,7 @@ package Virus;
 //Import staff
 import Population.Person;
 import Population.Sick;
+import UI.VirusManagement.VirusEnum;
 
 /***
  * Representation of a IVirus interface

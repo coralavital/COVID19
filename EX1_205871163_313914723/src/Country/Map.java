@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CyclicBarrier;
 import java.io.FileWriter;
@@ -12,7 +14,7 @@ import java.io.FileWriter;
  * Representation of a Map class
  * @author Yoni Ifrah 313914723, Coral Avital 205871163
  */
-public class Map {
+public class Map implements Iterable<Settlement>{
 	
 	//Private Data Members
 
@@ -260,8 +262,12 @@ public class Map {
 		for(int i = 0; i < getSettlements().length; i++) {
 			new Thread(getSettlements()[i]).start();
 		}
-
-
 	}
+	
+	
+	public Iterator<Settlement> iterator() {
+		return Arrays.stream(this.settlements).iterator();
+	}
+	
 }//Map class
 
