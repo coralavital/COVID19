@@ -761,6 +761,7 @@ public class MainWindow extends JFrame {
 					String row[]={ "B-virus","C-virus","S-Avirus"};
 					JPanel panel= new JPanel();
 
+
 					MutationsTable model = new MutationsTable(data, colum);
 					JTable table = new JTable(model);
 					table.setFillsViewportHeight(true);
