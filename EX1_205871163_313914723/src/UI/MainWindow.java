@@ -76,6 +76,10 @@ public class MainWindow extends JFrame {
 	private SimulationFile simulationFile;
 	private JSlider slider = new JSlider();
 	private MapPanel mapPanel;
+
+	//Static Data Members
+	static boolean data[][] = {{true, false, false}, {false, true, false}, {false, false, true}};
+
 	//Constructor
 	/**
 	 * The constructor that initializes the entire main window and creates from it an object in front of which our main function will work
@@ -108,15 +112,7 @@ public class MainWindow extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 	}
-	
-	/**
-	 * Getter function for getData
-	 * @return: boolean[][], data
-	 */
-	public static boolean[][] getData() {
-		return MutationsTable.getInstance().getData();
-	}
-	
+
 	//getter and setter
 	/**
 	 * Getter function for userMenu
@@ -185,6 +181,22 @@ public class MainWindow extends JFrame {
 	 */
 	public JSlider getJSlider() {
 		return slider;
+	}
+
+	/**
+	 * Getter for data which is the mutation table
+	 * @return: boolean, data
+	 */
+	public static boolean[][] getData() {
+		return data;
+	}
+
+	/**
+	 * Setter for data which is the mutation table
+	 * @param boolean, data
+	 */
+	public void setData(boolean[][] data) {
+		this.data = data;
 	}
 
 	// Inner class in MainWidow class
@@ -319,7 +331,83 @@ public class MainWindow extends JFrame {
 	}
 
 	//MutationsTable
-	
+	public class MutationsTable extends AbstractTableModel {
+		//Data members
+		private String[] col_names ;
+		private boolean[][] data;
+
+		//Constructor 
+		public MutationsTable(boolean[][] data2, String[] colum) { 
+			this.data = data2; 
+			this.col_names = colum;
+		}
+
+		/**
+		 * Getter for data.length
+		 * @return: data.length, int
+		 */
+		public int getRowCount() {
+			return data.length; 
+		}
+
+		/**
+		 * Getter for col_names.length
+		 * @return: col_names.length, int
+		 */
+		public int getColumnCount() { 
+			return col_names.length; 
+		}
+
+		/**
+		 * Getter for data specific index from the table
+		 * @param: rowIndex, int
+		 *	@param: columnIndex, int
+		 * @return: Object, data[rowIndex][columnIndex]
+		 */
+		public Object getValueAt(int rowIndex, int columnIndex) {
+			return data[rowIndex][columnIndex];
+		}
+
+		/**
+		 * Getter for the column name 
+		 * @param: column ,int
+		 * @return: col_names[column], String
+		 */
+		public String getColumnName(int column) {
+			return col_names[column]; 
+		}
+
+		/**
+		 * Getter for class by his column
+		 * @param: column, int
+		 * @return: class of data[rowIndex][columnIndex], Class
+		 */
+		public Class getColumnClass(int column) {
+			return getValueAt(0, column).getClass(); 
+		}
+
+		/**
+		 * Checking if we can editable  the cell
+		 * @param: rowIndex, int 
+		 * @param: columnIndex, int 
+		 * @return: true, boolean
+		 */
+		public boolean isCellEditable(int rowIndex, int columnIndex) {
+			return true;
+		}
+
+		/**
+		 * Set a boolean value into our data table according to the row and column
+		 * @param: aValue, Object
+		 * @param: col, int
+		 * @param: row, int
+		 */
+		public void setValueAt(Object aValue, int row, int col) {
+			if (aValue instanceof Boolean)
+				data[row][col]= (boolean) aValue;
+			fireTableCellUpdated(row, col);
+		}
+	}
 
 	//StatisticsWindow
 	public class StatisticsWindow extends JFrame {
@@ -669,11 +757,11 @@ public class MainWindow extends JFrame {
 			f3 = new JMenuItem("EDIT MUTATIONS");
 			f3.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String colum[]= { "BRITISH VIRUS","CHINESE VIRUS","SOUTHAFRICA VIRUS"};
-					String row[] = { "B-virus","C-virus","S-Avirus"};
-					JPanel panel = new JPanel();
+					String colum[]={ "BRITISH VIRUS","CHINESE VIRUS","SOUTHAFRICA VIRUS"};
+					String row[]={ "B-virus","C-virus","S-Avirus"};
+					JPanel panel= new JPanel();
 
-					MutationsTable model = MutationsTable.getInstance();
+					MutationsTable model = new MutationsTable(data, colum);
 					JTable table = new JTable(model);
 					table.setFillsViewportHeight(true);
 					panel.add(new RowedTableScroll(table, row));
@@ -887,8 +975,6 @@ public class MainWindow extends JFrame {
 		public boolean getFlag() {
 			return flag;
 		}
-
 	}
-	
-}//Class MainWindow
 
+}//Class MainWindow
