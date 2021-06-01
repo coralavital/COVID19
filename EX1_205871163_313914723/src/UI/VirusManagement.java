@@ -21,24 +21,20 @@ public class VirusManagement {
 		}
 	}
 
-	public static void toogle(int i, int j)
-	{
+	public static void toogle(int i, int j) {
 		data[i][j] =! data[i][j];
 	}
 
-	public static IVirus contagion(IVirus src) 
-	{
+	public static IVirus contagion(IVirus src)  {
 		int index = VirusEnum.findv(src);
 		IVirus v = findmutation(data[index]);
 		return v;
 	}
-	public static IVirus findmutation(boolean[] data)
-	{
+	public static IVirus findmutation(boolean[] data) {
 		int size = 0;
 		int[] indexes = null;
 		for(int i = 0; i < data.length; i++) {
-			if(data[i])
-			{
+			if(data[i]) {
 				size++;
 			}
 		}
@@ -56,8 +52,7 @@ public class VirusManagement {
 		return VirusEnum.values()[indexes[x]].getv();
 	}
 
-	public static boolean getval(int i, int j)
-	{
+	public static boolean getval(int i, int j) {
 		return data[i][j];
 	}
 
@@ -77,17 +72,15 @@ public class VirusManagement {
 			for (int i = 0; i < VirusEnum.values().length; i++) {
 				if (VirusEnum.values()[i].v == v)
 					return i;
-
 			}
 			return -1;
 		}
 
 		public String toString() {
-			// TODO Auto-generated method stub
 			return string;
 		}
-		public IVirus getv()
-		{
+		
+		public IVirus getv() {
 			return v;
 		}
 	}
