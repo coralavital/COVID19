@@ -7,7 +7,9 @@ import Virus.IVirus;
 import Virus.SouthAfricanVariant;
 
 public class VirusManagement {
+	
 	private static boolean[][] data;
+	
 	static {
 		data = new boolean[VirusEnum.values().length][];
 		for(int i = 0; i < data.length; i++) {
@@ -30,6 +32,7 @@ public class VirusManagement {
 		IVirus v = findmutation(data[index]);
 		return v;
 	}
+	
 	public static IVirus findmutation(boolean[] data) {
 		int size = 0;
 		int[] indexes = null;
@@ -38,6 +41,7 @@ public class VirusManagement {
 				size++;
 			}
 		}
+		
 		indexes = new int[size];
 		int j = 0;
 		for(int i = 0; i < size; i++) {
@@ -57,6 +61,7 @@ public class VirusManagement {
 	}
 
 	public enum VirusEnum {
+		
 		BritishVariant("BritishVariant", new BritishVariant()), ChineseVariant("ChineseVariant", new ChineseVariant()),
 		SouthAfricanVariant("SouthAfricanVariant", new SouthAfricanVariant());
 
@@ -84,7 +89,5 @@ public class VirusManagement {
 			return v;
 		}
 	}
-	
-
 
 }
