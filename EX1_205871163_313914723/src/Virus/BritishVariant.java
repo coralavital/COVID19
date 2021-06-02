@@ -20,6 +20,7 @@ public class BritishVariant implements IVirus{
 	public String toString() {
 		return "BritishVariant []";
 	}
+	
 
 	//Static mathods
 	/**
@@ -34,6 +35,7 @@ public class BritishVariant implements IVirus{
 		else
 			return 0.1;
 	}
+
 
 
 	//Mathods

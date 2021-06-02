@@ -18,6 +18,9 @@ import Location.Size;
 import Population.Healthy;
 import Population.Person;
 import Population.Sick;
+import Simulation.Clock;
+import Virus.BritishVariant;
+import Virus.IVirus;
 
 /***
  * Representation of a SimulationFile class 
@@ -156,7 +159,7 @@ public class SimulationFile {
 	 * @throws IOException
 	 */
 	public List<Settlement> readFromFile() throws IOException {
-
+		BritishVariant Bvirus = new BritishVariant();
 		String[] buffer;
 		List<Settlement> settlement = new ArrayList<>();
 		BufferedReader br= new BufferedReader(new FileReader(path));
@@ -185,7 +188,7 @@ public class SimulationFile {
 			List<Settlement> linkTo = new ArrayList<>();
 			RamzorColor ramzorColor = RamzorColor.Green;
 			Map map = new Map();
-
+			
 			if(buffer[0].equals("City")) {
 				City newCity = new City(name, location, sick, NonSick, ramzorColor, 0, linkTo, map);
 				for(int j = 0; j < Integer.parseInt(buffer[6]); j++) {
@@ -193,6 +196,14 @@ public class SimulationFile {
 					Healthy h = new Healthy(age, newCity.randomLocation(), newCity);
 					newCity.addPerson(h);
 				}
+				
+				for(int k = 0; k < Integer.parseInt(buffer[6]) * 0.1; k++) {
+					Healthy hh = (Healthy)newCity.getNonSick().get(k);
+					Sick newSick = new Sick(hh.getAge(), hh.getLocation(), newCity, Clock.now(), Bvirus);
+					newCity.getNonSick().remove(hh);
+					newCity.addPerson(newSick);
+				}
+				
 				newCity.setTotalPersons();
 				settlement.add(newCity);
 			}
@@ -204,15 +215,29 @@ public class SimulationFile {
 					Healthy h = new Healthy(age, newMoshav.randomLocation(), newMoshav);
 					newMoshav.addPerson(h);
 				}
+				for(int k = 0; k < Integer.parseInt(buffer[6]) * 0.1; k++) {
+					
+					Healthy hh = (Healthy)newMoshav.getNonSick().get(k);
+					Sick newSick = new Sick(hh.getAge(), hh.getLocation(), newMoshav, Clock.now(), Bvirus);
+					newMoshav.getNonSick().remove(hh);
+					newMoshav.addPerson(newSick);
+				}
 				newMoshav.setTotalPersons();
 				settlement.add(newMoshav);
 			}
+			
 			else if(buffer[0].equals("Kibbutz")) {
 				Kibbutz newKibbutz = new Kibbutz(name, location, sick, NonSick, ramzorColor, 0, linkTo, map);
 				for(int j = 0; j < Integer.parseInt(buffer[6]); j++) {
 					int age = getAge();
 					Healthy h = new Healthy(age, newKibbutz.randomLocation(), newKibbutz);
 					newKibbutz.addPerson(h);
+				}
+				for(int k = 0; k < Integer.parseInt(buffer[6]) * 0.1; k++) {
+					Healthy hh = (Healthy)newKibbutz.getNonSick().get(k);
+					Sick newSick = new Sick(hh.getAge(), hh.getLocation(), newKibbutz, Clock.now(), Bvirus);
+					newKibbutz.getNonSick().remove(hh);
+					newKibbutz.addPerson(newSick);
 				}
 				newKibbutz.setTotalPersons();
 				settlement.add(newKibbutz);

@@ -61,6 +61,7 @@ import Country.Settlement;
 import IO.SimulationFile;
 import IO.StatisticsFile;
 import Simulation.Clock;
+import Virus.VirusManagement;
 
 /*
  * Representation of a Main class
@@ -77,8 +78,6 @@ public class MainWindow extends JFrame {
 	private JSlider slider = new JSlider();
 	private MapPanel mapPanel;
 
-	//Static Data Members
-	static boolean data[][] = {{true, false, false}, {false, true, false}, {false, false, true}};
 
 	//Constructor
 	/**
@@ -181,22 +180,6 @@ public class MainWindow extends JFrame {
 	 */
 	public JSlider getJSlider() {
 		return slider;
-	}
-
-	/**
-	 * Getter for data which is the mutation table
-	 * @return: boolean, data
-	 */
-	public static boolean[][] getData() {
-		return data;
-	}
-
-	/**
-	 * Setter for data which is the mutation table
-	 * @param boolean, data
-	 */
-	public void setData(boolean[][] data) {
-		this.data = data;
 	}
 
 	// Inner class in MainWidow class
@@ -332,22 +315,16 @@ public class MainWindow extends JFrame {
 
 	//MutationsTable
 	public class MutationsTable extends AbstractTableModel {
+		
 		//Data members
-		private String[] col_names ;
-		private boolean[][] data;
-
-		//Constructor 
-		public MutationsTable(boolean[][] data2, String[] colum) { 
-			this.data = data2; 
-			this.col_names = colum;
-		}
+		private String[] col_names ={ VirusManagement.getBritishStr(),VirusManagement.getChineseStr(),VirusManagement.getAfricanStr()};
 
 		/**
 		 * Getter for data.length
 		 * @return: data.length, int
 		 */
 		public int getRowCount() {
-			return data.length; 
+			return VirusManagement.getData().length; 
 		}
 
 		/**
@@ -365,7 +342,7 @@ public class MainWindow extends JFrame {
 		 * @return: Object, data[rowIndex][columnIndex]
 		 */
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			return data[rowIndex][columnIndex];
+			return VirusManagement.getData()[rowIndex][columnIndex];
 		}
 
 		/**
@@ -404,7 +381,7 @@ public class MainWindow extends JFrame {
 		 */
 		public void setValueAt(Object aValue, int row, int col) {
 			if (aValue instanceof Boolean)
-				data[row][col]= (boolean) aValue;
+				VirusManagement.getData()[row][col]= (boolean) aValue;
 			fireTableCellUpdated(row, col);
 		}
 	}
@@ -757,12 +734,10 @@ public class MainWindow extends JFrame {
 			f3 = new JMenuItem("EDIT MUTATIONS");
 			f3.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String colum[]={ "BRITISH VIRUS","CHINESE VIRUS","SOUTHAFRICA VIRUS"};
+
 					String row[]={ "B-virus","C-virus","S-Avirus"};
 					JPanel panel= new JPanel();
-
-
-					MutationsTable model = new MutationsTable(data, colum);
+					MutationsTable model = new MutationsTable();
 					JTable table = new JTable(model);
 					table.setFillsViewportHeight(true);
 					panel.add(new RowedTableScroll(table, row));

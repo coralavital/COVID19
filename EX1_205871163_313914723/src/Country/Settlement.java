@@ -13,6 +13,9 @@ import Virus.BritishVariant;
 import Virus.ChineseVariant;
 import Virus.IVirus;
 import Virus.SouthAfricanVariant;
+import Virus.VirusManagement;
+import Virus.VirusManagement.VirusEnum;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
@@ -271,7 +274,6 @@ public abstract class Settlement implements Runnable {
 			Sick s = (Sick) p;
 			this.getSick().add(s);
 			return true;
-
 		} 
 		//If the person isn't sick person
 		else if(!(p instanceof Sick)) {
@@ -315,6 +317,7 @@ public abstract class Settlement implements Runnable {
 			for(int j = 0; j < end; j++) {
 				int index = rand.nextInt(getNonSick().size());
 				Person person = getNonSick().get(index);
+				
 				int value = rand.nextInt(3);
 				if(value == 1)
 					virus = new BritishVariant();
@@ -323,7 +326,8 @@ public abstract class Settlement implements Runnable {
 				else
 					virus = new SouthAfricanVariant();
 
-				Sick sick = new Sick(person.getAge(), person.getLocation(), person.getSettlement(), Clock.now(), virus);
+				Sick sick = new Sick(person.getAge(), person.getLocation(), person.getSettlement(), Clock.now(), VirusManagement.contagion(virus));
+				
 				getNonSick().remove(person);
 				addPerson(sick);
 			}
@@ -331,7 +335,10 @@ public abstract class Settlement implements Runnable {
 		}
 		else
 			return false;
+
+
 	}
+
 
 	/**
 	 * Take the person that we got and move him to the settlement we got 
@@ -441,6 +448,7 @@ public abstract class Settlement implements Runnable {
 				virus = new ChineseVariant();
 			else if(value == 2)
 				virus = new SouthAfricanVariant();
+
 			Sick sick = new Sick(person.getAge(), person.getLocation(), person.getSettlement(),
 					Clock.now(), virus);
 			getNonSick().remove(j);
@@ -475,19 +483,7 @@ public abstract class Settlement implements Runnable {
 		Person p = getNonSick().get(newP);
 		//If the sick person has a British virus
 		if(virus instanceof BritishVariant) {
-			//Examination of the mutation table
-			for(int n = 0; n < 3; n++) {
-				if(MainWindow.getData()[0][n])
-					value++;
-			}
-			index = rand.nextInt(value);
-			if(index == 0) 
-				v = new BritishVariant();
-			else if(index == 1)
-				v = new ChineseVariant();
-			else if(index == 2)
-				v = new SouthAfricanVariant();
-			s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), v);
+			s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), VirusManagement.contagion(virus));
 			if(v.tryToContagion(s, p)) {
 				getNonSick().remove(newP);
 				addPerson(p.contagion(v));
@@ -496,21 +492,10 @@ public abstract class Settlement implements Runnable {
 			else
 				System.out.println("The infection failed");
 		}
+
 		//If the sick person has a Chinese virus
 		if(virus instanceof ChineseVariant) {
-			//Examination of the mutation table
-			for(int n = 0; n < 3; n++) {
-				if(MainWindow.getData()[1][n])
-					value++;
-			}
-			index = rand.nextInt(value);
-			if(index == 0) 
-				v = new BritishVariant();
-			if(index == 1)
-				v = new ChineseVariant();
-			if(index == 2)
-				v = new SouthAfricanVariant();
-			s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), v);
+			s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), VirusManagement.contagion(virus));
 			if(v.tryToContagion(s, p)) {
 				getNonSick().remove(newP);
 				addPerson(p.contagion(v));
@@ -519,21 +504,10 @@ public abstract class Settlement implements Runnable {
 			else
 				System.out.println("The infection failed");
 		}
+
 		//If the sick person has a South African virus
 		if(virus instanceof SouthAfricanVariant) {
-			//Examination of the mutation table
-			for(int n = 0; n < 3; n++) {
-				if(MainWindow.getData()[2][n])
-					value++;
-			}
-			index = rand.nextInt(value);
-			if(index == 0) 
-				v = new BritishVariant();
-			else if(index == 1)
-				v = new ChineseVariant();
-			else if(index == 2)
-				v = new SouthAfricanVariant();
-			s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), v);
+			s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), VirusManagement.contagion(virus));
 			if(v.tryToContagion(s, p)) {
 				getNonSick().remove(newP);
 				addPerson(p.contagion(v));
@@ -661,6 +635,7 @@ public abstract class Settlement implements Runnable {
 		else
 			System.out.println("There are no sick people in this settlement");
 	}
+
 	/**
 	 * A run function for each stellment whose function is to run the simulation for each settlement
 	 */

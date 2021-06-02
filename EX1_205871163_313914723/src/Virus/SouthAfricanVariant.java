@@ -19,8 +19,7 @@ public class SouthAfricanVariant implements IVirus {
 	 *@author coral.
 	 */
 	public String toString() {
-		return "SouthAfricanVariant [getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()="
-				+ super.toString() + "]";
+		return "SouthAfricanVariant []";
 	}
 
 	//Static mathods
