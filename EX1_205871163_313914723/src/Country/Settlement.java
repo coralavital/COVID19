@@ -9,12 +9,12 @@ import Population.Sick;
 import Population.Vaccinated;
 import Simulation.Clock;
 import UI.MainWindow;
+import UI.VirusManagement;
+import UI.VirusManagement.VirusEnum;
 import Virus.BritishVariant;
 import Virus.ChineseVariant;
 import Virus.IVirus;
 import Virus.SouthAfricanVariant;
-import Virus.VirusManagement;
-import Virus.VirusManagement.VirusEnum;
 
 import java.io.IOException;
 import java.util.List;

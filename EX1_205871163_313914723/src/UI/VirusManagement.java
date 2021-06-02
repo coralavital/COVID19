@@ -1,6 +1,11 @@
-package Virus;
+package UI;
 
 import java.util.Random;
+
+import Virus.BritishVariant;
+import Virus.ChineseVariant;
+import Virus.IVirus;
+import Virus.SouthAfricanVariant;
 
 public class VirusManagement {
 

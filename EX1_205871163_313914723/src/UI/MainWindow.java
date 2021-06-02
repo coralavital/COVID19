@@ -61,7 +61,6 @@ import Country.Settlement;
 import IO.SimulationFile;
 import IO.StatisticsFile;
 import Simulation.Clock;
-import Virus.VirusManagement;
 
 /*
  * Representation of a Main class
