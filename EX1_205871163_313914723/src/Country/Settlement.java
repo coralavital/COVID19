@@ -9,6 +9,7 @@ import Population.Sick;
 import Population.Vaccinated;
 import Simulation.Clock;
 import UI.MainWindow;
+import UI.MainWindow.UserMenu;
 import UI.VirusManagement;
 import UI.VirusManagement.VirusEnum;
 import Virus.BritishVariant;
@@ -308,6 +309,7 @@ public abstract class Settlement implements Runnable {
 
 		Random rand = new Random();
 		IVirus virus;
+		Sick sick = null;
 		/**
 		 * Running on all the settlements if we found what the user selected then add a random virus into their people
 		 * if he didnt selected then we wont be able to add sick people
@@ -317,7 +319,7 @@ public abstract class Settlement implements Runnable {
 			for(int j = 0; j < end; j++) {
 				int index = rand.nextInt(getNonSick().size());
 				Person person = getNonSick().get(index);
-				
+
 				int value = rand.nextInt(3);
 				if(value == 1)
 					virus = new BritishVariant();
@@ -326,10 +328,12 @@ public abstract class Settlement implements Runnable {
 				else
 					virus = new SouthAfricanVariant();
 
-				Sick sick = new Sick(person.getAge(), person.getLocation(), person.getSettlement(), Clock.now(), VirusManagement.contagion(virus));
+				if(VirusManagement.contagion(virus) != null) {
+					sick = new Sick(person.getAge(), person.getLocation(), person.getSettlement(), Clock.now(), VirusManagement.contagion(virus));
+					getNonSick().remove(person);
+					addPerson(sick);
+				}
 				
-				getNonSick().remove(person);
-				addPerson(sick);
 			}
 			return true;
 		}
@@ -440,13 +444,12 @@ public abstract class Settlement implements Runnable {
 			int index = rand.nextInt(getNonSick().size());
 			Person person = getNonSick().get(index);
 			int value = rand.nextInt(3);
-			if(value < 0)
-				value = Math.abs(value);
+			
 			if(value == 0)
 				virus = new BritishVariant();
 			else if(value == 1)
 				virus = new ChineseVariant();
-			else if(value == 2)
+			else
 				virus = new SouthAfricanVariant();
 
 			Sick sick = new Sick(person.getAge(), person.getLocation(), person.getSettlement(),
@@ -472,7 +475,6 @@ public abstract class Settlement implements Runnable {
 	 */
 	private void tryToInfect(Sick sick) {
 		Random rand = new Random();
-		IVirus virus = sick.getVirus();
 		Sick s;
 		IVirus v = null;
 		int value = 0;
@@ -481,41 +483,17 @@ public abstract class Settlement implements Runnable {
 		//Grill a person not randomly ill
 		newP = rand.nextInt(getNonSick().size());
 		Person p = getNonSick().get(newP);
-		//If the sick person has a British virus
-		if(virus instanceof BritishVariant) {
-			s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), VirusManagement.contagion(virus));
-			if(v.tryToContagion(s, p)) {
-				getNonSick().remove(newP);
-				addPerson(p.contagion(v));
-				System.out.println("The infection succeeded");
-			}
-			else
-				System.out.println("The infection failed");
+		v = VirusManagement.contagion(sick.getVirus());
+		if(v == null)
+			return;
+		s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), v);
+		if(v.tryToContagion(s, p)) {
+			getNonSick().remove(newP);
+			addPerson(p.contagion(v));
+			System.out.println("The infection succeeded");
 		}
-
-		//If the sick person has a Chinese virus
-		if(virus instanceof ChineseVariant) {
-			s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), VirusManagement.contagion(virus));
-			if(v.tryToContagion(s, p)) {
-				getNonSick().remove(newP);
-				addPerson(p.contagion(v));
-				System.out.println("The infection succeeded");
-			}
-			else
-				System.out.println("The infection failed");
-		}
-
-		//If the sick person has a South African virus
-		if(virus instanceof SouthAfricanVariant) {
-			s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), VirusManagement.contagion(virus));
-			if(v.tryToContagion(s, p)) {
-				getNonSick().remove(newP);
-				addPerson(p.contagion(v));
-				System.out.println("The infection succeeded");
-			}
-			else
-				System.out.println("The infection failed");
-		}
+		else
+			System.out.println("The infection failed");
 	}
 
 	/**
@@ -576,7 +554,9 @@ public abstract class Settlement implements Runnable {
 					Settlement s = getLinkTo().get(index);
 					System.out.println("From: " + getName());
 					System.out.println("To: " + s.getName());
+
 					value = selectRandom(1);
+
 					if(transferPerson(getSick().get(value), s))
 						System.out.println("The transfer was successful");
 				}
@@ -661,7 +641,9 @@ public abstract class Settlement implements Runnable {
 			moveSettlement();
 			vaccinateHealthy();
 			killPeople();
-
+			
+			
+			
 			if(getMap().getFileName() != null) {
 				try {
 					//The system will try to write the data into the log file

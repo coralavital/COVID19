@@ -31,12 +31,17 @@ public class VirusManagement {
 	// DP strategy
 	public static IVirus contagion(IVirus src) { // SOMEHOW THE METHOD IS NOT USED
 		int index = VirusEnum.findv(src);
-		IVirus v = findmutation(data[index]);
-		return v;
+		if(index == -1) {
+			IVirus v = findmutation(data[index]);
+			return v;
+		}
+		else 
+			return null;
 	}
 
 	public static IVirus findmutation(boolean[] data) {
 		int size = 0;
+		int x = 0;
 		int[] indexes = null;
 		for (int i = 0; i < data.length; i++) {
 			if (data[i]) {
@@ -53,9 +58,13 @@ public class VirusManagement {
 
 		}
 		Random rand = new Random();
-		int x = rand.nextInt(size);
-
-		return VirusEnum.values()[indexes[x]].getVirus();
+		if(size == 0) {
+			System.out.println("no virus at all");
+			return null;
+		}
+		else
+			x = rand.nextInt(size);
+			return VirusEnum.values()[indexes[x]].getVirus();
 	}
 
 	public static boolean getval(int i, int j) {

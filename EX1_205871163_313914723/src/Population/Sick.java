@@ -2,6 +2,8 @@ package Population;
 //Import staff
 import Country.Settlement;
 import Location.Point;
+import UI.VirusManagement;
+import UI.VirusManagement.VirusEnum;
 import Virus.IVirus;
 
 /***
@@ -65,8 +67,7 @@ public class Sick extends Person{
 		if(this.getAge() == other.getAge()
 				&& this.getLocation().equals(other.getLocation())
 				&& this.getSettlement().equals(other.getSettlement())
-				&& this.contagiousTime == other.getContagiousTime()
-				&& this.virus.equals(other.getVirus()))
+				&& this.contagiousTime == other.getContagiousTime())
 			return true;
 		else
 			return false;

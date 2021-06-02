@@ -57,6 +57,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableRowSorter;
 import Country.Map;
+import Country.RamzorColor;
 import Country.Settlement;
 import IO.SimulationFile;
 import IO.StatisticsFile;
@@ -222,7 +223,7 @@ public class MainWindow extends JFrame {
 
 		//The method that actually draws the map in our main frame
 		protected void paintComponent(Graphics gr) {
-			if(getUserMenu().getFlag()) {
+			if(getMapPointer()!=null) {
 				Graphics2D g = (Graphics2D)gr;
 				rectangles = new ArrayList<>();
 				int x = 0, y = 0, width = 0, height = 0;
@@ -239,6 +240,8 @@ public class MainWindow extends JFrame {
 						x2 = getMapPointer().getSettlements()[l].getLinkTo().get(j).getLocation().getPosition().getX();
 						y2 = getMapPointer().getSettlements()[l].getLinkTo().get(j).getLocation().getPosition().getY();
 						//Draw the line
+						g.setColor(RamzorColor.Decorator(getMapPointer().getSettlements()[l].getRamzorColor().getColorEnum(), getMapPointer().getSettlements()[l].getLinkTo().get(j).getRamzorColor().getColorEnum()));
+						System.out.println(g.getColor().toString());
 						g.drawLine(x1, y1, x2, y2);
 					}
 				}
@@ -625,7 +628,7 @@ public class MainWindow extends JFrame {
 	 */
 	public class UserMenu extends JMenuBar {	
 
-		private boolean flag;
+		private boolean flagForLine;
 
 		/**
 		 * op1: file menu, op2: simulation menu, op3: help menu
@@ -689,7 +692,7 @@ public class MainWindow extends JFrame {
 							}
 							getMapPanel().repaint();
 							//Update of the relevant flag
-							flag = true;
+							flagForLine = true;
 							getMapPointer().setflagToFile(false);
 							//Creating Cyclic for this map
 							getMapPointer().setCyclic(getMapPointer().getSettlements().length, new Runnable() {
@@ -830,7 +833,7 @@ public class MainWindow extends JFrame {
 					getMapPointer().setPLAY(false);
 					getMapPointer().setflagToFile(false);
 					getMapPointer().setflagToDead(false);
-					flag = false;
+					flagForLine = false;
 					//repaint
 					getMapPanel().repaint();
 
@@ -947,8 +950,16 @@ public class MainWindow extends JFrame {
 		 * Getter function for flag
 		 * @return: boolean, flag
 		 */
-		public boolean getFlag() {
-			return flag;
+		public boolean getFlagForLine() {
+			return flagForLine;
+		}
+		
+		/**
+		 * Getter function for flag
+		 * @return: boolean, flag
+		 */
+		public void setFlagForLine(boolean flag) {
+			this.flagForLine = flag;
 		}
 	}
 

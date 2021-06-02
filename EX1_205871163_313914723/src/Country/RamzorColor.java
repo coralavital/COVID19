@@ -108,4 +108,8 @@ public enum RamzorColor {
 		else return color.red; 
 	}
 	
+	public static Color Decorator(Color a, Color b) {
+	    return new Color((a.RED.getRGB() + b.RED.getRGB()), (a.GREEN.getRGB() + b.GREEN.getRGB()), (a.BLUE.getRGB() + b.BLUE.getRGB()));
+	 }
+	
 }//RamzorColor class
