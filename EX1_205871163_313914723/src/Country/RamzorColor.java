@@ -7,7 +7,7 @@ import java.awt.Color;
  * @author Yoni Ifrah 313914723, Coral Avital 205871163
  */
 
-public enum RamzorColor implements RGB{
+public enum RamzorColor {
 	
 	Green(0.4, Color.green, 1), Yellow(0.6, Color.yellow, 0.8), Orange(0.8, Color.orange, 0.6), Red(1.0, Color.red, 0.4);
 
@@ -106,16 +106,6 @@ public enum RamzorColor implements RGB{
 		else if(c > 0.4 && c <= 0.6) return color.yellow;
 		else if(c > 0.6 && c <= 0.8) return color.orange;
 		else return color.red; 
-	}
-	
-	public static Color Decorator(Color a, Color b) {
-	    return new Color((a.RED.getRGB() + b.RED.getRGB()), (a.GREEN.getRGB() + b.GREEN.getRGB()), (a.BLUE.getRGB() + b.BLUE.getRGB()));
-	 }
-
-
-	@Override
-	public Color Combine(Color a, Color b) {
-		return new Color(a.getRed() + b.getRed(), a.getGreen() + b.getGreen(), a.getBlue() + b.getBlue());
 	}
 	
 }//RamzorColor class

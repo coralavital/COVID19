@@ -56,6 +56,7 @@ import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableRowSorter;
+
 import Country.Map;
 import Country.RamzorColor;
 import Country.Settlement;
@@ -223,6 +224,7 @@ public class MainWindow extends JFrame {
 
 		//The method that actually draws the map in our main frame
 		protected void paintComponent(Graphics gr) {
+			Color c = null;
 			if(getMapPointer()!=null) {
 				Graphics2D g = (Graphics2D)gr;
 				rectangles = new ArrayList<>();
@@ -240,9 +242,11 @@ public class MainWindow extends JFrame {
 						x2 = getMapPointer().getSettlements()[l].getLinkTo().get(j).getLocation().getPosition().getX();
 						y2 = getMapPointer().getSettlements()[l].getLinkTo().get(j).getLocation().getPosition().getY();
 						//Draw the line
-						g.setColor(RamzorColor.Decorator(getMapPointer().getSettlements()[l].getRamzorColor().getColorEnum(), getMapPointer().getSettlements()[l].getLinkTo().get(j).getRamzorColor().getColorEnum()));
-						System.out.println(g.getColor().toString());
+						
+						c = Decorator.creatColor(getMapPointer().getSettlements()[l].getRamzorColor().getColorEnum(), getMapPointer().getSettlements()[l].getLinkTo().get(j).getRamzorColor().getColorEnum());
+						g = Decorator.setGrephics(g);
 						g.drawLine(x1, y1, x2, y2);
+						
 					}
 				}
 
