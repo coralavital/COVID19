@@ -7,10 +7,9 @@ public abstract class Decorator {
 	
 	protected static Color c;
 
-	public static Color creatColor(Color a, Color b){
+	public static Color createColor(Color a, Color b) {
 		c = new Color((a.getRGB() + b.getRGB()) / 2);
 		return c;
-		
 	}
 	
 	public static Graphics2D setGrephics(Graphics2D g) {
