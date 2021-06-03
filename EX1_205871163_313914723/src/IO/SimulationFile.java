@@ -192,8 +192,9 @@ public class SimulationFile {
 			RamzorColor ramzorColor = RamzorColor.Green;
 			Map map = new Map();
 			setNumberPeople(Integer.parseInt(buffer[6]));
-			SettlementFactoryMethod factory = new SettlementFactoryMethod();
 			
+			//Our factory method
+			SettlementFactoryMethod factory = new SettlementFactoryMethod();
 			settlement.add(factory.createFactory(type, name, location, sick, NonSick, ramzorColor, 0, linkTo, map, numberOfPeople));
 
 			i = i + 1;

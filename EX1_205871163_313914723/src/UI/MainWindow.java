@@ -20,6 +20,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.sound.sampled.Line;
@@ -78,7 +79,6 @@ public class MainWindow extends JFrame {
 	private SimulationFile simulationFile;
 	private JSlider slider = new JSlider();
 	private MapPanel mapPanel;
-
 
 	//Constructor
 	/**
@@ -243,7 +243,7 @@ public class MainWindow extends JFrame {
 						//Draw the line
 						new RGBDecorator(getMapPointer().getSettlements()[l].getRamzorColor().getColorEnum(), getMapPointer().getSettlements()[l].getLinkTo().get(j).getRamzorColor().getColorEnum()) {}.setGrephicsColor(g);
 						g.drawLine(x1, y1, x2, y2);
-						
+
 					}
 				}
 
@@ -318,7 +318,7 @@ public class MainWindow extends JFrame {
 
 	//MutationsTable
 	public class MutationsTable extends AbstractTableModel {
-		
+
 		//Data members
 		private String[] col_names ={ VirusManagement.getBritishStr(),VirusManagement.getChineseStr(),VirusManagement.getAfricanStr()};
 
@@ -630,6 +630,13 @@ public class MainWindow extends JFrame {
 	public class UserMenu extends JMenuBar {	
 
 		private boolean flagForLine;
+		private PathTaker pathTaker = new PathTaker();
+		private Originator originator = new Originator();
+		private File fos = null;
+		private String str = null;
+		private String fileName = null;
+
+		private int index = 0;
 
 		/**
 		 * op1: file menu, op2: simulation menu, op3: help menu
@@ -643,7 +650,7 @@ public class MainWindow extends JFrame {
 		 * l1:play, l2: pause, l3: stop, l4: set ticks per day
 		 * h1:help, h2:about
 		 */
-		JMenuItem f1, f2, f3, f4, f5;
+		JMenuItem f1, f2, f3, f4, f5, f6;
 		JMenuItem l1, l2, l3, l4;
 		JMenuItem h1, h2;
 
@@ -677,7 +684,7 @@ public class MainWindow extends JFrame {
 							l1.setEnabled(true);
 							l2.setEnabled(false);
 						}
-						
+
 						File f = new File(fd.getDirectory(), fd.getFile());
 						simulationFile = new SimulationFile(f.getPath());
 						System.out.println(f.getPath());
@@ -758,25 +765,28 @@ public class MainWindow extends JFrame {
 			f4.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-					
-					File fos = null;
-					String str = null;
-					String fileName = null;
+					getMapPointer().setflagToFile(false);
 					JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 					//If the user choose a folder to save the log file
 					while(!getMapPointer().isflagToFile()) {
 						fileName = JOptionPane.showInputDialog("PLEASE ENTER A VALID FILE NAME: ");
+						if(fileName == null)
+							return;
 						jfc.setDialogTitle("CHOOSE A DIRECTORY TO SAVE YOUR FILE: ");
 						jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 						int returnValue = jfc.showSaveDialog(null);
-						if (returnValue == JFileChooser.APPROVE_OPTION) {
-							if (jfc.getSelectedFile().isDirectory()) {
+						if(returnValue == JFileChooser.APPROVE_OPTION) {
+							if(jfc.getSelectedFile().isDirectory()) {
 								str =  jfc.getSelectedFile().toString();
 								//Setting name to the file
 								str = str + "\\" + fileName + ".log";
 							}
-						}        
+						}    
+						else 
+							return;
+
 						fos = new File(str);
+						//pathTaker.addMemento(memento);
 						try {
 							PrintWriter pw = new PrintWriter(fos);
 						} catch (FileNotFoundException e1) {
@@ -784,13 +794,38 @@ public class MainWindow extends JFrame {
 						}
 						getMapPointer().setflagToFile(true);
 						getMapPointer().setFileName(str);
+						System.out.println(str);
 					}
+					originator.setState(str);
+					pathTaker.addMemento(originator.createMemento());
+					++index;
+					if(index > 1)
+						f5.setEnabled(true);
 				}
 			});
-			//Creat exit button
-			f5 = new JMenuItem("EXIT");// to stop and then exit ( need to add setEnable for exit according to stop)
-			f5.setEnabled(true);
+
+			f5 = new JMenuItem("RESTORE LAST LOG FILE LOCATION");// to stop and then exit ( need to add setEnable for exit according to stop)
+			f5.setEnabled(false);
 			f5.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					if(index <= 0) {
+						f5.setEnabled(false);
+						JOptionPane.showConfirmDialog(frame, "CANNOT UNDO A LOG FILE", "ERROR", JOptionPane.DEFAULT_OPTION);
+					}
+					
+					index = index - 2;
+					originator.setMemento(pathTaker.getMemento(index));
+					str = originator.getState();
+					getMapPointer().setFileName(str);
+					System.out.println(str);
+				}
+			});
+			
+			//Creat exit button
+			f6 = new JMenuItem("EXIT");// to stop and then exit ( need to add setEnable for exit according to stop)
+			f6.setEnabled(true);
+			f6.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					//If user press exit the system will shut down
 					System.exit(0);
@@ -932,6 +967,7 @@ public class MainWindow extends JFrame {
 			op1.add(f3);
 			op1.add(f4);
 			op1.add(f5);
+			op1.add(f6);
 
 			op2.add(l1);
 			op2.add(l2);
@@ -940,6 +976,7 @@ public class MainWindow extends JFrame {
 
 			op3.add(h1);
 			op3.add(h2);
+
 			// add menu to menu bar
 			this.add(op1);
 			this.add(op2);
@@ -954,7 +991,7 @@ public class MainWindow extends JFrame {
 		public boolean getFlagForLine() {
 			return flagForLine;
 		}
-		
+
 		/**
 		 * Getter function for flag
 		 * @return: boolean, flag
@@ -962,6 +999,7 @@ public class MainWindow extends JFrame {
 		public void setFlagForLine(boolean flag) {
 			this.flagForLine = flag;
 		}
+
 	}
 
 }//Class MainWindow
