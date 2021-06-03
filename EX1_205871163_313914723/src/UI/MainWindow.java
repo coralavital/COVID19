@@ -224,7 +224,6 @@ public class MainWindow extends JFrame {
 
 		//The method that actually draws the map in our main frame
 		protected void paintComponent(Graphics gr) {
-			Color c = null;
 			if(getMapPointer()!=null) {
 				Graphics2D g = (Graphics2D)gr;
 				rectangles = new ArrayList<>();
@@ -242,8 +241,7 @@ public class MainWindow extends JFrame {
 						x2 = getMapPointer().getSettlements()[l].getLinkTo().get(j).getLocation().getPosition().getX();
 						y2 = getMapPointer().getSettlements()[l].getLinkTo().get(j).getLocation().getPosition().getY();
 						//Draw the line
-						c = Decorator.createColor(getMapPointer().getSettlements()[l].getRamzorColor().getColorEnum(), getMapPointer().getSettlements()[l].getLinkTo().get(j).getRamzorColor().getColorEnum());
-						g.setColor(c);
+						new Decorator(getMapPointer().getSettlements()[l].getRamzorColor().getColorEnum(), getMapPointer().getSettlements()[l].getLinkTo().get(j).getRamzorColor().getColorEnum()) {}.setGrephicsColor(g);
 						g.drawLine(x1, y1, x2, y2);
 						
 					}

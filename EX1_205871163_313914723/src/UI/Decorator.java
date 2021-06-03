@@ -5,15 +5,20 @@ import java.awt.Graphics2D;
 
 public abstract class Decorator {
 	
-	protected static Color c;
+	private Color color;
 
-	public static Color createColor(Color a, Color b) {
-		c = new Color((a.getRGB() + b.getRGB()) / 2);
-		return c;
+	public Decorator(Color a, Color b) {
+		int red = (a.getRed() + b.getRed()) / 2;
+		int green = (a.getGreen() + b.getGreen()) / 2;
+		int blue = (a.getBlue() + b.getBlue()) / 2;
+		color = new Color(red,green,blue);
 	}
 	
-	public static Graphics2D setGrephics(Graphics2D g) {
-		g.setColor(c);
-		return g;
+	public void setGrephicsColor(Graphics2D g) {
+		g.setColor(color.darker());
+	}
+	
+	public Color getColor() {
+		return this.color;
 	}
 }
