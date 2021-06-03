@@ -665,5 +665,6 @@ public abstract class Settlement implements Runnable {
 		}
 		return;
 	}
+	
 
 }//Settlement class

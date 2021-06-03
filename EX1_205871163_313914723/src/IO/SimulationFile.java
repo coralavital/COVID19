@@ -41,6 +41,8 @@ public class SimulationFile {
 	private int totalPersons;
 	private int totalVaccines;
 	private List<Settlement> linkTo;
+	private int numberOfPeople;
+	private String type = null; 
 
 
 	//Constructor 
@@ -61,6 +63,22 @@ public class SimulationFile {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	/**
+	 * setter method for name
+	 * @param name, String
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}
+	
+	/**
+	 * setter method for name
+	 * @param name, String
+	 */
+	public void setNumberPeople(int total) {
+		this.numberOfPeople = total;
+	}
 
 	/**
 	 * setter method for location, making Point and Size as well according to the parameters we got
@@ -73,21 +91,7 @@ public class SimulationFile {
 		this.location = new Location((new Point(Xpoint,Ypoint)), (new Size(h,w)));
 	}
 
-	//Getter
-	/**
-	 * generate age according to the formula we got and also making sure that the age is realistic
-	 * @return age , int
-	 */
-	public int getAge() {
-		Random rand = new Random();
-		while(true) {
-			int y = rand.nextInt(4);
-			int x = (int)rand.nextGaussian()*6+9;
-			int age = ((5*x)+y);
-			if(age >= 0 && age <= 120)
-				return age;
-		}
-	}
+
 
 
 	//Sum of line
@@ -159,7 +163,6 @@ public class SimulationFile {
 	 * @throws IOException
 	 */
 	public List<Settlement> readFromFile() throws IOException {
-		BritishVariant Bvirus = new BritishVariant();
 		String[] buffer;
 		List<Settlement> settlement = new ArrayList<>();
 		BufferedReader br= new BufferedReader(new FileReader(path));
@@ -177,81 +180,32 @@ public class SimulationFile {
 				continue;
 
 			//get all the attributes  to make settlement
+			setType(buffer[0]);
 			setName(buffer[1]);
 			setLocation(Integer.parseInt(buffer[2]),
 					Integer.parseInt(buffer[3]),
 					Integer.parseInt(buffer[4]),
 					Integer.parseInt(buffer[5]));
-
 			List<Sick> sick = new ArrayList<>();
 			List<Person> NonSick = new ArrayList<>();
 			List<Settlement> linkTo = new ArrayList<>();
 			RamzorColor ramzorColor = RamzorColor.Green;
 			Map map = new Map();
+			setNumberPeople(Integer.parseInt(buffer[6]));
+			SettlementFactoryMethod factory = new SettlementFactoryMethod();
 			
-			if(buffer[0].equals("City")) {
-				City newCity = new City(name, location, sick, NonSick, ramzorColor, 0, linkTo, map);
-				for(int j = 0; j < Integer.parseInt(buffer[6]); j++) {
-					int age = getAge();
-					Healthy h = new Healthy(age, newCity.randomLocation(), newCity);
-					newCity.addPerson(h);
-				}
-				
-				for(int k = 0; k < Integer.parseInt(buffer[6]) * 0.1; k++) {
-					Healthy hh = (Healthy)newCity.getNonSick().get(k);
-					Sick newSick = new Sick(hh.getAge(), hh.getLocation(), newCity, Clock.now(), Bvirus);
-					newCity.getNonSick().remove(hh);
-					newCity.addPerson(newSick);
-				}
-				
-				newCity.setTotalPersons();
-				settlement.add(newCity);
-			}
-
-			else if(buffer[0].equals("Moshav")) {
-				Moshav newMoshav = new Moshav(name, location, sick, NonSick, ramzorColor, 0, linkTo, map);
-				for(int j = 0; j < Integer.parseInt(buffer[6]); j++) {
-					int age = getAge();
-					Healthy h = new Healthy(age, newMoshav.randomLocation(), newMoshav);
-					newMoshav.addPerson(h);
-				}
-				for(int k = 0; k < Integer.parseInt(buffer[6]) * 0.1; k++) {
-					
-					Healthy hh = (Healthy)newMoshav.getNonSick().get(k);
-					Sick newSick = new Sick(hh.getAge(), hh.getLocation(), newMoshav, Clock.now(), Bvirus);
-					newMoshav.getNonSick().remove(hh);
-					newMoshav.addPerson(newSick);
-				}
-				newMoshav.setTotalPersons();
-				settlement.add(newMoshav);
-			}
-			
-			else if(buffer[0].equals("Kibbutz")) {
-				Kibbutz newKibbutz = new Kibbutz(name, location, sick, NonSick, ramzorColor, 0, linkTo, map);
-				for(int j = 0; j < Integer.parseInt(buffer[6]); j++) {
-					int age = getAge();
-					Healthy h = new Healthy(age, newKibbutz.randomLocation(), newKibbutz);
-					newKibbutz.addPerson(h);
-				}
-				for(int k = 0; k < Integer.parseInt(buffer[6]) * 0.1; k++) {
-					Healthy hh = (Healthy)newKibbutz.getNonSick().get(k);
-					Sick newSick = new Sick(hh.getAge(), hh.getLocation(), newKibbutz, Clock.now(), Bvirus);
-					newKibbutz.getNonSick().remove(hh);
-					newKibbutz.addPerson(newSick);
-				}
-				newKibbutz.setTotalPersons();
-				settlement.add(newKibbutz);
-			}
-			else {
-				System.out.println("***Error*** The type of the settlement is not definded");
-			}
+			settlement.add(factory.createFactory(type, name, location, sick, NonSick, ramzorColor, 0, linkTo, map, numberOfPeople));
 
 			i = i + 1;
 		}
-		
+
+
+
 		br.close();
 		setLinkTo(settlement);
 		return settlement;
 	}
 
+	//Our factory method
+	
 }//SimulationFile class

@@ -64,5 +64,6 @@ public class Kibbutz extends Settlement{
 		this.setRamzorColor(RamzorColor.choice(c));
 		return RamzorColor.choice(c);
 	}
+	
 
 }//Kibbutz class

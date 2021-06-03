@@ -62,5 +62,6 @@ public class Moshav extends Settlement {
 		this.setRamzorColor(RamzorColor.choice(c));
 		return RamzorColor.choice(c);
 	}
-
+	
+	
 }//Moshav class

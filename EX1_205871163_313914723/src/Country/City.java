@@ -65,5 +65,6 @@ public class City extends Settlement{
 		return RamzorColor.choice(c);
 
 	}
+	
 
 }//City class

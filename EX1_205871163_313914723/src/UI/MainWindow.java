@@ -241,7 +241,7 @@ public class MainWindow extends JFrame {
 						x2 = getMapPointer().getSettlements()[l].getLinkTo().get(j).getLocation().getPosition().getX();
 						y2 = getMapPointer().getSettlements()[l].getLinkTo().get(j).getLocation().getPosition().getY();
 						//Draw the line
-						new Decorator(getMapPointer().getSettlements()[l].getRamzorColor().getColorEnum(), getMapPointer().getSettlements()[l].getLinkTo().get(j).getRamzorColor().getColorEnum()) {}.setGrephicsColor(g);
+						new RGBDecorator(getMapPointer().getSettlements()[l].getRamzorColor().getColorEnum(), getMapPointer().getSettlements()[l].getLinkTo().get(j).getRamzorColor().getColorEnum()) {}.setGrephicsColor(g);
 						g.drawLine(x1, y1, x2, y2);
 						
 					}
