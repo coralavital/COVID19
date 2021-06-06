@@ -18,7 +18,7 @@ public class BritishVariant implements IVirus{
 	 *@author coral.
 	 */
 	public String toString() {
-		return "BritishVariant []";
+		return "BritishVariant";
 	}
 	
 

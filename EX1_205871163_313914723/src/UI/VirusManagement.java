@@ -31,7 +31,7 @@ public class VirusManagement {
 	// DP strategy
 	public static IVirus contagion(IVirus src) { // SOMEHOW THE METHOD IS NOT USED
 		int index = VirusEnum.findv(src);
-		if(index == -1) {
+		if(index != -1) {
 			IVirus v = findmutation(data[index]);
 			return v;
 		}
@@ -76,7 +76,7 @@ public class VirusManagement {
 	// inner of enum
 	public enum VirusEnum {
 
-		BritishVariant("BritishVariant []", new BritishVariant()), ChineseVariant("ChineseVariant", new ChineseVariant()),
+		BritishVariant("BritishVariant", new BritishVariant()), ChineseVariant("ChineseVariant", new ChineseVariant()),
 		SouthAfricanVariant("SouthAfricanVariant", new SouthAfricanVariant());
 
 		private final String string;

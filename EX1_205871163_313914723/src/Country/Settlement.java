@@ -333,7 +333,7 @@ public abstract class Settlement implements Runnable {
 					getNonSick().remove(person);
 					addPerson(sick);
 				}
-				
+
 			}
 			return true;
 		}
@@ -434,67 +434,40 @@ public abstract class Settlement implements Runnable {
 	 * @param settlement, Settlement object
 	 */
 	private void initialization() {
-		Random rand = new Random();
-		IVirus virus = null;
-		/**The method samples 20% of healthy people and makes them sick. At the end of each 
-		 * human infection the method will call the tryToInfect method
-		 */
-		for(int j = 0; j < (getNonSick().size() * 0.2); j++) {
-			System.out.println("initialization no. " + j );
-			int index = rand.nextInt(getNonSick().size());
-			Person person = getNonSick().get(index);
-			int value = rand.nextInt(3);
-			
-			if(value == 0)
-				virus = new BritishVariant();
-			else if(value == 1)
-				virus = new ChineseVariant();
-			else
-				virus = new SouthAfricanVariant();
 
-			Sick sick = new Sick(person.getAge(), person.getLocation(), person.getSettlement(),
-					Clock.now(), virus);
-			getNonSick().remove(j);
-			addPerson(sick);
-			//Call the tryToInfect method three times for the paste
-			for(int k = 0; k < 3; k++) {
-				System.out.println("Now the system will try to infect 3 non-sick people for this sick person.");
-				if(getNonSick().size() > 3 ) {//changed from [j] to [i]
-					//Here is called a method whose function is to infect a random person with the help of 
-					//the created sick person.
-					tryToInfect(sick);
+		Random rand = new Random();
+		Sick sick;
+		Person person;
+		IVirus v = null;
+		int newS = 0;
+		int newP = 0;
+
+		//Grill a person not randomly ill
+		for(int i = 0; i < getSick().size() * 0.2; i++) {
+			if(getSick().size() > 0) {
+				newS = rand.nextInt(getSick().size());
+				sick = getSick().get(newS);
+				v = VirusManagement.contagion(sick.getVirus());
+				System.out.println(v.toString());
+				if(v == null)
+					return;
+				for(int k = 0; k < 3; k++) {
+					if(getNonSick().size() > 0) {
+						newP = rand.nextInt(getNonSick().size());
+						person = getNonSick().get(newP);
+						if(v.tryToContagion(sick, person)) {
+							addPerson(person.contagion(v));
+							getNonSick().remove(newP);
+							System.out.println("The infection succeeded");
+						}
+						else
+							System.out.println("The infection failed");
+					}
 				}
 			}
 		}
 	}
 
-	/**
-	 * Method that try to infect 3 non-sick people by one sick person
-	 * @param sick, Sick object
-	 * @param settlement, Settlement object
-	 */
-	private void tryToInfect(Sick sick) {
-		Random rand = new Random();
-		Sick s;
-		IVirus v = null;
-		int value = 0;
-		int index = 0;
-		int newP = 0;
-		//Grill a person not randomly ill
-		newP = rand.nextInt(getNonSick().size());
-		Person p = getNonSick().get(newP);
-		v = VirusManagement.contagion(sick.getVirus());
-		if(v == null)
-			return;
-		s = new Sick(sick.getAge(), sick.getLocation(), sick.getSettlement(), sick.getContagiousTime(), v);
-		if(v.tryToContagion(s, p)) {
-			getNonSick().remove(newP);
-			addPerson(p.contagion(v));
-			System.out.println("The infection succeeded");
-		}
-		else
-			System.out.println("The infection failed");
-	}
 
 	/**
 	 * Method that try to recover sick people to be convalescent people if they getContagiousTime > 25 days.
@@ -641,9 +614,9 @@ public abstract class Settlement implements Runnable {
 			moveSettlement();
 			vaccinateHealthy();
 			killPeople();
-			
-			
-			
+
+
+
 			if(getMap().getFileName() != null) {
 				try {
 					//The system will try to write the data into the log file
@@ -665,6 +638,6 @@ public abstract class Settlement implements Runnable {
 		}
 		return;
 	}
-	
+
 
 }//Settlement class

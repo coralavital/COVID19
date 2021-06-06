@@ -18,7 +18,7 @@ public class ChineseVariant implements IVirus {
 	 *@author coral.
 	 */
 	public String toString() {
-		return "ChineseVariant []";
+		return "ChineseVariant";
 	}
 
 
