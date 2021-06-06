@@ -498,7 +498,7 @@ public abstract class Settlement implements Runnable {
 		int value;
 		int index;
 		//A sample of 3% of people is NonSick
-		if(getNonSick() != null) {
+		if(getNonSick().size() > 0) {
 			if(getLinkTo().size() > 0) {
 				for(int j = 0; j < (this.getNonSick().size() * 0.03); j++) {
 					System.out.println("moveSettlement no. " + j);
@@ -518,7 +518,7 @@ public abstract class Settlement implements Runnable {
 				System.out.println("There are not link settlement for this settlement");
 		}
 		//Sample of 3% sick people
-		if(getSick() != null) {
+		if(getSick().size() > 0) {
 			if(getLinkTo().size() > 0) {
 				for(int j = 0; j < (this.getSick().size() * 0.03); j++) {
 					System.out.println("moveSettlement no. " + j);
@@ -543,9 +543,9 @@ public abstract class Settlement implements Runnable {
 	private synchronized int selectRandom(int numberOfList) {
 		Random rand = new Random();
 		int value = 0;
-		if(numberOfList == 0)
+		if(numberOfList == 0 && getNonSick().size() > 0)
 			value = rand.nextInt(getNonSick().size());
-		else if(numberOfList == 1)
+		else if(numberOfList == 1 && getSick().size() > 0)
 			value = rand.nextInt(getSick().size());
 		return value;
 
@@ -555,7 +555,7 @@ public abstract class Settlement implements Runnable {
 	 * A method that tries to vaccinate healthy people if there are vaccine doses waiting.
 	 */
 	private void vaccinateHealthy() {
-		if(this.getTotalVaccines() > 0) {
+		if(this.getTotalVaccines() > 0 && getNonSick().size() > 0) {
 			for(int k = 0; k < getNonSick().size(); k++) {
 				Vaccinated v = new Vaccinated(getNonSick().get(k).getAge(),
 						getNonSick().get(k).getLocation(),
@@ -573,7 +573,7 @@ public abstract class Settlement implements Runnable {
 	}
 
 	private void killPeople() {
-		if(this.getSick() != null) {
+		if(this.getSick().size() > 0) {
 			for(int j = 0; j < this.getSick().size(); j++) {
 				System.out.println("killPeople no. " + j);
 				if(getSick().get(j).tryToDie()) {
