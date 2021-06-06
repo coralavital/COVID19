@@ -252,8 +252,8 @@ public class MainWindow extends JFrame {
 						x2 = s.getLinkTo().get(j).getLocation().getPosition().getX();
 						y2 = s.getLinkTo().get(j).getLocation().getPosition().getY();
 						// Draw the line
-						new RGBDecorator(s.getRamzorColor().getColorEnum(),
-								s.getLinkTo().get(j).getRamzorColor()
+						new RGBDecorator(s.calcuateRamzorGrade().getColorEnum(),
+								s.getLinkTo().get(j).calcuateRamzorGrade()
 										.getColorEnum()) {}.setGrephicsColor(g);
 						g.drawLine(x1, y1, x2, y2);
 

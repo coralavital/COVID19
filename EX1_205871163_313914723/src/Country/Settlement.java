@@ -1,4 +1,5 @@
 package Country;
+
 //Import staff
 import Location.Location;
 import Location.Point;
@@ -23,13 +24,14 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.Random;
 
 /**
- * Representation of a Settlement class 
+ * Representation of a Settlement class
+ * 
  * @author Yoni Ifrah 313914723, Coral Avital 205871163
  */
 
 public abstract class Settlement implements Runnable {
 
-	//data members 
+	// data members
 	private String name;
 	private Location location;
 	private List<Sick> sick;
@@ -41,19 +43,21 @@ public abstract class Settlement implements Runnable {
 	private int numberOfDead;
 	private Map map;
 
-	//Constructor 
+	// Constructor
 	/**
 	 * Constructor functions.
-	 * @param String name
-	 * @param Location location.
-	 * @param List sick.
-	 * @param List Nonsick.
+	 * 
+	 * @param String      name
+	 * @param Location    location.
+	 * @param List        sick.
+	 * @param List        Nonsick.
 	 * @param RamzorColor ramzorColor.
-	 * @param int totalVaccines.
-	 * @param List linkTo.
-	 * @param Map map.
+	 * @param int         totalVaccines.
+	 * @param List        linkTo.
+	 * @param Map         map.
 	 */
-	public Settlement(String name, Location location, List<Sick> sick, List<Person> NonSick, RamzorColor ramzorColor, int totalVaccines, List<Settlement> linkTo, Map map) {
+	public Settlement(String name, Location location, List<Sick> sick, List<Person> NonSick, RamzorColor ramzorColor,
+			int totalVaccines, List<Settlement> linkTo, Map map) {
 		this.name = name;
 		this.location = location;
 		this.sick = sick;
@@ -67,6 +71,7 @@ public abstract class Settlement implements Runnable {
 
 	/**
 	 * Copy Constructor
+	 * 
 	 * @param s, settlement
 	 */
 	public Settlement(Settlement s) {
@@ -82,35 +87,39 @@ public abstract class Settlement implements Runnable {
 		this.map = s.map;
 	}
 
-	//ToString
+	// ToString
 	/**
 	 * toString functions.
+	 * 
 	 * @return String.
 	 */
 	public String toString() {
-		return "\n\t\tForm of locality --> " + this.getName() 
-		+ "\n\t\t" + this.getLocation().toString() 
-		+ "\n\t\tNumber of people --> " + this.getNonSick().size() + this.getSick().size()
-		+ "\n\t\tRamzorColor is -->  "+ this.getRamzorColor()
-		+ "\n\t\tLinked settlement -->" + this.getLinkTo();
+		return "\n\t\tForm of locality --> " + this.getName() + "\n\t\t" + this.getLocation().toString()
+				+ "\n\t\tNumber of people --> " + this.getNonSick().size() + this.getSick().size()
+				+ "\n\t\tRamzorColor is -->  " + this.getRamzorColor() + "\n\t\tLinked settlement -->"
+				+ this.getLinkTo();
 	}
 
 	/**
 	 * Abstract functions.
+	 * 
 	 * @return String.
 	 */
 	public abstract boolean equals(Object obj);
 
-	//Getters
+	// Getters
 	/**
 	 * Getter function to name
+	 * 
 	 * @return String
 	 */
 	public String getName() {
 		return this.name;
 	}
+
 	/**
 	 * Setter function to name
+	 * 
 	 * @return String
 	 */
 	public void setName(String name) {
@@ -119,6 +128,7 @@ public abstract class Settlement implements Runnable {
 
 	/**
 	 * Getter function to location
+	 * 
 	 * @return Object location
 	 */
 	public Location getLocation() {
@@ -127,8 +137,9 @@ public abstract class Settlement implements Runnable {
 
 	/**
 	 * Get functions that give ramzorColor object.
+	 * 
 	 * @return RamzorColor object.
-	 *@author coral.
+	 * @author coral.
 	 */
 	public RamzorColor getRamzorColor() {
 		return ramzorColor;
@@ -136,6 +147,7 @@ public abstract class Settlement implements Runnable {
 
 	/**
 	 * Setter function for ramzorColor
+	 * 
 	 * @param ramzorColor
 	 */
 	public void setRamzorColor(RamzorColor ramzorColor) {
@@ -144,23 +156,26 @@ public abstract class Settlement implements Runnable {
 
 	/**
 	 * Setter function for ramzorColor
+	 * 
 	 * @param ramzorColor
 	 */
 	public abstract RamzorColor calcuateRamzorGrade();
 
 	/**
-	 * Method  that calculate the Percentage of getting contagious
+	 * Method that calculate the Percentage of getting contagious
+	 * 
 	 * @return double
 	 */
 	public double contaiousPercent() {
-		if(getSick().size() == 0)
+		if (getSick().size() == 0)
 			return 0;
 		else
 			return (double) getSick().size() / (NonSick.size() + sick.size());
 	}
 
 	/**
-	 *  Getter function for sick
+	 * Getter function for sick
+	 * 
 	 * @return: list , sick
 	 */
 	public List<Sick> getSick() {
@@ -168,7 +183,8 @@ public abstract class Settlement implements Runnable {
 	}
 
 	/**
-	 * Getter function for non sick 
+	 * Getter function for non sick
+	 * 
 	 * @return: list , NonSick
 	 */
 	public List<Person> getNonSick() {
@@ -177,6 +193,7 @@ public abstract class Settlement implements Runnable {
 
 	/**
 	 * Getter function for total persons
+	 * 
 	 * @return: list , sick
 	 */
 	public int getTotalPersons() {
@@ -187,22 +204,24 @@ public abstract class Settlement implements Runnable {
 	 * Setter function for total persons
 	 */
 	public void setTotalPersons() {
-		this.totalPersons = (int)((getNonSick().size() + getSick().size()) * 1.3);
+		this.totalPersons = (int) ((getNonSick().size() + getSick().size()) * 1.3);
 	}
 
 	/**
 	 * Setter function for the number of vaccines
+	 * 
 	 * @param: int, number
 	 */
 	public synchronized void setTotalVaccines(int number) {
-		this.totalVaccines += number;	
+		this.totalVaccines += number;
 	}
 
 	/**
-	 * decreasing the number of vaccines if there is more than zero else it will stay zero 
+	 * decreasing the number of vaccines if there is more than zero else it will
+	 * stay zero
 	 */
 	public void decVaccineByOne() {
-		if(this.totalVaccines > 0)
+		if (this.totalVaccines > 0)
 			this.totalVaccines -= 1;
 		else
 			this.totalVaccines = 0;
@@ -210,6 +229,7 @@ public abstract class Settlement implements Runnable {
 
 	/**
 	 * Getter function for number of vaccines
+	 * 
 	 * @return: int, totalVaccines
 	 */
 	public int getTotalVaccines() {
@@ -218,6 +238,7 @@ public abstract class Settlement implements Runnable {
 
 	/**
 	 * Getter function for linked settlements to the current settlement
+	 * 
 	 * @return: list, linkTo
 	 */
 	public List<Settlement> getLinkTo() {
@@ -226,16 +247,17 @@ public abstract class Settlement implements Runnable {
 
 	/**
 	 * Returning a string that match inside to the cell of the Excel file
+	 * 
 	 * @return: String, finalString
 	 */
 	public String printLinked() {
 		String finalString = "";
 		int counter = getLinkTo().size();
-		for(int i = 0; i < getLinkTo().size(); i++) {
-			if(counter == 1)
-				finalString += getLinkTo().get(i).getName() +  " ";
-			else if(counter > 1) {
-				finalString += getLinkTo().get(i).getName() +  ", ";
+		for (int i = 0; i < getLinkTo().size(); i++) {
+			if (counter == 1)
+				finalString += getLinkTo().get(i).getName() + " ";
+			else if (counter > 1) {
+				finalString += getLinkTo().get(i).getName() + ", ";
 				counter -= 1;
 			}
 
@@ -244,13 +266,14 @@ public abstract class Settlement implements Runnable {
 	}
 
 	/**
-	 * Return the name of the type of the settlement 
+	 * Return the name of the type of the settlement
+	 * 
 	 * @return:String, CITY/MOSHAV/KIBBUTZ
 	 */
 	public String getType() {
-		if(this instanceof City)
+		if (this instanceof City)
 			return "CITY";
-		else if(this instanceof Moshav)
+		else if (this instanceof Moshav)
 			return "MOSHAV";
 		else
 			return "KIBBUTZ";
@@ -261,48 +284,51 @@ public abstract class Settlement implements Runnable {
 	}
 
 	public void incNumberOfDead() {
-		this.numberOfDead += 1; 
+		this.numberOfDead += 1;
 	}
 
 	/**
-	 * Method that add Person into list of people 
-	 * @param p, Person object that can be Healthy or Sick or Convalescent or Vaccinated
-	 * @return boolean, true if the Person object was from the object that are mention above, else false
+	 * Method that add Person into list of people
+	 * 
+	 * @param p, Person object that can be Healthy or Sick or Convalescent or
+	 *           Vaccinated
+	 * @return boolean, true if the Person object was from the object that are
+	 *         mention above, else false
 	 */
 	public boolean addPerson(Person p) {
-		//If the person is sick
-		if(p instanceof Sick) {
+		// If the person is sick
+		if (p instanceof Sick) {
 			Sick s = (Sick) p;
 			this.getSick().add(s);
 			return true;
-		} 
-		//If the person isn't sick person
-		else if(!(p instanceof Sick)) {
-			//If the person Healthy person
-			if(p instanceof Healthy) {
+		}
+		// If the person isn't sick person
+		else if (!(p instanceof Sick)) {
+			// If the person Healthy person
+			if (p instanceof Healthy) {
 				Healthy h = (Healthy) p;
 				this.getNonSick().add(h);
 			}
-			//If the person Convalescent person
-			else if(p instanceof Convalescent) {
+			// If the person Convalescent person
+			else if (p instanceof Convalescent) {
 				Convalescent c = (Convalescent) p;
 				this.getNonSick().add(c);
 			}
-			//If the person Vaccinated person
+			// If the person Vaccinated person
 			else {
-				Vaccinated v = (Vaccinated) p; 
+				Vaccinated v = (Vaccinated) p;
 				this.getNonSick().add(v);
 			}
-			//If adding the person was successful
+			// If adding the person was successful
 			return true;
-		}
-		else
-			//If adding the person failed
+		} else
+			// If adding the person failed
 			return false;
 	}
 
 	/**
 	 * A method that samples 10% of healthy people and oh
+	 * 
 	 * @return boolean, true if the people managed to add
 	 */
 	public synchronized boolean addSick() {
@@ -311,71 +337,72 @@ public abstract class Settlement implements Runnable {
 		IVirus virus;
 		Sick sick = null;
 		/**
-		 * Running on all the settlements if we found what the user selected then add a random virus into their people
-		 * if he didnt selected then we wont be able to add sick people
+		 * Running on all the settlements if we found what the user selected then add a
+		 * random virus into their people if he didnt selected then we wont be able to
+		 * add sick people
 		 */
-		if(getNonSick() != null) {
+		if (getNonSick() != null) {
 			int end = getNonSick().size() / 100;
-			for(int j = 0; j < end; j++) {
+			for (int j = 0; j < end; j++) {
 				int index = rand.nextInt(getNonSick().size());
 				Person person = getNonSick().get(index);
 
 				int value = rand.nextInt(3);
-				if(value == 1)
+				if (value == 1)
 					virus = new BritishVariant();
-				else if(value == 2)
+				else if (value == 2)
 					virus = new ChineseVariant();
 				else
 					virus = new SouthAfricanVariant();
 
-				if(VirusManagement.contagion(virus) != null) {
-					sick = new Sick(person.getAge(), person.getLocation(), person.getSettlement(), Clock.now(), VirusManagement.contagion(virus));
+				if (VirusManagement.contagion(virus) != null) {
+					sick = new Sick(person.getAge(), person.getLocation(), person.getSettlement(), Clock.now(),
+							VirusManagement.contagion(virus));
 					getNonSick().remove(person);
 					addPerson(sick);
 				}
 
 			}
 			return true;
-		}
-		else
+		} else
 			return false;
-
 
 	}
 
-
 	/**
-	 * Take the person that we got and move him to the settlement we got 
+	 * Take the person that we got and move him to the settlement we got
+	 * 
 	 * @param p, Object Person
 	 * @param s, Object Settlement
 	 * @return boolean, true if the transfer was complete, else false
 	 */
 	public boolean transferPerson(Person p, Settlement s) {
-		//We will select the ID number that appears in the fire table so we know who to turn on our synchronized first in order to avoid a dead lock.
+		// We will select the ID number that appears in the fire table so we know who to
+		// turn on our synchronized first in order to avoid a dead lock.
 		int s1 = System.identityHashCode(this);
 		int s2 = System.identityHashCode(s);
 		Object o1, o2;
-		if( s1 <= s2) {
+		if (s1 <= s2) {
 			o1 = this;
 			o2 = s;
-		}
-		else {
+		} else {
 			o1 = s;
 			o2 = this;
 		}
-		//Prevent dead lock with the smaller int id of the settlement - now its this before 
-		synchronized(o1) {
-			synchronized(o2) {
+		// Prevent dead lock with the smaller int id of the settlement - now its this
+		// before
+		synchronized (o1) {
+			synchronized (o2) {
 				if (!(this.equals(s))) {
-					if ((s.getTotalPersons() > (s.getNonSick().size() + s.getSick().size())) || 
-							(p.getSettlement().getRamzorColor().getProbability() * s.getRamzorColor().getProbability() <= Math.random())) {
-						if(p instanceof Sick) {
+					if ((s.getTotalPersons() > (s.getNonSick().size() + s.getSick().size()))
+							|| (p.getSettlement().getRamzorColor().getProbability()
+									* s.getRamzorColor().getProbability() <= Math.random())) {
+						if (p instanceof Sick) {
 							s.addPerson(p);
 							this.getSick().remove(p);
 							System.out.println("This person move to the new settlement");
 							return true;
-						}
-						else if(!(p instanceof Sick)) {
+						} else if (!(p instanceof Sick)) {
 							s.addPerson(p);
 							this.getNonSick().remove(p);
 							System.out.println("This person move to the new settlement");
@@ -387,8 +414,7 @@ public abstract class Settlement implements Runnable {
 							return false;
 						}
 					}
-				}
-				else {
+				} else {
 					System.out.println("This person is allready in the settlement");
 					return false;
 				}
@@ -399,7 +425,9 @@ public abstract class Settlement implements Runnable {
 	}
 
 	/**
-	 * Calculate random location  when we need  person to have  a point in his settlement
+	 * Calculate random location when we need person to have a point in his
+	 * settlement
+	 * 
 	 * @return Object, Point
 	 */
 	public Point randomLocation() {
@@ -413,14 +441,15 @@ public abstract class Settlement implements Runnable {
 	}
 
 	/**
-	 * Setter method to assign a map 
+	 * Setter method to assign a map
 	 */
 	public void setMap(Map map) {
 		this.map = map;
 	}
 
 	/**
-	 * Getter method to assign a map 
+	 * Getter method to assign a map
+	 * 
 	 * @return: Map
 	 */
 	public Map getMap() {
@@ -430,7 +459,8 @@ public abstract class Settlement implements Runnable {
 	// Initialization
 	/**
 	 * Running on all the settlements and the 20% of people in it and make them sick
-	 * @param map, Map object
+	 * 
+	 * @param map,        Map object
 	 * @param settlement, Settlement object
 	 */
 	private void initialization() {
@@ -442,54 +472,55 @@ public abstract class Settlement implements Runnable {
 		int newS = 0;
 		int newP = 0;
 
-		//Grill a person not randomly ill
-		for(int i = 0; i < getSick().size() * 0.2; i++) {
-			if(getSick().size() > 0) {
+		// Grill a person not randomly ill
+		for (int i = 0; i < getSick().size() * 0.2; i++) {
+			if (getSick().size() > 0) {
 				newS = rand.nextInt(getSick().size());
 				sick = getSick().get(newS);
 				v = VirusManagement.contagion(sick.getVirus());
 				System.out.println(v.toString());
-				if(v == null)
+				if (v == null)
 					return;
-				for(int k = 0; k < 3; k++) {
-					if(getNonSick().size() > 0) {
+				for (int k = 0; k < 3; k++) {
+					if (getNonSick().size() > 0) {
 						newP = rand.nextInt(getNonSick().size());
 						person = getNonSick().get(newP);
-						if(v.tryToContagion(sick, person)) {
+						if (v.tryToContagion(sick, person)) {
 							addPerson(person.contagion(v));
 							getNonSick().remove(newP);
 							System.out.println("The infection succeeded");
-						}
-						else
+						} else
 							System.out.println("The infection failed");
 					}
 				}
 			}
 		}
+		this.ramzorColor = calcuateRamzorGrade();
 	}
 
-
 	/**
-	 * Method that try to recover sick people to be convalescent people if they getContagiousTime > 25 days.
+	 * Method that try to recover sick people to be convalescent people if they
+	 * getContagiousTime > 25 days.
 	 */
 	private void recoverToHealthy() {
 
-		//A loop that passes over the person how found in the Sick-list
+		// A loop that passes over the person how found in the Sick-list
 		for (int k = 0; k < getSick().size(); k++) {
 			System.out.println("recoverToHealthy no. " + k);
-			//A loop that passes over the number of people who have passed 25 days from the moment they were infected with the virus 
-			if(Clock.days(getSick().get(k).getContagiousTime()) >= 25) {
+			// A loop that passes over the number of people who have passed 25 days from the
+			// moment they were infected with the virus
+			if (Clock.days(getSick().get(k).getContagiousTime()) >= 25) {
 				System.out.println("try to recover the person in the index " + k + " in the settlement " + getName());
 				Sick s = getSick().get(k);
+				Person newP = s.recover();
 				this.getSick().remove(s);
-				s.recover();
-				this.addPerson(s);
+				this.addPerson(newP);
 				System.out.println("this person was a sick and now he healthy");
-			}
+			} 
 			else
 				System.out.println("No people were found to be ill for more than 25 days");
 		}
-	}	
+	}
 
 	/**
 	 * Method that try to transfer sick from one settlement to another
@@ -497,30 +528,29 @@ public abstract class Settlement implements Runnable {
 	private void moveSettlement() {
 		int value;
 		int index;
-		//A sample of 3% of people is NonSick
-		if(getNonSick().size() > 0) {
-			if(getLinkTo().size() > 0) {
-				for(int j = 0; j < (this.getNonSick().size() * 0.03); j++) {
+		// A sample of 3% of people is NonSick
+		if (getNonSick().size() > 0) {
+			if (getLinkTo().size() > 0) {
+				for (int j = 0; j < (this.getNonSick().size() * 0.03); j++) {
 					System.out.println("moveSettlement no. " + j);
 					Random rand = new Random();
 					index = rand.nextInt(getLinkTo().size());
 					Settlement s = getLinkTo().get(index);
 					System.out.println("From:" + getName());
-					System.out.println("To: " +s.getName());
+					System.out.println("To: " + s.getName());
 
 					value = selectRandom(0);
 
-					if(transferPerson(getNonSick().get(value), s))
+					if (transferPerson(getNonSick().get(value), s))
 						System.out.println("The transfer was successful");
 				}
-			}
-			else
+			} else
 				System.out.println("There are not link settlement for this settlement");
 		}
-		//Sample of 3% sick people
-		if(getSick().size() > 0) {
-			if(getLinkTo().size() > 0) {
-				for(int j = 0; j < (this.getSick().size() * 0.03); j++) {
+		// Sample of 3% sick people
+		if (getSick().size() > 0) {
+			if (getLinkTo().size() > 0) {
+				for (int j = 0; j < (this.getSick().size() * 0.03); j++) {
 					System.out.println("moveSettlement no. " + j);
 					Random rand = new Random();
 					index = rand.nextInt(getLinkTo().size());
@@ -530,80 +560,83 @@ public abstract class Settlement implements Runnable {
 
 					value = selectRandom(1);
 
-					if(transferPerson(getSick().get(value), s))
+					if (transferPerson(getSick().get(value), s))
 						System.out.println("The transfer was successful");
 				}
-			}
-			else
+			} else
 				System.out.println("There are not link settlement for this settlement");
 		}
+	
 	}
 
-	//add this method to sure that we cant try to move a person that not in the settlement
+	// add this method to sure that we cant try to move a person that not in the
+	// settlement
 	private synchronized int selectRandom(int numberOfList) {
 		Random rand = new Random();
 		int value = 0;
-		if(numberOfList == 0 && getNonSick().size() > 0)
+		if (numberOfList == 0 && getNonSick().size() > 0)
 			value = rand.nextInt(getNonSick().size());
-		else if(numberOfList == 1 && getSick().size() > 0)
+		else if (numberOfList == 1 && getSick().size() > 0)
 			value = rand.nextInt(getSick().size());
 		return value;
 
 	}
 
 	/**
-	 * A method that tries to vaccinate healthy people if there are vaccine doses waiting.
+	 * A method that tries to vaccinate healthy people if there are vaccine doses
+	 * waiting.
 	 */
 	private void vaccinateHealthy() {
-		if(this.getTotalVaccines() > 0 && getNonSick().size() > 0) {
-			for(int k = 0; k < getNonSick().size(); k++) {
-				Vaccinated v = new Vaccinated(getNonSick().get(k).getAge(),
-						getNonSick().get(k).getLocation(),
+		if (this.getTotalVaccines() > 0 && getNonSick().size() > 0) {
+			for (int k = 0; k < getNonSick().size(); k++) {
+				Vaccinated v = new Vaccinated(getNonSick().get(k).getAge(), getNonSick().get(k).getLocation(),
 						getNonSick().get(k).getSettlement(), Clock.now());
 				getNonSick().remove(k);
 				addPerson(v);
 				decVaccineByOne();
 				System.out.println("The person in index " + k + "resilient and now he is a resilient person");
 			}
-		}
-		else
+		} else
 			System.out.println("There were no vaccines left in the pool");
 
 		System.out.println("Finish vaccinateHealthy for this settlement");
+		this.ramzorColor = calcuateRamzorGrade();
 	}
 
 	private void killPeople() {
-		if(this.getSick().size() > 0) {
-			for(int j = 0; j < this.getSick().size(); j++) {
+		if (this.getSick().size() > 0) {
+			for (int j = 0; j < this.getSick().size(); j++) {
 				System.out.println("killPeople no. " + j);
-				if(getSick().get(j).tryToDie()) {
+				if (getSick().get(j).tryToDie()) {
 					System.out.println("the person form sick list in the index " + j + " is dead!");
 					getSick().remove(j);
 					incNumberOfDead();
-				}
-				else
+				} else
 					System.out.println("the person form sick list in the index " + j + " is not dead!");
 			}
-		}
-		else
+		} else
 			System.out.println("There are no sick people in this settlement");
+		this.ramzorColor = calcuateRamzorGrade();
 	}
 
 	/**
-	 * A run function for each stellment whose function is to run the simulation for each settlement
+	 * A run function for each stellment whose function is to run the simulation for
+	 * each settlement
 	 */
 	public void run() {
-		while(this.getMap().isON()) {
-			//The role of the method is to sample 20% of patients out of all the people in localities that have already been initialized 
-			//on the map and for each person who has become ill an attempt will be made to infect three different people
-			//And for this purpose uses another method whose function is to try to infect a random person who is not ill
-			synchronized(getMap()) {
-				while(!(getMap().isPLAY())) {
-					//All trades will wait until the user presses play
+		while (this.getMap().isON()) {
+			// The role of the method is to sample 20% of patients out of all the people in
+			// localities that have already been initialized
+			// on the map and for each person who has become ill an attempt will be made to
+			// infect three different people
+			// And for this purpose uses another method whose function is to try to infect a
+			// random person who is not ill
+			synchronized (getMap()) {
+				while (!(getMap().isPLAY())) {
+					// All trades will wait until the user presses play
 					try {
 						getMap().wait();
-					} 
-					catch(InterruptedException e) {
+					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 				}
@@ -615,29 +648,24 @@ public abstract class Settlement implements Runnable {
 			vaccinateHealthy();
 			killPeople();
 
-
-
-			if(getMap().getFileName() != null) {
+			if (getMap().getFileName() != null) {
 				try {
-					//The system will try to write the data into the log file
+					// The system will try to write the data into the log file
 					getMap().saveLogFile();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
 			}
 			try {
-				//All trades will wait until the last trade has finished its tick
+				// All trades will wait until the last trade has finished its tick
 				getMap().getCyclic().await();
-			} 
-			catch (InterruptedException e) {
+			} catch (InterruptedException e) {
 				e.printStackTrace();
-			} 
-			catch (BrokenBarrierException e) {
+			} catch (BrokenBarrierException e) {
 				e.printStackTrace();
 			}
 		}
 		return;
 	}
 
-
-}//Settlement class
+}// Settlement class

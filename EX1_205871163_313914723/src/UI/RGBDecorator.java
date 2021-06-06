@@ -11,6 +11,8 @@ public abstract class RGBDecorator {
 		int red = (a.getRed() + b.getRed()) / 2;
 		int green = (a.getGreen() + b.getGreen()) / 2;
 		int blue = (a.getBlue() + b.getBlue()) / 2;
+		
+		
 		color = new Color(red,green,blue);
 	}
 	
