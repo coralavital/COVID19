@@ -36,6 +36,8 @@ public class StatisticsFile {
 			jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			String str = null;
 			int returnValue = jfc.showSaveDialog(null);
+			if(returnValue == JFileChooser.CANCEL_OPTION)
+				return;
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
 				if (jfc.getSelectedFile().isDirectory()) {
 					str =  jfc.getSelectedFile().toString();
@@ -62,7 +64,6 @@ public class StatisticsFile {
 		else {
 			JOptionPane.showConfirmDialog(statisticFrame, "PLEASE SELECT NAME TO THE FILE!", "ERROR", JOptionPane.DEFAULT_OPTION);
 		}
-
 	}
 
 }//StatisticsFile Class	

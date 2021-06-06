@@ -521,7 +521,8 @@ public class MainWindow extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					try {
 						new StatisticsFile(getMapPointer(), getStatistics());
-					} catch (FileNotFoundException e1) {
+					} 
+					catch (FileNotFoundException e1) {
 						e1.printStackTrace();
 						System.out.println("ERROR AT SAVE ACTION FROM STATISTICS WINDOW");
 					}
@@ -916,6 +917,7 @@ public class MainWindow extends JFrame {
 					synchronized (getMapPointer()) {
 						// Update of the relevant flag
 						getMapPointer().setPLAY(false);
+						
 					}
 					l2.setEnabled(false);
 					l1.setEnabled(true);
