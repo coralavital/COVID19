@@ -245,17 +245,16 @@ public class MainWindow extends JFrame {
 				// Clears the last paint
 				super.paintComponent(g);
 				// Draw the connection lines
-				for (int l = 0; l < getMapPointer().getSettlements().length; ++l) {
-					for (int j = 0; j < getMapPointer().getSettlements()[l].getLinkTo().size(); j++) {
-						x1 = getMapPointer().getSettlements()[l].getLocation().getPosition().getX();
-						y1 = getMapPointer().getSettlements()[l].getLocation().getPosition().getY();
-						x2 = getMapPointer().getSettlements()[l].getLinkTo().get(j).getLocation().getPosition().getX();
-						y2 = getMapPointer().getSettlements()[l].getLinkTo().get(j).getLocation().getPosition().getY();
+				for (Settlement s : getMapPointer()) {
+					for (int j = 0; j < s.getLinkTo().size(); j++) {
+						x1 = s.getLocation().getPosition().getX();
+						y1 = s.getLocation().getPosition().getY();
+						x2 = s.getLinkTo().get(j).getLocation().getPosition().getX();
+						y2 = s.getLinkTo().get(j).getLocation().getPosition().getY();
 						// Draw the line
-						new RGBDecorator(getMapPointer().getSettlements()[l].getRamzorColor().getColorEnum(),
-								getMapPointer().getSettlements()[l].getLinkTo().get(j).getRamzorColor()
-										.getColorEnum()) {
-						}.setGrephicsColor(g);
+						new RGBDecorator(s.getRamzorColor().getColorEnum(),
+								s.getLinkTo().get(j).getRamzorColor()
+										.getColorEnum()) {}.setGrephicsColor(g);
 						g.drawLine(x1, y1, x2, y2);
 
 					}
@@ -538,9 +537,9 @@ public class MainWindow extends JFrame {
 					String selectedName = null;
 					try {
 						selectedName = (String) table.getValueAt(table.getSelectedRow(), 0);
-						for (int i = 0; i < getMapPointer().getSettlements().length; i++) {
-							if (selectedName == getMapPointer().getSettlements()[i].getName())
-								getMapPointer().getSettlements()[i].addSick();
+						for (Settlement s : getMapPointer()) {
+							if (selectedName == s.getName())
+								s.addSick();
 						}
 						model.fireTableDataChanged();
 					} catch (Exception ee) {
