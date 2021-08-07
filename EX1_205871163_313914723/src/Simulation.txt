@@ -1,0 +1,9 @@
+City; Tel-Aviv; 400;400; 100;100; 2000
+City; Beer-Sheva; 10;10; 90;50; 1200
+City; Ashdod; 200;70; 75;75; 100
+Kibbutz; Carmia; 120;170; 20;20; 700
+Moshav; Gevim; 270;500; 10;20; 200
+# ; Ashdod ; Beer-Sheva
+# ; Beer-Sheva; Gevim
+# ; Tel-Aviv; Ashdod; 
+# ; Carmia; Gevim
